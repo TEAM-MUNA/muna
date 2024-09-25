@@ -16,6 +16,16 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "eqeqeq": "error", // ==, != 사용 금지 (테스트용)
     "prefer-const": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+      },
+    ],
   },
   "settings": {
     "import/resolver": {
