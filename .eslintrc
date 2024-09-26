@@ -26,6 +26,7 @@
         "tsx": "never",
       },
     ],
+    "no-param-reassign": "off", // no-param-reassign 규칙 비활성화
   },
   "settings": {
     "import/resolver": {

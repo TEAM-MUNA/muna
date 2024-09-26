@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase/firebase";
+import Counter from "./features/counter/Counter";
 
 function App() {
   // const a = 3;
@@ -37,6 +38,7 @@ function App() {
   return (
     <div>
       <h1>muna</h1>
+      <Counter />
     </div>
   );
 }
