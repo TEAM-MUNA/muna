@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "./firebase/firebase";
 
 function App() {
-  const a = 3;
-  if (a == 3) {
-    // == 사용 못하게하는 eslint 테스트용 코드
-    console.log("a는 3입니다");
-  }
-  const b = 3;
-  if (b == 3) {
-    console.log("b는 3입니다");
-  }
+  // const a = 3;
+  // if (a == 3) {
+  //   // == 사용 못하게하는 eslint 테스트용 코드
+  //   console.log("a는 3입니다");
+  // }
+  // const b = 3;
+  // if (b == 3) {
+  //   console.log("b는 3입니다");
+  // }
 
   // firebase 사용 테스트
   const getDocs = async () => {
