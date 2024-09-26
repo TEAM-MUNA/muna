@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "./firebase/firebase";
-import Counter from "./features/counter/Counter";
+import { db } from "./firebase";
+import LoginForm from "./components/LoginForm";
+import Counter from "./components/Counter";
 
 function App() {
   // const a = 3;
@@ -39,6 +40,7 @@ function App() {
     <div>
       <h1>muna</h1>
       <Counter />
+      <LoginForm />
     </div>
   );
 }

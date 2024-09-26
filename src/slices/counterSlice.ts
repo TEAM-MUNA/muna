@@ -4,9 +4,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState, AppThunk } from "../../app/store";
-
-import fetchCount from "./counterAPI";
+import fetchCount from "../api/counterAPI";
+import { AppThunk, RootState } from "../app/store";
 // 카운터 슬라이스의 상태에 대한 TypeScript 타입 정의
 export interface CounterState {
   value: number;
