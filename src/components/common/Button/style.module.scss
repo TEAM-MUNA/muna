@@ -1,10 +1,56 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
-// @import "../../../styles/_variables";
-// @import "../../../styles/_mixin";
+.btn {
+  display: flex;
+  gap: 4px;
+  border: 1px solid $line-light;
+  border-radius: 100px;
+  background-color: $white;
+  &:disabled {
+    opacity: 0.4;
+  }
+}
 
-.test_danger {
-  // @include danger;
-  color: $danger;
+.primary {
+  color: $white;
+  border-color: $primary;
+  background-color: $primary;
+}
+
+.black {
+  color: $white;
+  border-color: $black;
+  background-color: $black;
+}
+
+.danger {
+  color: $white;
+  border-color: $danger;
+  background-color: $danger;
+}
+
+.primary_line {
+  color: $primary;
+  border-color: $primary;
+}
+
+.sm {
+  font-size: $font-sm;
+  padding: 4px 20px;
+}
+
+.md {
+  font-size: $font-md;
+  padding: 6px 20px;
+}
+
+.lg {
+  font-size: $font-lg;
+  padding: 8px 24px;
+}
+
+.xl {
+  font-size: $font-2xl;
+  padding: 10px 28px;
 }

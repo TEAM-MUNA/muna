@@ -42,8 +42,8 @@ function App() {
       <h1 className='danger'>muna</h1>
       <Counter />
       <LoginForm />
-      <Button />
       <UserIcon />
+      <Button label='버튼' color='danger' size='xl' />
     </div>
   );
 }
