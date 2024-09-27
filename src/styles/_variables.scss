@@ -1,12 +1,7 @@
-$font-base: #1a1a1aeb;
-$font-light: #1a1a1a99;
-$font-lighter: #1a1a1a66;
-
-$line-light: #1a1a1a33;
-$line-lighter: #1a1a1a1f;
-
-$box-base: #eeeeee;
-$box-light: #f6f6f6;
+// color
+$black: #1a1a1aeb;
+$black-light: #1a1a1a99;
+$black-lighter: #1a1a1a66;
 
 $white: #ffffff;
 $white-light: #ffffffcc;
@@ -17,3 +12,19 @@ $primary-light: #7926ff1f;
 
 $danger: #ed4b4b;
 $danger-light: #ed4b4b1f;
+
+$line-light: #1a1a1a33;
+$line-lighter: #1a1a1a1f;
+
+$box-base: #eeeeee;
+$box-light: #f6f6f6;
+
+// font-size
+$font-xs: 0.6875rem; // 11px
+$font-sm: 0.75rem; // 12px
+$font-md: 0.875rem; // 14px
+$font-lg: 1rem; // 16px
+$font-xl: 1.125rem; // 18px
+$font-2xl: 1.25rem; // 20px
+$font-3xl: 1.5rem; // 24px
+$font-4xl: 2rem; // 32px
