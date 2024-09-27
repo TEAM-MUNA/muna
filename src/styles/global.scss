@@ -5,20 +5,17 @@
 body {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: none;
+  line-height: 150%;
 }
 
-// blue
-.card {
-  @include box("circle");
-  background-color: blue;
-}
+// // blue
+// .card {
+//   @include box("circle");
+//   background-color: blue;
+// }
 
-// red
-.profile {
-  @include box("rect");
-  background-color: red;
-}
-
-.danger {
-  @include danger;
-}
+// // red
+// .profile {
+//   @include box("rect");
+//   background-color: red;
+// }
