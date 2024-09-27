@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
