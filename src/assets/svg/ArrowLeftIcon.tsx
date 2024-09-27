@@ -2,7 +2,7 @@ import React from "react";
 import defaultIconProps from "../../types/defaultIconProps";
 import { IconProps } from "../../types/iconProps";
 
-export default function ArrowRightIcon({
+export default function ArrowLeftIcon({
   size = defaultIconProps.size,
 }: IconProps) {
   return (
