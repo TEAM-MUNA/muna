@@ -1,4 +1,5 @@
 import React from "react";
+// import { useNavigate } from "react-router-dom";
 import styles from "./Title.module.scss";
 import Button from "../Button/Button";
 import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
@@ -9,25 +10,33 @@ interface TitleProps {
   label?: string;
   buttonLeft?: "back" | "close";
   buttonRight?: "done" | null;
+  handleDoneButton?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function Title({
   label = "",
   buttonLeft,
   buttonRight,
+  handleDoneButton,
 }: TitleProps) {
+  const handleBackButton = () => {
+    // navigate(-1);
+  };
+
   return (
     <header className={`${styles.title}`}>
       <div>
         {buttonLeft === "back" ? (
-          <Button icon={<ArrowLeftIcon />} />
+          <Button icon={<ArrowLeftIcon />} onClick={handleBackButton} />
         ) : (
-          <Button icon={<CloseIcon />} />
+          <Button icon={<CloseIcon />} onClick={handleBackButton} />
         )}
       </div>
       <h1>{label}</h1>
       <div>
-        {buttonRight === "done" ? <Button icon={<CheckIcon />} /> : null}
+        {buttonRight === "done" ? (
+          <Button icon={<CheckIcon />} onClick={handleDoneButton} />
+        ) : null}
       </div>
     </header>
   );
