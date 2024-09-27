@@ -1,4 +1,5 @@
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
-  width?: number;
+  size?: string;
   stroke?: string;
+  fill?: string;
 }
