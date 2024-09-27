@@ -1,0 +1,25 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.container {
+  border: none;
+  background-color: $box-base;
+  border-radius: 8px;
+  display: flex;
+  padding: 8px;
+  font-size: $font-lg;
+
+  input {
+    color: $black;
+    width: 100%;
+    margin-left: 8px;
+    &::placeholder {
+      color: $black-lighter;
+    }
+  }
+  button.clear {
+    padding: 0;
+    border: none;
+    cursor: pointer;
+  }
+}

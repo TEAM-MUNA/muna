@@ -13,7 +13,6 @@
   }
 
   input {
-    border: none;
     color: $black;
     padding: 0;
     width: 100%;
@@ -21,10 +20,6 @@
     &::placeholder {
       color: $black-lighter;
       font-size: $font-md;
-    }
-
-    &:focus {
-      outline: none;
     }
   }
   .input-icon-container {

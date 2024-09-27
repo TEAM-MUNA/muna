@@ -6,6 +6,7 @@ import Button from "./components/common/Button/Button";
 import Input from "./components/common/Input/Input";
 import Title from "./components/common/Title/Title";
 import UserIcon from "./assets/svg/UserIcon";
+import SearchInput from "./components/common/SearchInput/SearchInput";
 
 function App() {
   // const a = 3;
@@ -61,6 +62,7 @@ function App() {
       <Title label='기록하기' buttonLeft='back' />
       <Title label='기록하기' buttonLeft='close' buttonRight='done' />
       <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
+      <SearchInput placeholder='검색어를 입력하세요' />
     </div>
   );
 }

@@ -31,6 +31,10 @@ p {
 }
 input {
   background: none;
+  border: none;
+  &:focus {
+    outline: none;
+  }
 }
 
 // // blue
