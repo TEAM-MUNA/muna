@@ -5,9 +5,9 @@ import CloseIcon from "../../../assets/svg/CloseIcon";
 
 interface SearchInputProps {
   placeholder?: string;
-  onChange?: () => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   fullWidth?: boolean;
-  onClear?: () => void;
+  onClear?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function SearchInput({

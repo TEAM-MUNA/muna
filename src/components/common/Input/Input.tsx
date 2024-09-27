@@ -5,7 +5,7 @@ interface InputProps {
   label?: string;
   error?: boolean;
   placeholder?: string;
-  onChange?: () => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   type?: string;
   message?: string;
