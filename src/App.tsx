@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Counter from "./components/Counter";
+import Button from "./components/common/Button";
 
 function App() {
   // const a = 3;
@@ -38,9 +39,10 @@ function App() {
 
   return (
     <div>
-      <h1>muna</h1>
+      <h1 className='danger'>muna</h1>
       <Counter />
       <LoginForm />
+      <Button />
     </div>
   );
 }

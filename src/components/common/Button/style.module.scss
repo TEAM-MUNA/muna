@@ -1,0 +1,10 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+// @import "../../../styles/_variables";
+// @import "../../../styles/_mixin";
+
+.test_danger {
+  // @include danger;
+  color: $danger;
+}

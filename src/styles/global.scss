@@ -1,0 +1,18 @@
+@import "./variables";
+@import "./mixin";
+
+// blue
+.card {
+  @include box("circle");
+  background-color: blue;
+}
+
+// red
+.profile {
+  @include box("rect");
+  background-color: red;
+}
+
+.danger {
+  @include danger;
+}
