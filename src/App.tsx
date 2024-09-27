@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
-import Counter from "./components/Counter";
 import Button from "./components/common/Button";
-import UserIcon from "./assets/svg/userIcon";
+import UserIcon from "./assets/svg/UserIcon";
 
 function App() {
   // const a = 3;
@@ -40,10 +39,11 @@ function App() {
   return (
     <div>
       <h1 className='danger'>muna</h1>
-      <Counter />
+      {/* <Counter /> */}
       <LoginForm />
       <UserIcon />
       <Button label='버튼' color='danger' size='xl' />
+      <Button />
     </div>
   );
 }
