@@ -8,6 +8,24 @@ body {
 
   // TODO: 수정 필요
   line-height: 150%;
+  font-weight: 00;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+}
+
+p {
+  font-weight: 300;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 // reset.css
