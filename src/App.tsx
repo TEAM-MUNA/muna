@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
-import Button from "./components/common/Button";
-import UserIcon from "./assets/svg/UserIcon";
+import Button from "./components/common/Button/Button";
 
 function App() {
   // const a = 3;
@@ -41,7 +40,6 @@ function App() {
       <h1 className='danger'>muna</h1>
       {/* <Counter /> */}
       <LoginForm />
-      <UserIcon />
       <Button label='버튼' color='danger' size='xl' />
       <Button />
     </div>

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styles from "./style.module.scss";
+import styles from "./Button.module.scss";
 
 interface ButtonProps {
   label?: string | null;
