@@ -13,6 +13,7 @@
     "sourceType": "module",
   },
   "rules": {
+    "react/require-default-props": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "eqeqeq": "error", // ==, != 사용 금지 (테스트용)
     "prefer-const": "error",
