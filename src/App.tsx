@@ -4,6 +4,7 @@ import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button";
 import UserIcon from "./assets/svg/UserIcon";
+import Tag from "./components/common/Tag";
 
 function App() {
   // const a = 3;
@@ -44,6 +45,9 @@ function App() {
       <UserIcon />
       <Button label='버튼' color='danger' size='xl' />
       <Button />
+      <Tag label='tag-default' color='default' />
+      <Tag label='tag-primary' color='primary' />
+      <Tag label='tag-secondary' color='black' />
     </div>
   );
 }
