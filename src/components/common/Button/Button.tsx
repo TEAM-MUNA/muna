@@ -8,7 +8,7 @@ interface ButtonProps {
   color?: "default" | "primary" | "primary_line" | "danger" | "";
   icon?: ReactNode | null;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function Button({
