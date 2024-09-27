@@ -1,0 +1,25 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.btn {
+  color: $white;
+  display: flex;
+  gap: 4px;
+  border-radius: 100px;
+  background-color: $line-light;
+  font-size: $font-xs;
+  border-style: none;
+  padding: 3px 6px;
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.primary {
+  background-color: $primary;
+}
+
+.black {
+  background-color: $black;
+}
