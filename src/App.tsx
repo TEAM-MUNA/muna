@@ -40,7 +40,7 @@ function App() {
       <h1 className='danger'>muna</h1>
       {/* <Counter /> */}
       <LoginForm />
-      <Button label='버튼' color='danger' size='xl' />
+      <Button label='버튼' color='primary_line' size='sm' fullWidth />
       <Button />
     </div>
   );
