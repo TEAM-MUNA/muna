@@ -8,7 +8,6 @@ body {
 
   // TODO: 수정 필요
   line-height: 150%;
-  font-weight: 00;
 }
 
 h1,
@@ -23,11 +22,15 @@ h6 {
 * {
   box-sizing: border-box;
   font-weight: 400;
+  box-sizing: border-box;
 }
 
 // reset.css
 p {
   margin: 0;
+}
+input {
+  background: none;
 }
 
 // // blue

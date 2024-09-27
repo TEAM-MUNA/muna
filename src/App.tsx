@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button/Button";
 import Input from "./components/common/Input/Input";
 import Title from "./components/common/Title/Title";
+import UserIcon from "./assets/svg/UserIcon";
 
 function App() {
   // const a = 3;
@@ -42,8 +43,12 @@ function App() {
       <h1 className='danger'>muna</h1>
       {/* <Counter /> */}
       <LoginForm />
+      <Button label='버튼' color='primary_line' size='sm' fullWidth={false} />
       <Button label='버튼' color='primary_line' size='sm' fullWidth />
       <Button />
+
+      <Button icon={<UserIcon />} />
+
       <Input label='이메일' placeholder='이메일 주소를 입력해 주세요.' />
 
       <Input
@@ -55,6 +60,7 @@ function App() {
       />
       <Title label='기록하기' buttonLeft='back' />
       <Title label='기록하기' buttonLeft='close' buttonRight='done' />
+      <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
     </div>
   );
 }
