@@ -4,6 +4,16 @@ import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button";
 import UserIcon from "./assets/svg/UserIcon";
+import ArrowRightIcon from "./assets/svg/ArrowRightIcon";
+import BookmarkIcon from "./assets/svg/BookmarkIcon";
+import IconGallery from "./assets/svg/IconGallery";
+import KebabMenuIcon from "./assets/svg/KebabMenuIcon";
+import LikeIcon from "./assets/svg/LikeIcon";
+import PencilIcon from "./assets/svg/PencilIcon";
+import QueueListIcon from "./assets/svg/QueueListIcon";
+import SearchIcon from "./assets/svg/SearchIcon";
+import SettingIcon from "./assets/svg/SettingIcon";
+import TrashIcon from "./assets/svg/TrashIcon";
 
 function App() {
   // const a = 3;
@@ -44,6 +54,18 @@ function App() {
       <UserIcon />
       <Button label='버튼' color='danger' size='xl' />
       <Button />
+
+      <ArrowRightIcon />
+      <BookmarkIcon />
+      <IconGallery />
+      <KebabMenuIcon />
+      <LikeIcon />
+      <PencilIcon />
+      <QueueListIcon />
+      <SearchIcon />
+      <SettingIcon />
+      <TrashIcon />
+      <UserIcon />
     </div>
   );
 }

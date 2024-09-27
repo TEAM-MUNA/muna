@@ -4,7 +4,6 @@ import { IconProps } from "../../types/iconProps";
 
 export default function ArrowRightIcon({
   size = defaultIconProps.size,
-  stroke = defaultIconProps.stroke,
 }: IconProps) {
   return (
     <svg
@@ -16,7 +15,7 @@ export default function ArrowRightIcon({
     >
       <path
         d='M10.5 19.5L3 12M3 12L10.5 4.5M3 12L21 12'
-        stroke={stroke}
+        stroke='currentColor'
         strokeOpacity='0.92'
         strokeWidth='1.5'
         strokeLinecap='round'
