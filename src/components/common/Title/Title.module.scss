@@ -1,0 +1,18 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.title {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  h1 {
+    font-size: $font-2xl;
+  }
+
+  > div {
+    width: 40px;
+  }
+}

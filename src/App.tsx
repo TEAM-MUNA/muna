@@ -4,7 +4,8 @@ import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button/Button";
 import Input from "./components/common/Input/Input";
-import UserIcon from "./assets/svg/UserIcon";
+import UserIcon from "./assets/svg/userIcon";
+import Title from "./components/common/Title/Title";
 
 function App() {
   // const a = 3;
@@ -54,6 +55,7 @@ function App() {
         error
         message='비밀번호가 일치하지 않습니다.'
       />
+      <Title label='기록하기' buttonLeft='back' />
     </div>
   );
 }
