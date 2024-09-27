@@ -3,7 +3,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button/Button";
-import UserIcon from "./assets/svg/userIcon";
+import Input from "./components/common/Input/Input";
+import UserIcon from "./assets/svg/UserIcon";
 
 function App() {
   // const a = 3;
@@ -43,6 +44,16 @@ function App() {
       <LoginForm />
       <Button label='버튼' color='primary_line' size='sm' fullWidth />
       <Button icon={<UserIcon />} />
+      <Button />
+      <Input label='이메일' placeholder='이메일 주소를 입력해 주세요.' />
+
+      <Input
+        label='비밀번호'
+        type='password'
+        placeholder='현재 비밀번호를 입력해 주세요.'
+        error
+        message='비밀번호가 일치하지 않습니다.'
+      />
     </div>
   );
 }

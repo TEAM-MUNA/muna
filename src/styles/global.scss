@@ -5,7 +5,14 @@
 body {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: none;
+
+  // TODO: 수정 필요
   line-height: 150%;
+}
+
+// reset.css
+p {
+  margin: 0;
 }
 
 // // blue
