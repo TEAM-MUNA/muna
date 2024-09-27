@@ -4,6 +4,7 @@ import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Counter from "./components/Counter";
 import Button from "./components/common/Button";
+import UserIcon from "./assets/svg/userIcon";
 
 function App() {
   // const a = 3;
@@ -42,6 +43,7 @@ function App() {
       <Counter />
       <LoginForm />
       <Button />
+      <UserIcon />
     </div>
   );
 }
