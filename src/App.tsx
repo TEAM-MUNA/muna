@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button/Button";
+import UserIcon from "./assets/svg/userIcon";
 
 function App() {
   // const a = 3;
@@ -41,7 +42,7 @@ function App() {
       {/* <Counter /> */}
       <LoginForm />
       <Button label='버튼' color='primary_line' size='sm' fullWidth />
-      <Button />
+      <Button icon={<UserIcon />} />
     </div>
   );
 }

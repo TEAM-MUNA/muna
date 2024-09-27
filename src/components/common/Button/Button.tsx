@@ -2,10 +2,10 @@ import React, { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
-  label?: string | null;
-  size?: "sm" | "md" | "lg" | "xl";
+  label?: string;
+  size?: "sm" | "md" | "lg" | "xl" | "";
   fullWidth?: boolean;
-  color?: "default" | "primary" | "primary_line" | "danger";
+  color?: "default" | "primary" | "primary_line" | "danger" | "";
   icon?: ReactNode | null;
   disabled?: boolean;
   onClick?: () => void;
@@ -13,9 +13,9 @@ interface ButtonProps {
 
 export default function Button({
   label = "",
-  size = "md",
+  size = "",
   fullWidth = false,
-  color = "default",
+  color = "",
   icon = null,
   disabled = false,
   onClick = () => {},

@@ -6,13 +6,19 @@
   gap: 4px;
   justify-content: center;
   align-items: center;
-  border: 1px solid $line-light;
+  padding: 8px;
+  border: 1px solid transparent;
   border-radius: 100px;
-  background-color: $white;
+  background-color: transparent;
   cursor: pointer;
   &:disabled {
     opacity: 0.4;
   }
+}
+
+.default {
+  border-color: $line-light;
+  background-color: $white;
 }
 
 .primary {
@@ -36,6 +42,7 @@
 .primary_line {
   color: $primary;
   border-color: $primary;
+  background-color: $white;
 }
 
 .sm {
