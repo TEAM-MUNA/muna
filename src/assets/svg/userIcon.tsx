@@ -1,10 +1,7 @@
 import React from "react";
 import { IconProps } from "../../types/iconProps";
 
-export default function UserIcon({
-  width = 24,
-  stroke = "#1D1D1D",
-}: IconProps) {
+export default function UserIcon({ width, stroke }: IconProps) {
   return (
     <svg
       width={width}
@@ -32,3 +29,7 @@ export default function UserIcon({
     </svg>
   );
 }
+UserIcon.defaultProps = {
+  width: 24,
+  stroke: "#1D1D1D",
+};
