@@ -7,18 +7,9 @@ import Input from "./components/common/Input/Input";
 import Title from "./components/common/Title/Title";
 import UserIcon from "./assets/svg/UserIcon";
 import SearchInput from "./components/common/SearchInput/SearchInput";
+import Header from "./components/layout/Header/Header";
 
 function App() {
-  // const a = 3;
-  // if (a == 3) {
-  //   // == 사용 못하게하는 eslint 테스트용 코드
-  //   console.log("a는 3입니다");
-  // }
-  // const b = 3;
-  // if (b == 3) {
-  //   console.log("b는 3입니다");
-  // }
-
   // firebase 사용 테스트
   const getDocs = async () => {
     try {
@@ -63,6 +54,11 @@ function App() {
       <Title label='기록하기' buttonLeft='close' buttonRight='done' />
       <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
       <SearchInput placeholder='검색어를 입력하세요' />
+
+      <Header buttonLeft='profile' />
+      <Header buttonLeft='login' />
+      <Header buttonLeft='back' />
+      <Header buttonLeft='back' />
     </div>
   );
 }

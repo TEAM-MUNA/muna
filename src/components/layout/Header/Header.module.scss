@@ -1,0 +1,18 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.header {
+  width: 100%;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $line-light;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  position: absolute; // absolute로 로고를 중앙에 고정
+  left: 50%;
+  transform: translateX(-50%);
+}
