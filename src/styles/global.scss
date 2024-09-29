@@ -16,25 +16,36 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 500;
+  font-weight: $font-bold;
 }
 
 * {
   box-sizing: border-box;
-  font-weight: 400;
+  font-weight: $font-regular;
   box-sizing: border-box;
+}
+
+a,
+button {
+  cursor: pointer;
 }
 
 // reset.css
 p {
   margin: 0;
 }
+
 input {
   background: none;
   border: none;
   &:focus {
     outline: none;
   }
+}
+
+ul,
+li {
+  padding: 0;
 }
 
 // // blue
