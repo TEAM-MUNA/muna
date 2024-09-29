@@ -26,6 +26,7 @@ export default function SearchInput({
         onChange={onChange}
       />
       <button className={styles.clear} type='button' onClick={onClear}>
+        <span className='sr_only'>close</span>
         <CloseIcon />
       </button>
     </div>
