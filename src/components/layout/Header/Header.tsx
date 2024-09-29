@@ -25,13 +25,21 @@ export default function Header({ buttonLeft }: HeaderProps) {
     <header className={`${styles.header}`}>
       <div>
         {buttonLeft === "back" && (
-          <Button icon={<ArrowLeftIcon />} onClick={handleBackButton} />
+          <Button
+            label='back'
+            iconOnly={<ArrowLeftIcon />}
+            onClick={handleBackButton}
+          />
         )}
         {buttonLeft === "login" && (
           <Button label='로그인' size='md' color='default' />
         )}
         {buttonLeft === "profile" && (
-          <Button icon={<UserIcon />} onClick={handleProfileButton} />
+          <Button
+            label='profile'
+            iconOnly={<UserIcon />}
+            onClick={handleProfileButton}
+          />
         )}
       </div>
       {search ? (
@@ -39,10 +47,14 @@ export default function Header({ buttonLeft }: HeaderProps) {
       ) : (
         <>
           <div className={`${styles.logo}`}>
-            <Button icon={<Logo />} />
+            <Button label='muna logo' iconOnly={<Logo />} />
           </div>
           <div>
-            <Button icon={<SearchIcon />} onClick={handleSearchButton} />
+            <Button
+              label='search'
+              iconOnly={<SearchIcon />}
+              onClick={handleSearchButton}
+            />
           </div>
         </>
       )}

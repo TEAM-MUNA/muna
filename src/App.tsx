@@ -48,9 +48,9 @@ function App() {
       <LoginForm />
       <Button label='버튼' color='primary_line' size='sm' fullWidth={false} />
       <Button label='버튼' color='primary_line' size='sm' fullWidth />
-      <Button />
+      <Button label='test' />
 
-      <Button icon={<UserIcon />} />
+      <Button label='test' iconOnly={<UserIcon />} />
 
       <Input label='이메일' placeholder='이메일 주소를 입력해 주세요.' />
 

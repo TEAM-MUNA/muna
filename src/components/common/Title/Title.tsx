@@ -27,15 +27,27 @@ export default function Title({
     <header className={`${styles.title}`}>
       <div>
         {buttonLeft === "back" ? (
-          <Button icon={<ArrowLeftIcon />} onClick={handleBackButton} />
+          <Button
+            label='back'
+            iconOnly={<ArrowLeftIcon />}
+            onClick={handleBackButton}
+          />
         ) : (
-          <Button icon={<CloseIcon />} onClick={handleBackButton} />
+          <Button
+            label='close'
+            iconOnly={<CloseIcon />}
+            onClick={handleBackButton}
+          />
         )}
       </div>
       <h1>{label}</h1>
       <div>
         {buttonRight === "done" ? (
-          <Button icon={<CheckIcon />} onClick={handleDoneButton} />
+          <Button
+            label='done'
+            iconOnly={<CheckIcon />}
+            onClick={handleDoneButton}
+          />
         ) : null}
       </div>
     </header>

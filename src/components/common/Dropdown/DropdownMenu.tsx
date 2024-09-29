@@ -28,7 +28,11 @@ export default function DropdownMenu({
   return (
     <div className={styles.dropdown}>
       {label}
-      <Button icon={<KebabMenuIcon />} onClick={toggleDropdown} />
+      <Button
+        label='menu'
+        iconOnly={<KebabMenuIcon />}
+        onClick={toggleDropdown}
+      />
       {isOpen && (
         <ul className={`${styles.dropdown_ul} ${styles.dropdown_right}`}>
           {options.map((option) => (

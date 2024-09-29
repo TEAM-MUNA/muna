@@ -32,7 +32,7 @@ export default function DropdownSelect({
       {label}
       <Button
         label={selected}
-        icon={<CaretIcon />}
+        iconRight={<CaretIcon />}
         onClick={toggleDropdown}
         color='default'
         size='md'
