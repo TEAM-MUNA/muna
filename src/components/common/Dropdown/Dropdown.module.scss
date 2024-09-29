@@ -18,18 +18,24 @@
   border-radius: 8px;
   background: $white;
   z-index: 10;
+  width: fit-content;
+
+  &.dropdown_right {
+    right: 0;
+  }
 }
 
 .dropdown_li {
   display: flex;
   font-size: $font-md;
 
-  &.selected button {
-    font-weight: $font-bold;
-  }
-
   button {
     background: transparent;
     border: 0;
+    white-space: nowrap;
+  }
+
+  &.selected button {
+    font-weight: $font-bold;
   }
 }
