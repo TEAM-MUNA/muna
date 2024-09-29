@@ -8,6 +8,7 @@ import Title from "./components/common/Title/Title";
 import UserIcon from "./assets/svg/UserIcon";
 import SearchInput from "./components/common/SearchInput/SearchInput";
 import Header from "./components/layout/Header/Header";
+import DropdownSelect from "./components/common/Dropdown/DropdownSelect";
 
 function App() {
   // firebase 사용 테스트
@@ -29,6 +30,11 @@ function App() {
   useEffect(() => {
     getDocs();
   }, []);
+
+  // DropdownSelect 선택시 기능 추가
+  const handleSelect = (value: string) => {
+    console.log(`Selected: ${value}`);
+  };
 
   return (
     <div>
@@ -52,6 +58,10 @@ function App() {
       />
       <Title label='기록하기' buttonLeft='back' />
       <Title label='기록하기' buttonLeft='close' buttonRight='done' />
+      <DropdownSelect
+        options={["Option One", "Option Two", "Option Three"]}
+        onSelect={handleSelect}
+      />
       <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
       <SearchInput placeholder='검색어를 입력하세요' />
 
