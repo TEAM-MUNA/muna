@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import LoginForm from "./components/LoginForm";
 import Button from "./components/common/Button/Button";
-import Input from "./components/common/Input/Input";
-import Title from "./components/common/Title/Title";
-import UserIcon from "./assets/svg/UserIcon";
-import SearchInput from "./components/common/SearchInput/SearchInput";
+
+import Main from "./pages/Main/Main";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
 import Header from "./components/layout/Header/Header";
-import DropdownSelect from "./components/common/Dropdown/DropdownSelect";
-import DropdownMenu from "./components/common/Dropdown/DropdownMenu";
+import Search from "./pages/Search/Search";
+import ConcertList from "./pages/ConcertList/ConcertList";
+import ConcertDetail from "./pages/ConcertDetail/ConcertDetail";
+import ReviewEdit from "./pages/ReviewEdit/ReviewEdit";
+import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
+import Profile from "./pages/Profile/Profile";
+import Setting from "./pages/Setting/Setting";
 
 function App() {
   // firebase 사용 테스트
@@ -32,52 +37,79 @@ function App() {
     getDocs();
   }, []);
 
-  // DropdownSelect 선택시 기능 추가
-  const handleDropdownSelect = (value: string) => {
-    console.log(`Selected: ${value}`);
-  };
-  // DropdownSelect 선택시 기능 추가
-  const handleDropdownMenu = (value: string) => {
-    console.log(`Menu: ${value}`);
-  };
-
   return (
     <div>
-      <h1 className='danger'>muna</h1>
-      {/* <Counter /> */}
-      <LoginForm />
-      <Button label='버튼' color='primary_line' size='sm' fullWidth={false} />
-      <Button label='버튼' color='primary_line' size='sm' fullWidth />
-      <Button label='test' />
-      <Button label='test' iconOnly={<UserIcon />} />
-      <Input label='이메일' placeholder='이메일 주소를 입력해 주세요.' />
-      <Input
-        label='비밀번호'
-        type='password'
-        placeholder='현재 비밀번호를 입력해 주세요.'
-        error
-        message='비밀번호가 일치하지 않습니다.'
-      />
-      <Title label='기록하기' buttonLeft='back' />
-      <Title label='기록하기' buttonLeft='close' buttonRight='done' />
-      <DropdownSelect
-        options={["Option One", "Option Two", "Option Three"]}
-        onSelect={handleDropdownSelect}
-      />
-      <DropdownMenu
-        options={["후기 수정", "후기 삭제"]}
-        onSelect={handleDropdownMenu}
-      />
-      <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
-      <SearchInput placeholder='검색어를 입력하세요' />
-      <Header buttonLeft='profile' />
-      <Header buttonLeft='login' />
-      <Header buttonLeft='back' />
-      <Header buttonLeft='back' />
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, tenetur
-      necessitatibus ratione iste omnis numquam unde? Magnam, illum! Quasi eum
-      magnam deleniti cum officiis ipsum a voluptatibus ratione aliquam
-      exercitationem.
+      <Router>
+        <div>
+          <Header buttonLeft='profile' />
+          <nav>
+            <ul>
+              <li>
+                <Link to='/'>
+                  <Button label='Main' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/login'>
+                  <Button label='Login' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/signup'>
+                  <Button label='Signup' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/search'>
+                  <Button label='Search' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/concert-list'>
+                  <Button label='ConcertList' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/concert-detail/1'>
+                  <Button label='ConcertDetail' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/review-edit/1'>
+                  <Button label='ReviewEdit' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/review-detail/1'>
+                  <Button label='Review Detail' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/profile'>
+                  <Button label='Profile' size='sm' color='default' />
+                </Link>
+              </li>
+              <li>
+                <Link to='/setting'>
+                  <Button label='Setting' size='sm' color='default' />
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/search' element={<Search />} />
+            <Route path='/concert-list' element={<ConcertList />} />
+            <Route path='/concert-detail/:id' element={<ConcertDetail />} />
+            <Route path='/review-edit/:id' element={<ReviewEdit />} />
+            <Route path='/review-detail/:id' element={<ReviewDetail />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/setting' element={<Setting />} />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }
