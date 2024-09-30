@@ -11,10 +11,10 @@ export default function Toggle({
   initialState = false,
   onChange,
 }: ToggleProps) {
-  const { isActive, toggle } = useToggle(initialState);
+  const { isActive, onToggle } = useToggle(initialState);
 
   const handleToggle = () => {
-    toggle();
+    onToggle();
     if (onChange) {
       onChange(!isActive);
     }
