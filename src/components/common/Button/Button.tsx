@@ -27,7 +27,14 @@ export default function Button({
   return (
     <button
       type='button'
-      className={`${styles.btn} ${size ? styles[size] : ""} ${color ? styles[color] : ""} ${fullWidth ? styles.full : ""} ${className}`}
+      className={`
+        ${styles.btn} 
+        ${size ? styles[size] : ""} 
+        ${color ? styles[color] : ""} 
+        ${fullWidth ? styles.full : ""} 
+        ${iconRight ? styles.has_icon_right : ""} 
+        ${className}
+      `}
       disabled={disabled}
       onClick={onClick}
     >

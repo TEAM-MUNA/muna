@@ -54,6 +54,9 @@
 .md {
   font-size: $font-md;
   padding: 6px 20px;
+  &.has_icon_right {
+    padding-right: 14px;
+  }
 }
 
 .lg {
