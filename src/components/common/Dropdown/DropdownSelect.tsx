@@ -6,13 +6,11 @@ import CaretIcon from "../../../assets/svg/CaretIcon";
 interface DropdownSelectProps {
   options: string[];
   onSelect: (value: string) => void;
-  label?: string;
 }
 // TODO: 로직 훅으로 관리하기 / 추후 고려
 export default function DropdownSelect({
   options = [],
   onSelect,
-  label,
 }: DropdownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(options[0]);
@@ -46,7 +44,6 @@ export default function DropdownSelect({
 
   return (
     <div className={styles.dropdown} ref={dropdownSelectRef}>
-      {label}
       <Button
         label={selected}
         iconRight={<CaretIcon />}
