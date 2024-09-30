@@ -5,8 +5,6 @@
 body {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: none;
-
-  // TODO: 수정 필요
   line-height: 1.2;
   background: #ddd;
   overflow-x: hidden;
@@ -70,6 +68,23 @@ li {
   clip-path: inset(50%);
   border: 0;
   clip: rect(0 0 0 0);
+}
+
+$font-sizes: (
+  xs: $font-xs,
+  sm: $font-sm,
+  md: $font-md,
+  lg: $font-lg,
+  xl: $font-xl,
+  2xl: $font-2xl,
+  3xl: $font-3xl,
+  4xl: $font-4xl,
+);
+
+@each $size, $value in $font-sizes {
+  .font-#{$size} {
+    font-size: $value;
+  }
 }
 
 // // blue
