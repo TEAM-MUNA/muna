@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Button.module.scss";
 import LikeIcon from "../../../assets/svg/LikeIcon";
+import useToggle from "../../../hooks/useToggle";
 
 interface LikeButtonProps {
   likeCount?: number;
@@ -17,22 +18,17 @@ export default function LikeButton({
   disabled = false,
   // onClick = () => {},
 }: LikeButtonProps) {
-  const [like, setLike] = useState(active);
-
-  const handleLikeButton = () => {
-    setLike(!like);
-    // TODO: 버튼 눌렸을 때 추가기능, 숫자 늘어나기
-    // onClick();
-  };
+  const { isActive, onToggle } = useToggle(active);
+  // TODO: 버튼 눌렸을 때 추가기능, 숫자 늘어나기
 
   return (
     <button
       type='button'
       className={`${styles.btn} text_danger`}
       disabled={disabled}
-      onClick={handleLikeButton}
+      onClick={onToggle}
     >
-      <LikeIcon size={size === "md" ? "24" : "20"} active={like} />
+      <LikeIcon size={size === "md" ? "24" : "20"} active={isActive} />
       <span className='sr_only'>좋아요</span>
       <span className={`font_${size}`}>{likeCount}</span>
     </button>
