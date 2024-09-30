@@ -1,6 +1,5 @@
 import React from "react";
-import { defaultIconProps } from "../../types/defaultIconProps";
-import { IconProps } from "../../types/iconProps";
+import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 // ellipsis-vertical
 // 점 세개 세로로 있는

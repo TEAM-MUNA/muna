@@ -1,6 +1,5 @@
 import React from "react";
-import { defaultIconProps } from "../../types/defaultIconProps";
-import { IconProps } from "../../types/iconProps";
+import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function SearchIcon({
   size = defaultIconProps.size,
