@@ -97,8 +97,8 @@ function App() {
                 </Link>
               </li>
               <li>
-                <Link to='/setting'>
-                  <Button label='Setting' size='sm' color='default' />
+                <Link to='/settings'>
+                  <Button label='Settings' size='sm' color='default' />
                 </Link>
               </li>
             </ul>
