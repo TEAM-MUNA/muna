@@ -15,6 +15,7 @@ import ReviewEdit from "./pages/ReviewEdit/ReviewEdit";
 import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
 import Profile from "./pages/Profile/Profile";
 import Settings from "./pages/Settings/Settings";
+import ComponentTest from "./pages/ComponentTest/ComponentTest";
 
 function App() {
   // firebase 사용 테스트
@@ -101,6 +102,15 @@ function App() {
                   <Button label='Settings' size='sm' color='default' />
                 </Link>
               </li>
+              <li>
+                <Link to='/component-test'>
+                  <Button
+                    label='컴포넌트 테스트 페이지'
+                    size='sm'
+                    color='default'
+                  />
+                </Link>
+              </li>
             </ul>
           </nav>
           <Routes>
@@ -114,6 +124,7 @@ function App() {
             <Route path='/review-detail/:id' element={<ReviewDetail />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/settings' element={<Settings />} />
+            <Route path='/component-test' element={<ComponentTest />} />
           </Routes>
         </div>
       </Router>
