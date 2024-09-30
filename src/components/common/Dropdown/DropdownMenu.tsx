@@ -6,13 +6,11 @@ import KebabMenuIcon from "../../../assets/svg/KebabMenuIcon";
 interface DropdownMenuProps {
   options: string[];
   onSelect: (value: string) => void;
-  label?: string;
 }
 
 export default function DropdownMenu({
   options = [],
   onSelect,
-  label,
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
@@ -45,7 +43,6 @@ export default function DropdownMenu({
 
   return (
     <div className={styles.dropdown} ref={dropdownMenuRef}>
-      {label}
       <Button
         label='menu'
         iconOnly={<KebabMenuIcon />}
