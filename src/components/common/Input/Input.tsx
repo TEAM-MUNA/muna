@@ -2,6 +2,7 @@ import React, { JSX } from "react";
 import styles from "./Input.module.scss";
 
 interface InputProps {
+  value?: string; // 외부에서 값을 받아올 수 있도록 수정
   label?: string;
   error?: boolean;
   placeholder?: string;
@@ -14,6 +15,7 @@ interface InputProps {
 }
 
 export default function Input({
+  value,
   label = "",
   placeholder = "",
   error = false,
@@ -34,8 +36,8 @@ export default function Input({
           disabled={disabled}
           placeholder={placeholder}
           onChange={onChange}
+          value={value}
         />
-        {/* TODO: 아이콘 크기 수정하기 */}
         <span className={styles.icon}>{icon}</span>
       </div>
       <div className={`${styles.line} ${error ? styles.error : ""}`} />
