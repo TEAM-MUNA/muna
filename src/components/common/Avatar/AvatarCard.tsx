@@ -4,7 +4,7 @@ import image from "../../../assets/img/user-default.png"
 
 interface AvatarCardProps{
     url?: string;
-    nickName?: string;
+    nickName?: string; 
     userName?: string;
 }
 
