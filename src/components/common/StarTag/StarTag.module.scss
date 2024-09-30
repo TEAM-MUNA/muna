@@ -1,0 +1,14 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.container {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  background-color: $primary-light;
+  padding: 5px 6px;
+  border-radius: 4px;
+  font-size: $font-md;
+  color: $primary;
+  gap: 4px;
+}
