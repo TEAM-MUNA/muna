@@ -1,0 +1,42 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.tab {
+  display: flex;
+  font-size: $font-lg;
+  gap: 22px;
+
+  padding: 10px 10px 0 10px;
+  position: relative;
+  .line {
+    background-color: $line-lighter;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+
+  li {
+    list-style: none;
+    cursor: pointer;
+
+    button {
+      color: $black-light;
+      padding: 0;
+      border: none;
+      background: none;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 100%;
+      padding-bottom: 8px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .active {
+      font-weight: $font-bold;
+      color: $black;
+      border-bottom: 2px solid $black;
+    }
+  }
+}
