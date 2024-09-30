@@ -1,18 +1,30 @@
-@mixin box($value) {
-  width: 100px;
-  height: 100px;
+// @mixin box($value) {
+//   width: 100px;
+//   height: 100px;
 
-  @if ($value == "circle") {
-    border: 1px solid black;
-    border-radius: 50%;
-  }
+//   @if ($value == "circle") {
+//     border: 1px solid black;
+//     border-radius: 50%;
+//   }
 
-  @if ($value == "rect") {
-    border: 1px solid black;
-    border-radius: 10%;
-  }
-}
+//   @if ($value == "rect") {
+//     border: 1px solid black;
+//     border-radius: 10%;
+//   }
+// }
 
-@mixin danger {
-  color: $danger;
+// @mixin danger {
+//   color: $danger;
+// }
+
+@mixin text_ellipsis($lineNumber) {
+  display: block;
+  display: -webkit-box;
+  max-height: calc($lineNumber * 1.4em);
+  line-height: 1.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: $lineNumber;
+  -webkit-box-orient: vertical;
 }

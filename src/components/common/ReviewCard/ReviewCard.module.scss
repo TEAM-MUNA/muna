@@ -1,0 +1,64 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.card {
+  padding-bottom: 16px;
+  border-bottom: 1px solid $line-lighter;
+}
+
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: $font-md;
+  + .main {
+    margin-top: 8px;
+  }
+}
+
+.main {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  p {
+    @include text_ellipsis(4);
+    font-size: $font-md;
+  }
+  img {
+    flex: 0 0 auto;
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border: 1px solid $line-lighter;
+    border-radius: 8px;
+  }
+}
+
+.info {
+  display: inline-flex;
+  align-items: center;
+  color: $black-light;
+  .wrap_icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: $font-sm;
+  }
+  .date {
+    font-size: $font-xs;
+    margin-left: auto;
+  }
+}
