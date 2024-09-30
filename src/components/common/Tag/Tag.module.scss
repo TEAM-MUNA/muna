@@ -3,13 +3,13 @@
 
 .btn {
   color: $white;
-  display: flex;
+  display: inline;
   gap: 4px;
   border-radius: 100px;
   background-color: $line-light;
   font-size: $font-xs;
   border-style: none;
-  padding: 3px 6px;
+  padding: 1px 6px;
   width: fit-content;
 
   &:disabled {
