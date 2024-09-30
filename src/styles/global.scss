@@ -70,6 +70,7 @@ li {
   clip: rect(0 0 0 0);
 }
 
+// 변수관련 공통스타일
 $font-sizes: (
   xs: $font-xs,
   sm: $font-sm,
@@ -87,7 +88,6 @@ $font-sizes: (
   }
 }
 
-// 변수관련 공통스타일
 $colors: (
   text: (
     black: $black,
