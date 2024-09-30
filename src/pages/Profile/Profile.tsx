@@ -3,6 +3,7 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import testImage from "../../assets/img/profileImage.png";
+import useDropdownSelect from "../../hooks/useDropdownSelect";
 
 // import AvatarCard from "../../components/common/Avatar/AvatarCard";
 // import AvatarProfile from "../../components/common/Avatar/AvatarProfile";
@@ -12,7 +13,10 @@ export default function Profile() {
   const handleDropdownMenu = () => {};
 
   const dropdownSelectOptions = ["공연전체", "공연중", "공연예정"];
-  const handleDropdownSelect = () => {};
+  // const handleDropdownSelect = () => {};
+
+  const { onSelect: onDropdownSelect, value: dropdownSelectedValue } =
+    useDropdownSelect(dropdownSelectOptions[0]);
 
   return (
     <div>
@@ -22,8 +26,9 @@ export default function Profile() {
         options={dropdownMenuOptions}
       />
       <DropdownSelect
-        onSelect={handleDropdownSelect}
+        onSelect={onDropdownSelect}
         options={dropdownSelectOptions}
+        selectedValue={dropdownSelectedValue}
       />
       <div>
         <ReviewCard thumbnail={testImage} />
