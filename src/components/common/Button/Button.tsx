@@ -3,9 +3,9 @@ import styles from "./Button.module.scss";
 
 interface ButtonProps {
   label: string;
-  size?: "sm" | "md" | "lg" | "xl" | "";
+  size?: "sm" | "md" | "lg" | "xl" | null;
   fullWidth?: boolean;
-  color?: "default" | "primary" | "primary_line" | "danger" | "";
+  color?: "default" | "primary" | "primary_line" | "danger" | null;
   iconRight?: ReactNode | null;
   iconOnly?: ReactNode | null;
   disabled?: boolean;
@@ -13,10 +13,10 @@ interface ButtonProps {
 }
 
 export default function Button({
-  label = "",
-  size = "",
+  label,
+  size,
   fullWidth = false,
-  color = "",
+  color,
   iconRight,
   iconOnly,
   disabled = false,
@@ -25,7 +25,7 @@ export default function Button({
   return (
     <button
       type='button'
-      className={`${styles.btn} ${styles[size]} ${styles[color]} ${fullWidth ? styles.full : ""}`}
+      className={`${styles.btn} ${size ? styles[size] : ""} ${color ? styles[color] : ""} ${fullWidth ? styles.full : ""}`}
       disabled={disabled}
       onClick={onClick}
     >
