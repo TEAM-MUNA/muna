@@ -14,7 +14,7 @@ import ConcertDetail from "./pages/ConcertDetail/ConcertDetail";
 import ReviewEdit from "./pages/ReviewEdit/ReviewEdit";
 import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
 import Profile from "./pages/Profile/Profile";
-import Setting from "./pages/Setting/Setting";
+import Settings from "./pages/Settings/Settings";
 
 function App() {
   // firebase 사용 테스트
@@ -113,7 +113,7 @@ function App() {
             <Route path='/review-edit/:id' element={<ReviewEdit />} />
             <Route path='/review-detail/:id' element={<ReviewDetail />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/setting' element={<Setting />} />
+            <Route path='/settings' element={<Settings />} />
           </Routes>
         </div>
       </Router>
