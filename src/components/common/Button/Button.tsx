@@ -3,11 +3,12 @@ import styles from "./Button.module.scss";
 
 interface ButtonProps {
   label: string;
-  size?: "sm" | "md" | "lg" | "xl" | null;
+  size?: "sm" | "md" | "lg" | "xl" | undefined;
   fullWidth?: boolean;
-  color?: "default" | "primary" | "primary_line" | "danger" | null;
-  iconRight?: ReactNode | null;
-  iconOnly?: ReactNode | null;
+  color?: "default" | "primary" | "primary_line" | "danger" | undefined;
+  iconRight?: ReactNode | undefined;
+  iconOnly?: ReactNode | undefined;
+  className?: string | "";
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -19,13 +20,14 @@ export default function Button({
   color,
   iconRight,
   iconOnly,
+  className = "",
   disabled = false,
   onClick = () => {},
 }: ButtonProps) {
   return (
     <button
       type='button'
-      className={`${styles.btn} ${size ? styles[size] : ""} ${color ? styles[color] : ""} ${fullWidth ? styles.full : ""}`}
+      className={`${styles.btn} ${size ? styles[size] : ""} ${color ? styles[color] : ""} ${fullWidth ? styles.full : ""} ${className}`}
       disabled={disabled}
       onClick={onClick}
     >
