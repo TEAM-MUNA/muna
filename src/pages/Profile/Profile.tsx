@@ -4,6 +4,7 @@ import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import testImage from "../../assets/img/profileImage.png";
 import useDropdownSelect from "../../hooks/useDropdownSelect";
+import LikeButton from "../../components/common/Button/LikeButton";
 
 // import AvatarCard from "../../components/common/Avatar/AvatarCard";
 // import AvatarProfile from "../../components/common/Avatar/AvatarProfile";
@@ -32,8 +33,10 @@ export default function Profile() {
       />
       <div>
         <ReviewCard thumbnail={testImage} />
+        <ReviewCard />
         {/* <AvatarCard nickName='nickname' userName='userid' /> */}
         {/* <AvatarProfile /> */}
+        <LikeButton likeCount={10} />
       </div>
     </div>
   );

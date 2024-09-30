@@ -7,7 +7,7 @@ export interface UserProps {
 }
 
 export const defaultUserProps = {
-  nickname: "nickname",
+  nickname: "닉네임",
   userId: "userId",
   userImage: userDefault,
 };

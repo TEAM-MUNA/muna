@@ -34,7 +34,7 @@ export default function LikeButton({
     >
       <LikeIcon size={size === "md" ? "24" : "20"} active={like} />
       <span className='sr_only'>좋아요</span>
-      <span className={`font-${size}`}>{likeCount}</span>
+      <span className={`font_${size}`}>{likeCount}</span>
     </button>
   );
 }
