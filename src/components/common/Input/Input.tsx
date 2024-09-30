@@ -27,7 +27,7 @@ export default function Input({
   return (
     <div className={`${styles.container} ${fullWidth ? styles.full : ""}`}>
       {label && <p className={styles.label}>{label}</p>}
-      <div className={styles["input-icon-container"]}>
+      <div className={styles.input_icon_container}>
         <input
           type={type}
           className={styles.input}

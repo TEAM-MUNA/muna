@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Dropdown.module.scss";
 import Button from "../Button/Button";
 import CaretIcon from "../../../assets/svg/CaretIcon";
@@ -6,16 +6,15 @@ import CaretIcon from "../../../assets/svg/CaretIcon";
 interface DropdownSelectProps {
   options: string[];
   onSelect: (value: string) => void;
-  label?: string;
 }
-
+// TODO: 로직 훅으로 관리하기 / 추후 고려
 export default function DropdownSelect({
   options = [],
   onSelect,
-  label,
 }: DropdownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(options[0]);
+  const dropdownSelectRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -27,9 +26,24 @@ export default function DropdownSelect({
     onSelect(value);
   };
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      dropdownSelectRef.current &&
+      !dropdownSelectRef.current.contains(e.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={styles.dropdown}>
-      {label}
+    <div className={styles.dropdown} ref={dropdownSelectRef}>
       <Button
         label={selected}
         iconRight={<CaretIcon />}
@@ -38,7 +52,7 @@ export default function DropdownSelect({
         size='md'
       />
       {isOpen && (
-        <ul className={styles.dropdown_ul}>
+        <ul className={`${styles.dropdown_ul}`}>
           {options.map((option) => (
             <li
               key={option}

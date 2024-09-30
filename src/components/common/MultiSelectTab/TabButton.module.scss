@@ -1,0 +1,22 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.tab_btn {
+  padding: 4px 12px;
+  font-size: $font-md;
+  border: 1px solid $line-light;
+  border-radius: 100px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.default {
+  border-color: $line-light;
+  background-color: $white;
+}
+
+.active {
+  color: $white;
+  border-color: $primary;
+  background-color: $primary;
+}

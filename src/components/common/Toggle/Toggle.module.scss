@@ -1,0 +1,30 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.toggle {
+  width: 49px;
+  background-color: $line-light;
+  border: none;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  padding: 3.5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &_circle {
+    height: 21px;
+    width: 21px;
+    border-radius: 50%;
+    background-color: $white;
+    transition: transform 0.2s ease;
+  }
+
+  &.active {
+    background-color: $primary;
+
+    .toggle_circle {
+      transform: translateX(21px);
+    }
+  }
+}

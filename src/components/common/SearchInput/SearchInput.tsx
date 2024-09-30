@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./SearchInput.module.scss";
 import SearchIcon from "../../../assets/svg/SearchIcon";
 import CloseIcon from "../../../assets/svg/CloseIcon";
+import Button from "../Button/Button";
 
 interface SearchInputProps {
   placeholder?: string;
@@ -18,17 +19,16 @@ export default function SearchInput({
 }: SearchInputProps) {
   return (
     <div className={`${styles.container} ${fullWidth ? styles.full : ""}`}>
-      <SearchIcon />
+      <span className={styles.icon_container}>
+        <SearchIcon />
+      </span>
       <input
         type='text'
         className={styles.input}
         placeholder={placeholder}
         onChange={onChange}
       />
-      <button className={styles.clear} type='button' onClick={onClear}>
-        <span className='sr_only'>close</span>
-        <CloseIcon />
-      </button>
+      <Button label='clear' iconOnly={<CloseIcon />} onClick={onClear} />
     </div>
   );
 }

@@ -11,6 +11,7 @@
   border-radius: 100px;
   background-color: transparent;
   cursor: pointer;
+  white-space: nowrap;
   &:disabled {
     opacity: 0.4;
   }
@@ -53,6 +54,9 @@
 .md {
   font-size: $font-md;
   padding: 6px 20px;
+  &.has_icon_right {
+    padding-right: 14px;
+  }
 }
 
 .lg {

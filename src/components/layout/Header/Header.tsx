@@ -23,7 +23,7 @@ export default function Header({ buttonLeft }: HeaderProps) {
 
   return (
     <header className={`${styles.header}`}>
-      <div>
+      <div className={`${styles.left_btn}`}>
         {buttonLeft === "back" && (
           <Button
             label='back'
@@ -43,7 +43,7 @@ export default function Header({ buttonLeft }: HeaderProps) {
         )}
       </div>
       {search ? (
-        <SearchInput placeholder='검색어를 입력하세요' />
+        <SearchInput placeholder='검색어를 입력하세요' fullWidth />
       ) : (
         <>
           <div className={`${styles.logo}`}>

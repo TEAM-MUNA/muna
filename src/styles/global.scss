@@ -7,7 +7,17 @@ body {
   font-optical-sizing: none;
 
   // TODO: 수정 필요
-  line-height: 150%;
+  line-height: 1.2;
+  background: #ddd;
+  overflow-x: hidden;
+}
+
+#root {
+  background: $white;
+  max-width: 480px;
+  padding: 0 20px;
+  margin: 0 auto;
+  border: 1px solid transparent;
 }
 
 h1,
@@ -28,6 +38,7 @@ h6 {
 a,
 button {
   cursor: pointer;
+  padding: 0;
 }
 
 // reset.css

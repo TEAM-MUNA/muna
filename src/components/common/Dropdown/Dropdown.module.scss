@@ -19,6 +19,7 @@
   background: $white;
   z-index: 10;
   width: fit-content;
+  min-width: 100%;
 
   &.dropdown_right {
     right: 0;
