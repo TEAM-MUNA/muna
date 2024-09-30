@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Toggle.module.scss";
+import useToggle from "../../../hooks/useToggle";
 
-export default function Toggle() {
-  const [isActive, setIsActive] = useState<boolean>(true);
-  const onToggle = () => {
-    setIsActive(!isActive);
+interface ToggleProps {
+  initialState?: boolean;
+  onChange?: (isActive: boolean) => void;
+}
+
+export default function Toggle({
+  initialState = false,
+  onChange,
+}: ToggleProps) {
+  const { isActive, toggle } = useToggle(initialState);
+
+  const handleToggle = () => {
+    toggle();
+    if (onChange) {
+      onChange(!isActive);
+    }
   };
 
   return (
     <button
-      onClick={onToggle}
+      onClick={handleToggle}
       aria-label='토글 버튼'
       type='button'
       className={`${styles.toggle} ${isActive ? styles.active : ""}`}
