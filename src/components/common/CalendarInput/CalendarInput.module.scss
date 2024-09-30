@@ -1,0 +1,24 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+@import "../Input/Input.module.scss";
+
+.calendarInput {
+  justify-content: space-between;
+
+  &::-webkit-datetime-edit-text,
+  &::-webkit-datetime-edit-month-field,
+  &::-webkit-datetime-edit-day-field,
+  &::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    display: none;
+  }
+
+  &::before {
+    color: $black-lighter;
+    content: attr(placeholder);
+  }
+
+  &:not(.emptyDate)::before {
+    color: $black;
+  }
+}

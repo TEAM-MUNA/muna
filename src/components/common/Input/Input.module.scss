@@ -16,10 +16,12 @@
     color: $black;
     padding: 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: $font-md;
 
     &::placeholder {
       color: $black-lighter;
-      font-size: $font-md;
     }
   }
   .input_icon_container {
