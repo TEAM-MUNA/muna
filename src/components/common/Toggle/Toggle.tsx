@@ -6,10 +6,7 @@ interface ToggleProps {
   isActive?: boolean;
 }
 
-export default function Toggle({
-  onClick = () => {},
-  isActive = false,
-}: ToggleProps) {
+export default function Toggle({ onClick = () => {}, isActive }: ToggleProps) {
   return (
     <button
       onClick={onClick}
