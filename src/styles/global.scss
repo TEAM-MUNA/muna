@@ -71,20 +71,42 @@ li {
 }
 
 // 변수관련 공통스타일
-$font-sizes: (
-  xs: $font-xs,
-  sm: $font-sm,
-  md: $font-md,
-  lg: $font-lg,
-  xl: $font-xl,
-  2xl: $font-2xl,
-  3xl: $font-3xl,
-  4xl: $font-4xl,
+@function get-property($type) {
+  @if $type == "text" {
+    @return color;
+  } @else if $type == "bg" {
+    @return background-color;
+  } @else if $type == "border" {
+    @return border-color;
+  } @else if $type == "size" {
+    @return font-size;
+  } @else if $type == "weight" {
+    @return font-weight;
+  }
+}
+
+$fonts: (
+  size: (
+    xs: $font-xs,
+    sm: $font-sm,
+    md: $font-md,
+    lg: $font-lg,
+    xl: $font-xl,
+    2xl: $font-2xl,
+    3xl: $font-3xl,
+    4xl: $font-4xl,
+  ),
+  weight: (
+    regular: $font-regular,
+    bold: $font-bold,
+  ),
 );
 
-@each $size, $value in $font-sizes {
-  .font_#{$size} {
-    font-size: $value;
+@each $type, $font-map in $fonts {
+  @each $size, $value in $font-map {
+    .font_#{$size} {
+      #{get-property($type)}: $value;
+    }
   }
 }
 
@@ -110,16 +132,6 @@ $colors: (
     line_lighter: $line-lighter,
   ),
 );
-
-@function get-property($type) {
-  @if $type == "text" {
-    @return color;
-  } @else if $type == "bg" {
-    @return background-color;
-  } @else if $type == "border" {
-    @return border-color;
-  }
-}
 
 @each $type, $color-map in $colors {
   @each $color, $value in $color-map {
