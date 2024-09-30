@@ -6,7 +6,7 @@ interface AvatarProfileProps {
     url?: string;
     nickName?: string;
     userName?: string;
-} 
+}
 
 export default function AvatarProfile({
     url,

@@ -7,7 +7,7 @@ interface ReviewAvatarProps{
     nickName?: string;
     userName?: string;
     watchDate?: string;
-} 
+}
 
 export default function ReviewAvatar({
     url,
