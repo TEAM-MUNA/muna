@@ -82,8 +82,50 @@ $font-sizes: (
 );
 
 @each $size, $value in $font-sizes {
-  .font-#{$size} {
+  .font_#{$size} {
     font-size: $value;
+  }
+}
+
+// 변수관련 공통스타일
+$colors: (
+  text: (
+    black: $black,
+    black_light: $black-light,
+    black_lighter: $black-lighter,
+    white: $white,
+    white_light: $white-light,
+    white_lighter: $white-lighter,
+    primary: $primary,
+    primary_light: $primary-light,
+    danger: $danger,
+    danger_light: $danger-light,
+  ),
+  bg: (
+    box_base: $box-base,
+    box_light: $box-light,
+  ),
+  border: (
+    line_light: $line-light,
+    line_lighter: $line-lighter,
+  ),
+);
+
+@function get-property($type) {
+  @if $type == "text" {
+    @return color;
+  } @else if $type == "bg" {
+    @return background-color;
+  } @else if $type == "border" {
+    @return border-color;
+  }
+}
+
+@each $type, $color-map in $colors {
+  @each $color, $value in $color-map {
+    .#{$type}_#{$color} {
+      #{get-property($type)}: $value;
+    }
   }
 }
 
