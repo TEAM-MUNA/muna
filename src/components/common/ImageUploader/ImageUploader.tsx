@@ -28,6 +28,7 @@ export default function ImageUploader({
       <span className='sr_only'>프로필 이미지 설정</span>
       <input
         type='file'
+        accept='image/*'
         id='userImageInput'
         className='sr_only'
         onChange={handleFileChange}
