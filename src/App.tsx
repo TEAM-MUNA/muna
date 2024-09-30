@@ -49,11 +49,8 @@ function App() {
       <Button label='버튼' color='primary_line' size='sm' fullWidth={false} />
       <Button label='버튼' color='primary_line' size='sm' fullWidth />
       <Button label='test' />
-
       <Button label='test' iconOnly={<UserIcon />} />
-
       <Input label='이메일' placeholder='이메일 주소를 입력해 주세요.' />
-
       <Input
         label='비밀번호'
         type='password'
@@ -73,11 +70,14 @@ function App() {
       />
       <Input placeholder='공연 관람일을 입력하세요' icon={<UserIcon />} />
       <SearchInput placeholder='검색어를 입력하세요' />
-
       <Header buttonLeft='profile' />
       <Header buttonLeft='login' />
       <Header buttonLeft='back' />
       <Header buttonLeft='back' />
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, tenetur
+      necessitatibus ratione iste omnis numquam unde? Magnam, illum! Quasi eum
+      magnam deleniti cum officiis ipsum a voluptatibus ratione aliquam
+      exercitationem.
     </div>
   );
 }
