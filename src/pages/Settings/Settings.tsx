@@ -1,5 +1,5 @@
 import React from "react";
-import ImageInput from "../../components/common/ImageInput/ImageInput";
+import ImageInput from "../../components/common/ImageUploader/ImageUploader";
 
 export default function Settings() {
   return (
