@@ -5,16 +5,15 @@ import CaretIcon from "../../../assets/svg/CaretIcon";
 
 interface DropdownSelectProps {
   options: string[];
-  onSelect: (selectedValue: string) => void;
-  selectedValue: string;
+  onSelect: (value: string) => void;
 }
 // TODO: 로직 훅으로 관리하기 / 추후 고려
 export default function DropdownSelect({
   options = [],
   onSelect,
-  selectedValue,
 }: DropdownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<string>(options[0]);
   const dropdownSelectRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => {
@@ -22,8 +21,9 @@ export default function DropdownSelect({
   };
 
   const handleSelect = (value: string) => {
-    onSelect(value);
+    setSelected(value);
     setIsOpen(false);
+    onSelect(value);
   };
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -45,7 +45,7 @@ export default function DropdownSelect({
   return (
     <div className={styles.dropdown} ref={dropdownSelectRef}>
       <Button
-        label={selectedValue}
+        label={selected}
         iconRight={<CaretIcon />}
         onClick={toggleDropdown}
         color='default'
@@ -56,7 +56,7 @@ export default function DropdownSelect({
           {options.map((option) => (
             <li
               key={option}
-              className={`${styles.dropdown_li} ${option === selectedValue ? styles.selected : ""}`}
+              className={`${styles.dropdown_li} ${option === selected ? styles.selected : ""}`}
             >
               <button type='button' onClick={() => handleSelect(option)}>
                 {option}

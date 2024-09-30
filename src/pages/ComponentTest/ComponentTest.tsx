@@ -1,7 +1,7 @@
 import React from "react";
 import useToggle from "../../hooks/useToggle";
 import useInput from "../../hooks/useInput";
-import useDropdownSelect from "../../hooks/useDropdownSelect";
+// import useDropdownSelect from "../../hooks/useDropdownSelect";
 import Toggle from "../../components/common/Toggle/Toggle";
 import Input from "../../components/common/Input/Input";
 // import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
@@ -12,8 +12,6 @@ import Profile from "../Profile/Profile";
 export default function ComponentTest() {
   const { isActive, onToggle } = useToggle(true); // Toggle
   const { value, onChange } = useInput("초기값"); // Input
-  const { value: dropdownSelectedValue, onSelect: onDropdownSelect } =
-    useDropdownSelect("옵션1"); // dropdownSelect
 
   return (
     <div>
@@ -32,13 +30,17 @@ export default function ComponentTest() {
         }}
         value={value}
       />
-      <DropdownSelect
+      {/* <DropdownSelect
         options={["옵션1", "옵션2", "옵션3"]}
         onSelect={(selected) => {
           onDropdownSelect(selected);
           console.log("선택된 값", selected);
         }}
         selectedValue={dropdownSelectedValue}
+      /> */}
+      <DropdownSelect
+        options={["옵션1", "옵션2", "옵션3"]}
+        onSelect={(selected) => console.log(selected)}
       />
       <Profile />
     </div>
