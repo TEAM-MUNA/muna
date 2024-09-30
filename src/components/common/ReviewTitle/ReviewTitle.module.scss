@@ -1,0 +1,50 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.review_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid $line-light;
+  padding: 13px 0;
+
+  .left_btn {
+    margin-left: 20px;
+  }
+  .right_btn {
+    margin-right: 20px;
+  }
+
+  .title_container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  h1 {
+    font-size: $font-md;
+    font-weight: $font-regular;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 200px; // 말줄임표가 적용될 너비
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+  h2 {
+    font-size: $font-xs;
+    color: $black-light;
+    font-weight: $font-regular;
+    margin: 0;
+  }
+  a {
+    color: black;
+    text-decoration: none;
+    text-decoration: underline;
+  }
+}
