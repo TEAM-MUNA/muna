@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Dropdown.module.scss";
 import Button from "../Button/Button";
 import CaretIcon from "../../../assets/svg/CaretIcon";
+import useClickOutside from "../../../hooks/useCloseOnOutsideClick";
 
 interface DropdownSelectProps {
   options: string[];
   onSelect: (value: string) => void;
 }
-// TODO: 로직 훅으로 관리하기 / 추후 고려
+
 export default function DropdownSelect({
   options = [],
   onSelect,
@@ -15,6 +16,8 @@ export default function DropdownSelect({
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(options[0]);
   const dropdownSelectRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside(dropdownSelectRef, setIsOpen);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -25,22 +28,6 @@ export default function DropdownSelect({
     setIsOpen(false);
     onSelect(value);
   };
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      dropdownSelectRef.current &&
-      !dropdownSelectRef.current.contains(e.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className={styles.dropdown} ref={dropdownSelectRef}>

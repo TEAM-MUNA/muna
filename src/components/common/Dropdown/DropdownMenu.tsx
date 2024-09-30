@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Dropdown.module.scss";
 import Button from "../Button/Button";
 import KebabMenuIcon from "../../../assets/svg/KebabMenuIcon";
+import useClickOutside from "../../../hooks/useCloseOnOutsideClick";
 
 interface DropdownMenuProps {
   options: string[];
@@ -15,6 +16,8 @@ export default function DropdownMenu({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
 
+  useClickOutside(dropdownMenuRef, setIsOpen);
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -23,23 +26,6 @@ export default function DropdownMenu({
     setIsOpen(false);
     onSelect(value);
   };
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      dropdownMenuRef.current &&
-      !dropdownMenuRef.current.contains(e.target as Node)
-      // 클릭한 위치가 드롭다운이 아닐 때
-    ) {
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className={styles.dropdown} ref={dropdownMenuRef}>
