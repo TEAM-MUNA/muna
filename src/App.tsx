@@ -43,7 +43,14 @@ function App() {
         <div>
           <Header buttonLeft='profile' />
           <nav>
-            <ul>
+            <ul
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                listStyle: "none",
+                gap: "4px",
+              }}
+            >
               <li>
                 <Link to='/'>
                   <Button label='Main' size='sm' color='default' />
