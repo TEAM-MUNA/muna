@@ -1,4 +1,4 @@
-export interface reviewProps {
+export interface ReviewProps {
   title?: string;
   content?: string;
   thumbnail?: string;
