@@ -9,7 +9,10 @@ interface ToggleProps {
 export default function Toggle({ onClick = () => {}, isActive }: ToggleProps) {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       aria-label='토글 버튼'
       type='button'
       className={`${styles.toggle} ${isActive ? styles.active : ""}`}
