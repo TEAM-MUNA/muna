@@ -4,14 +4,17 @@ import useInput from "../../hooks/useInput";
 // import useDropdownSelect from "../../hooks/useDropdownSelect";
 import Toggle from "../../components/common/Toggle/Toggle";
 import Input from "../../components/common/Input/Input";
-// import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import Profile from "../Profile/Profile";
+import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 
 // 컴포넌트 테스트 페이지
 export default function ComponentTest() {
   const { isActive, onToggle } = useToggle(true); // Toggle
   const { value, onChange } = useInput("초기값"); // Input
+
+  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
+    useToggle(false);
 
   return (
     <div>
@@ -43,6 +46,21 @@ export default function ComponentTest() {
         onSelect={(selected) => console.log(selected)}
       />
       <Profile />
+      <ul>
+        <ColumnMenuItem
+          label='프로필 변경'
+          buttonRight={
+            <Toggle
+              isActive={isSettingToggleActive}
+              onClick={onSettingToggle}
+            />
+          }
+          onClick={() => {
+            console.log("프로필 변경 페이지로 이동?");
+          }}
+        />
+        <ColumnMenuItem label='프로필 변경' />
+      </ul>
     </div>
   );
 }
