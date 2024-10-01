@@ -8,7 +8,7 @@ interface CardAvatarProps{
 
 export default function AvatarCard({
     nickName,
-    userName,
+    userName, 
 }: CardAvatarProps) {
     return(
         <div className={styles.card}>
