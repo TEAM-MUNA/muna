@@ -15,7 +15,7 @@ export default function ReviewAvatar({
     return(
         <div className={styles.reviewAvatar}>
             <div className={styles.reviewAvatarImg}>
-                <img src={image} alt="님네임갱갱갱" className={styles.image} />
+                <img src={image} alt={nickName} className={styles.image} />
             </div>
             <div className={styles.reviewAvatarText}>
                 <div className={styles.reviewAvatarTextTop}>

@@ -16,7 +16,7 @@ export default function ProfileAvatar({
     return(
         <div className={styles.profile}>
             <div className={styles.profileImg}>
-                <img src={image} alt="님네임갱갱갱" className={styles.image} />
+                <img src={image} alt={nickName} className={styles.image} />
             </div>
             <div className={styles.profileText}>
                 <p className={`${styles.xl} ${styles.black} ${styles.bold}`}>{nickName}</p>

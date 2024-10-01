@@ -13,7 +13,7 @@ export default function AvatarCard({
     return(
         <div className={styles.card}>
             <div className={styles.cardImg}>
-                <img src={image} alt="님네임갱갱갱" className={styles.image} />
+                <img src={image} alt={nickName} className={styles.image} />
             </div>
             <div className={styles.cardText}>
                 <p className={`${styles.md} ${styles.black} ${styles.bold}`}>{nickName}</p>
