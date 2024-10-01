@@ -1,16 +1,13 @@
-import React, { ReactNode } from "react";
 import styles from "./Avatar.module.scss";
 import image from "../../../assets/img/profile-image.png"
 
 interface ReviewAvatarProps{
-    url?: string;
     nickName?: string;
     userName?: string;
     watchDate?: string;
 }
 
 export default function ReviewAvatar({
-    url,
     nickName,
     userName,
     watchDate,
