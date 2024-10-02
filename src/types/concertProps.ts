@@ -17,7 +17,7 @@ export interface ConcertProps {
 
 export const defaultConcertProps = {
   concertId: "",
-  title: "콘서트 제목 <타이틀>",
+  title: "공연명",
   poster: posterDefault,
   state: "공연중",
   startDate: "2016.05.12",
