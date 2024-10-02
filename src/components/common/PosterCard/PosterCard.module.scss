@@ -1,0 +1,30 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.card {
+  display: inline-block;
+  position: relative;
+  width: calc(50% - 5px);
+  margin-top: 20px;
+  &:nth-child(2n) {
+    margin-left: 10px;
+  }
+
+  .title {
+    font-size: $font-lg;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 170 / 230;
+    object-fit: cover;
+  }
+
+  .btn_bookmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
