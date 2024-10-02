@@ -16,8 +16,16 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
-      <StarIcon size='40' />
-      <StarIcon active size='40' />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <StarIcon size='40' />
+        <StarIcon active size='40' />
+        <StarIcon size='24' />
+        <StarIcon active size='24' />
+        <StarIcon size='20' />
+        <StarIcon active size='20' />
+        <StarIcon size='14' />
+        <StarIcon active size='14' />
+      </div>
       <DropdownMenu
         onSelect={handleDropdownMenu}
         options={dropdownMenuOptions}
