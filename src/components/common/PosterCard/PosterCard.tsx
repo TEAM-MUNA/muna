@@ -21,6 +21,7 @@ export default function PosterCard({
         className={styles.btn_bookmark}
         label='북마크'
         iconOnly={<BookmarkIcon active={isBookmarked} />}
+        iconShadow
       />
     </div>
   );

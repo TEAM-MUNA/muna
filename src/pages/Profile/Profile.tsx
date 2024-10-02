@@ -24,7 +24,7 @@ export default function Profile() {
       />
       <ReviewCard />
       <div>
-        <PosterCard />
+        <PosterCard isBookmarked />
         <PosterCard />
         <PosterCard />
         <PosterCard />

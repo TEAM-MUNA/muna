@@ -72,3 +72,9 @@
 .full {
   width: 100%;
 }
+
+.has_icon_shadow {
+  svg {
+    @include icon_shadow;
+  }
+}

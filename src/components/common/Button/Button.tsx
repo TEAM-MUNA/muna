@@ -8,6 +8,7 @@ interface ButtonProps {
   color?: "default" | "primary" | "primary_line" | "danger" | undefined;
   iconRight?: ReactNode | undefined;
   iconOnly?: ReactNode | undefined;
+  iconShadow?: boolean;
   className?: string | "";
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -20,6 +21,7 @@ export default function Button({
   color,
   iconRight,
   iconOnly,
+  iconShadow = false,
   className = "",
   disabled = false,
   onClick = () => {},
@@ -33,6 +35,7 @@ export default function Button({
         ${color ? styles[color] : ""} 
         ${fullWidth ? styles.full : ""} 
         ${iconRight ? styles.has_icon_right : ""} 
+        ${iconShadow ? styles.has_icon_shadow : ""} 
         ${className}
       `}
       disabled={disabled}
