@@ -5,7 +5,7 @@ import { ReviewProps, defaultReviewProps } from "../../../types/reviewProps";
 import StarIcon from "../../../assets/svg/StarIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import LikeButton from "../Button/LikeButton";
-import CardAvatar from "../Avatar/CardAvatar";
+import Avatar from "../Avatar/Avatar";
 
 interface ReviewCardProps extends UserProps, ReviewProps {
   page?: "concert" | "profile" | "main";
@@ -31,11 +31,7 @@ export default function ReviewCard({
         <h3 className={styles.title}>{title}</h3>
       ) : (
         <div className={styles.top}>
-          <CardAvatar
-            nickname={nickname}
-            userId={userId}
-            userImage={userImage}
-          />
+          <Avatar nickname={nickname} userId={userId} userImage={userImage} />
           {page === "main" && <LikeButton size='sm' likeCount={20} />}
         </div>
       )}
