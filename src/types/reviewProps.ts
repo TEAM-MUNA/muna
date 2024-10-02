@@ -18,6 +18,6 @@ export const defaultReviewProps = {
   date: "2024.10.22",
   starRate: "5.0",
   likeCount: 50,
-  thumbnail: undefined,
+  thumbnail: reviewTest,
   images: [reviewTest, reviewTest2],
 };

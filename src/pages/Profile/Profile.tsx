@@ -3,8 +3,6 @@ import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
-import LikeIcon from "../../assets/svg/LikeIcon";
-import ImageLayersIcon from "../../assets/svg/ImageLayersIcon";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
 export default function Profile() {
@@ -26,8 +24,8 @@ export default function Profile() {
         options={dropdownSelectOptions}
       />
       <ReviewCard />
-      <LikeIcon size='20' />
-      <ImageLayersIcon size='20' />
+      <ReviewCard page='concert' />
+      <ReviewCard page='profile' />
       <div>
         <PosterCard isBookmarked />
         <PosterCard />

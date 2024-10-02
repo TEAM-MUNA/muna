@@ -22,7 +22,7 @@
 .main {
   display: flex;
   gap: 16px;
-  margin-top: 16px;
+  margin-top: 12px;
   .text {
     display: flex;
     flex-direction: column;
@@ -35,8 +35,8 @@
   }
   img {
     flex: 0 0 auto;
-    width: 110px;
-    height: 110px;
+    width: 96px;
+    height: 96px;
     object-fit: cover;
     border: 1px solid $line-lighter;
     border-radius: 8px;
