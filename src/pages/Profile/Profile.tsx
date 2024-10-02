@@ -23,20 +23,20 @@ export default function Profile() {
         onSelect={handleDropdownSelect}
         options={dropdownSelectOptions}
       />
-      <ReviewCard />
-      <ReviewCard page='concert' />
-      <ReviewCard page='profile' />
+      <ReviewCard reviewLink='#' />
+      <ReviewCard reviewLink='#' page='concert' />
+      <ReviewCard reviewLink='#' page='profile' />
       <div>
-        <PosterCard isBookmarked />
-        <PosterCard />
-        <PosterCard />
-        <PosterCard />
+        <PosterCard link='#' isBookmarked />
+        <PosterCard link='#' />
+        <PosterCard link='#' />
+        <PosterCard link='#' />
       </div>
       <div>
-        <ReviewGalleryCard hasMultiImages />
-        <ReviewGalleryCard />
-        <ReviewGalleryCard />
-        <ReviewGalleryCard />
+        <ReviewGalleryCard link='#' hasMultiImages />
+        <ReviewGalleryCard link='#' />
+        <ReviewGalleryCard link='#' />
+        <ReviewGalleryCard link='#' />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styles from "./ReviewGalleryCard.module.scss";
 import { ReviewProps, defaultReviewProps } from "../../../types/reviewProps";
 import { ConcertProps, defaultConcertProps } from "../../../types/concertProps";
@@ -6,10 +7,12 @@ import ImageLayersIcon from "../../../assets/svg/ImageLayersIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 
 interface ReviewGalleryCardProps extends ReviewProps, ConcertProps {
+  link: string;
   hasMultiImages?: boolean;
 }
 
 export default function ReviewGalleryCard({
+  link,
   title = defaultReviewProps.title,
   thumbnail = defaultReviewProps.thumbnail,
   likeCount = defaultReviewProps.likeCount,
@@ -17,7 +20,7 @@ export default function ReviewGalleryCard({
   hasMultiImages,
 }: ReviewGalleryCardProps) {
   return (
-    <div className={styles.card}>
+    <Link to={link} className={styles.card}>
       <img className={styles.thumbnail} src={thumbnail || poster} alt={title} />
       {hasMultiImages && (
         <span className={`${styles.icon} ${styles.icon_layers}`}>
@@ -30,6 +33,6 @@ export default function ReviewGalleryCard({
           {likeCount}
         </span>
       )}
-    </div>
+    </Link>
   );
 }

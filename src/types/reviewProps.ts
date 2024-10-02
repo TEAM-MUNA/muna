@@ -9,6 +9,7 @@ export interface ReviewProps {
   likeCount?: number;
   thumbnail?: string;
   images?: string[];
+  reviewLink?: string;
 }
 
 export const defaultReviewProps = {
@@ -20,4 +21,5 @@ export const defaultReviewProps = {
   likeCount: 50,
   thumbnail: reviewTest,
   images: [reviewTest, reviewTest2],
+  reviewLink: "#",
 };
