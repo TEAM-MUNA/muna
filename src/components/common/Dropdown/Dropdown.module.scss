@@ -4,6 +4,9 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  button {
+    color: $black;
+  }
 }
 
 .dropdown_ul {
@@ -13,7 +16,7 @@
   top: calc(100% + 4px);
   font-size: $font-md;
   padding: 16px 20px;
-  gap: 12px;
+  gap: 20px;
   border: 1px solid $line-light;
   border-radius: 8px;
   background: $white;

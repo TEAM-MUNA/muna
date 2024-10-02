@@ -14,7 +14,7 @@
   .text {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 2px;
   }
   .nickname {
     font-size: $font-md;
