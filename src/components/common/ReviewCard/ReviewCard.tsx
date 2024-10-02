@@ -43,11 +43,11 @@ export default function ReviewCard({
             <div className={styles.info}>
               <div className={styles.wrap_icon}>
                 <span className={styles.icon}>
-                  <StarIcon size='20' />
+                  <StarIcon size='14' />
                   {starRate}
                 </span>
                 <span className={styles.icon}>
-                  <LikeIcon size='20' />
+                  <LikeIcon size='14' />
                   {likeCount}
                 </span>
               </div>
