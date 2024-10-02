@@ -1,7 +1,7 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
-.btn {
+.tag {
   color: $white;
   display: inline;
   gap: 4px;
@@ -27,7 +27,7 @@
 }
 
 .white {
-  color: $black-lighter;
+  color: $black-light;
   background-color: $white;
   border: 1px solid $black-lighter;
 }

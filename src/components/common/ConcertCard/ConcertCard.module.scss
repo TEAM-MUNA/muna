@@ -23,22 +23,22 @@
     padding: 4px 0 5px;
 
     p {
-      font-size: $font-md;
-      color: $black;
+      font-size: $font-sm;
+      color: $black_light;
     }
 
     .title {
       font-size: $font-lg;
       font-weight: $font-bold;
-      margin-top: 10px;
-      margin-bottom: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
     }
 
     .tag_container {
       display: flex;
       margin-bottom: 19px;
       color: $black-light;
-      gap: 14px;
+      gap: 12px;
       font-size: $font-sm;
 
       .tag {

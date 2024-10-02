@@ -7,5 +7,5 @@ interface TagProps {
 }
 
 export default function Tag({ label = "test", color = "default" }: TagProps) {
-  return <span className={`${styles.btn} ${styles[color]}`}>{label}</span>;
+  return <span className={`${styles.tag} ${styles[color]}`}>{label}</span>;
 }

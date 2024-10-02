@@ -2,6 +2,7 @@ import React from "react";
 import Tag from "../Tag/Tag";
 import StarIcon from "../../../assets/svg/StarIcon";
 import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
+import ReviewIcon from "../../../assets/svg/ReviewIcon";
 import { ConcertProps, defaultConcertProps } from "../../../types/concertProps";
 import styles from "./ConcertCard.module.scss";
 
@@ -30,19 +31,19 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
       </div>
       <div className={styles.info}>
         <Tag label={state} color='white' />
-        <p className={styles.title}>{title}</p>
+        <h3 className={styles.title}>{title}</h3>
 
         <div className={styles.tag_container}>
           <div className={styles.tag}>
-            <StarIcon size='20px' />
+            <StarIcon size='14' />
             <span>{starRate}</span>
           </div>
           <div className={styles.tag}>
-            <BookmarkIcon size='20px' />
+            <BookmarkIcon size='14' />
             <span>{reviewCount}</span>
           </div>
           <div className={styles.tag}>
-            <BookmarkIcon size='20px' />
+            <ReviewIcon size='14' />
             <span>{bookmarkCount}</span>
           </div>
         </div>
