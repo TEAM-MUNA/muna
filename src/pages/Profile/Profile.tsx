@@ -5,6 +5,7 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import LikeIcon from "../../assets/svg/LikeIcon";
 import ImageLayersIcon from "../../assets/svg/ImageLayersIcon";
+import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
 export default function Profile() {
   const dropdownMenuOptions = ["수정", "삭제"];
@@ -32,6 +33,12 @@ export default function Profile() {
         <PosterCard />
         <PosterCard />
         <PosterCard />
+      </div>
+      <div>
+        <ReviewGalleryCard hasMultiImages />
+        <ReviewGalleryCard />
+        <ReviewGalleryCard />
+        <ReviewGalleryCard />
       </div>
     </div>
   );

@@ -74,7 +74,5 @@
 }
 
 .has_icon_shadow {
-  svg {
-    @include icon_shadow;
-  }
+  @include icon_shadow;
 }
