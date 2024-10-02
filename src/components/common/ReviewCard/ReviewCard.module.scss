@@ -30,7 +30,8 @@
   }
   p {
     @include text_ellipsis(4);
-    font-size: $font-md;
+    font-size: $font-sm;
+    color: $black-light;
   }
   img {
     flex: 0 0 auto;

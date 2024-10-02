@@ -16,7 +16,7 @@ export default function Avatar({
     <div className={`${styles.avatar} ${styles[size]}`}>
       <img src={userImage} alt={nickname} />
       <div className={styles.text}>
-        <h4 className={styles.nickname}>{nickname}</h4>
+        <p className={styles.nickname}>{nickname}</p>
         <p className={styles.id}>{userId}</p>
       </div>
     </div>
