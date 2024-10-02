@@ -6,13 +6,15 @@
   // border: 1px solid #000;
   gap: 16px;
   width: fit-content;
+  margin-top: 20px;
 
   .poster {
-    width: 111px;
-    aspect-ratio: 111 / 173;
+    width: 110px;
+    height: 170px;
     img {
       width: 100%;
       height: 100%;
+      aspect-ratio: 110 / 170;
       object-fit: cover;
     }
   }
@@ -20,7 +22,7 @@
   .info {
     display: flex;
     flex-direction: column;
-    padding: 4px 0 5px;
+    padding: 4px 0;
 
     p {
       font-size: $font-sm;
@@ -36,7 +38,7 @@
 
     .tag_container {
       display: flex;
-      margin-bottom: 19px;
+      margin-bottom: 20px;
       color: $black-light;
       gap: 12px;
       font-size: $font-sm;
@@ -52,6 +54,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      margin-top: auto;
     }
   }
 }
