@@ -3,6 +3,8 @@ import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
+import LikeIcon from "../../assets/svg/LikeIcon";
+import ImageLayersIcon from "../../assets/svg/ImageLayersIcon";
 
 export default function Profile() {
   const dropdownMenuOptions = ["수정", "삭제"];
@@ -23,6 +25,8 @@ export default function Profile() {
         options={dropdownSelectOptions}
       />
       <ReviewCard />
+      <LikeIcon size='20' />
+      <ImageLayersIcon size='20' />
       <div>
         <PosterCard isBookmarked />
         <PosterCard />
