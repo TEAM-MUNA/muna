@@ -13,8 +13,8 @@ export default function StarTag({ rating = 0 }: StarTagProps) {
     <div className={styles.container}>
       {rating ? (
         <>
-          <div>{fixedRating}</div>
           <StarIcon size='14px' active />
+          <div>{fixedRating}</div>
         </>
       ) : (
         <StarIcon size='12.84px' />
