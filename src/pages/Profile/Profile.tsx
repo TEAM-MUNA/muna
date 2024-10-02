@@ -1,7 +1,7 @@
 import React from "react";
-// import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import DropdownMenu from "../../components/common/Dropdown/DropdownMenu";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 
 export default function Profile() {
   const dropdownMenuOptions = ["수정", "삭제"];
@@ -13,7 +13,6 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
-      {/* <ReviewCard /> */}
       <DropdownMenu
         onSelect={handleDropdownMenu}
         options={dropdownMenuOptions}
@@ -22,6 +21,7 @@ export default function Profile() {
         onSelect={handleDropdownSelect}
         options={dropdownSelectOptions}
       />
+      <ReviewCard />
     </div>
   );
 }
