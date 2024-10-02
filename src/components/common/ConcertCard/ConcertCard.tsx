@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Tag from "../Tag/Tag";
 import StarIcon from "../../../assets/svg/StarIcon";
 import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
@@ -22,10 +23,11 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
     starRate = "4.7",
     reviewCount = "718",
     bookmarkCount = "24",
+    concertLink = defaultConcertProps.concertLink,
   } = concert;
 
   return (
-    <article className={styles.concertCard}>
+    <Link to={concertLink} className={styles.concertCard}>
       <div className={styles.poster}>
         <img src={poster} alt={title} />
       </div>
@@ -54,6 +56,6 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
           <p>{age}</p>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

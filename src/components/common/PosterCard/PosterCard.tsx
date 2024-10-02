@@ -7,12 +7,11 @@ import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
 import useToggle from "../../../hooks/useToggle";
 
 interface PosterCardProps extends ConcertProps {
-  link: string;
   isBookmarked?: boolean;
 }
 
 export default function PosterCard({
-  link,
+  concertLink = defaultConcertProps.concertLink,
   title = defaultConcertProps.title,
   poster = defaultConcertProps.poster,
   isBookmarked = false,
@@ -20,7 +19,7 @@ export default function PosterCard({
   const { isActive, onToggle } = useToggle(isBookmarked);
 
   return (
-    <Link to={link} className={`${styles.card}`}>
+    <Link to={concertLink} className={`${styles.card}`}>
       <img className={styles.poster} src={poster} alt={title} />
       <h3 className={styles.title}>{title}</h3>
       <Button

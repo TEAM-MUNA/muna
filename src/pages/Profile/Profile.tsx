@@ -27,16 +27,16 @@ export default function Profile() {
       <ReviewCard reviewLink='#' page='concert' />
       <ReviewCard reviewLink='#' page='profile' />
       <div>
-        <PosterCard link='#' isBookmarked />
-        <PosterCard link='#' />
-        <PosterCard link='#' />
-        <PosterCard link='#' />
+        <PosterCard concertLink='#' isBookmarked />
+        <PosterCard concertLink='#' />
+        <PosterCard concertLink='#' />
+        <PosterCard concertLink='#' />
       </div>
       <div>
-        <ReviewGalleryCard link='#' hasMultiImages />
-        <ReviewGalleryCard link='#' />
-        <ReviewGalleryCard link='#' />
-        <ReviewGalleryCard link='#' />
+        <ReviewGalleryCard reviewLink='#' hasMultiImages />
+        <ReviewGalleryCard reviewLink='#' />
+        <ReviewGalleryCard reviewLink='#' />
+        <ReviewGalleryCard reviewLink='#' />
       </div>
     </div>
   );

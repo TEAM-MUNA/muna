@@ -7,12 +7,11 @@ import ImageLayersIcon from "../../../assets/svg/ImageLayersIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 
 interface ReviewGalleryCardProps extends ReviewProps, ConcertProps {
-  link: string;
   hasMultiImages?: boolean;
 }
 
 export default function ReviewGalleryCard({
-  link,
+  reviewLink = defaultReviewProps.reviewLink,
   title = defaultReviewProps.title,
   thumbnail = defaultReviewProps.thumbnail,
   likeCount = defaultReviewProps.likeCount,
@@ -20,7 +19,7 @@ export default function ReviewGalleryCard({
   hasMultiImages,
 }: ReviewGalleryCardProps) {
   return (
-    <Link to={link} className={styles.card}>
+    <Link to={reviewLink} className={styles.card}>
       <img className={styles.thumbnail} src={thumbnail || poster} alt={title} />
       {hasMultiImages && (
         <span className={`${styles.icon} ${styles.icon_layers}`}>

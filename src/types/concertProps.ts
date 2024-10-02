@@ -2,6 +2,7 @@ import posterDefault from "../assets/img/test-cat.png";
 
 export interface ConcertProps {
   concertId?: string;
+  concertLink?: string;
   title?: string;
   poster?: string;
   state?: "공연중" | "공연예정" | "공연완료" | undefined;
@@ -17,6 +18,7 @@ export interface ConcertProps {
 
 export const defaultConcertProps = {
   concertId: "",
+  concertLink: "#",
   title: "공연명",
   poster: posterDefault,
   state: "공연중",
