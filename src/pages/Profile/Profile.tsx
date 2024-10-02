@@ -4,6 +4,7 @@ import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
+import StarIcon from "../../assets/svg/StarIcon";
 
 export default function Profile() {
   const dropdownMenuOptions = ["수정", "삭제"];
@@ -15,6 +16,8 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
+      <StarIcon size='40' />
+      <StarIcon active size='40' />
       <DropdownMenu
         onSelect={handleDropdownMenu}
         options={dropdownMenuOptions}
