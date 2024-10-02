@@ -4,6 +4,8 @@ import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import StarTag from "../../components/common/StarTag/StarTag";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
+import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
+import { defaultReviewProps } from "../../types/reviewProps";
 
 export default function ConcertList() {
   const genreList = [
@@ -34,6 +36,8 @@ export default function ConcertList() {
     prfstate: "공연완료",
   };
 
+  const review = defaultReviewProps;
+
   return (
     <>
       <Header buttonLeft='profile' />
@@ -50,6 +54,9 @@ export default function ConcertList() {
         <StarTag rating={4} />
         <StarTag rating={5} />
       </div>
+
+      <ReviewBar review={review} />
+
       <ul>
         <li>
           <ConcertCard concert={concert} />
