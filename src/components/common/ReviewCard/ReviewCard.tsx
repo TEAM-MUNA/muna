@@ -31,7 +31,9 @@ export default function ReviewCard({
   return (
     <div className={`${styles.card}`}>
       {page === "profile" ? (
-        <h3 className={styles.title}>{title}</h3>
+        <Link to={reviewLink}>
+          <h3 className={styles.title}>{title}</h3>
+        </Link>
       ) : (
         <div className={styles.top}>
           <Avatar
