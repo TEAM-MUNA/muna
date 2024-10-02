@@ -4,8 +4,9 @@ export interface ConcertProps {
   concertId?: string;
   title?: string;
   poster?: string;
-  state?: "공연중" | "공연예정" | undefined;
-  period?: string;
+  state?: "공연중" | "공연예정" | "공연완료" | undefined;
+  startDate?: string;
+  endDate?: string;
   location?: string;
   age?: string;
   starRate?: string;
@@ -19,7 +20,8 @@ export const defaultConcertProps = {
   title: "콘서트 제목 <타이틀>",
   poster: posterDefault,
   state: "공연중",
-  period: "2024.10.22",
+  startDate: "2016.05.12",
+  endDate: "2016.07.30",
   location: "",
   age: "만 12세 이상",
   starRate: "5.0",
