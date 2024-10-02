@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function CalendarIcon({
-  size = defaultIconProps.size, // CalendarIcon의 가로,세로를 24px로 하겠다
+  size = defaultIconProps.size,
 }: IconProps) {
   return (
     <svg
