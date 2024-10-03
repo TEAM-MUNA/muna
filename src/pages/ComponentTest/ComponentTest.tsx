@@ -7,6 +7,8 @@ import Input from "../../components/common/Input/Input";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import Profile from "../Profile/Profile";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
+import StarTag from "../../components/common/StarTag/StarTag";
+import StarScore from "../../components/common/StarScore/StarScore";
 
 // 컴포넌트 테스트 페이지
 export default function ComponentTest() {
@@ -61,6 +63,12 @@ export default function ComponentTest() {
         />
         <ColumnMenuItem label='프로필 변경' />
       </ul>
+        <div>
+        <StarTag rating = {2}/>
+        <StarScore initialRating={0} onRatingChange={(newRating) => {
+          console.log(newRating)
+        }} />
+        </div>
     </div>
   );
 }
