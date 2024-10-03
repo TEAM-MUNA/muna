@@ -1,0 +1,41 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.container{
+    display: flex;
+    flex-direction: column;
+    div{
+        margin: auto;
+    }
+}
+
+.primary{
+    margin: auto;
+    color: $primary;
+    *{
+        color: $primary;
+    }
+}
+
+.black_lighter{
+    margin: auto;
+    color: $black-lighter;
+    *{
+        color: $black-lighter;
+    }
+}
+
+.black{
+    margin: auto;
+    color: $black;
+}
+
+.font_md{
+    font-size: $font-md;
+    text-align: center;
+}
+
+.font_lg{
+    font-size: $font-lg;
+    text-align: center;
+}
