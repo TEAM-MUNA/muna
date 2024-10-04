@@ -5,10 +5,13 @@ import useInput from "../../hooks/useInput";
 import Toggle from "../../components/common/Toggle/Toggle";
 import Input from "../../components/common/Input/Input";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
-import Profile from "../Profile/Profile";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 import StarTag from "../../components/common/StarTag/StarTag";
 import StarForm from "../../components/common/StarForm/StarForm";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
+import PosterCard from "../../components/common/PosterCard/PosterCard";
+import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
+// import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 
 // 컴포넌트 테스트 페이지
 export default function ComponentTest() {
@@ -20,6 +23,48 @@ export default function ComponentTest() {
 
   return (
     <div>
+      {/* PosterCard */}
+      <ul>
+        <li>
+          <PosterCard />
+        </li>
+        <li>
+          <PosterCard />
+        </li>
+        <li>
+          <PosterCard />
+        </li>
+        <li>
+          <PosterCard />
+        </li>
+      </ul>
+      {/* ReviewCard */}
+      <ul>
+        <li>
+          <ReviewCard page='main' />
+        </li>
+        <li>
+          <ReviewCard page='main' />
+        </li>
+        <li>
+          <ReviewCard page='main' />
+        </li>
+      </ul>
+      {/* ConcertCard */}
+      <ul>
+        <li>
+          <ReviewGalleryCard />
+        </li>
+        <li>
+          <ReviewGalleryCard />
+        </li>
+        <li>
+          <ReviewGalleryCard />
+        </li>
+        <li>
+          <ReviewGalleryCard />
+        </li>
+      </ul>
       <Toggle
         isActive={isActive}
         onClick={() => {
@@ -47,7 +92,6 @@ export default function ComponentTest() {
         options={["옵션1", "옵션2", "옵션3"]}
         onSelect={(selected) => console.log(selected)}
       />
-      <Profile />
       <ul>
         <ColumnMenuItem
           label='프로필 변경'

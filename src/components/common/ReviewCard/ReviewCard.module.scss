@@ -7,12 +7,6 @@
   width: 100%;
   padding: 16px 0;
   border-bottom: 1px solid $line-lighter;
-  &.profile,
-  &.concert {
-    &:first-child {
-      padding-top: 0;
-    }
-  }
 }
 
 .top {
