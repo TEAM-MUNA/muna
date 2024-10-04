@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
+  id?: string;
   label: string;
   size?: "sm" | "md" | "lg" | "xl" | undefined;
   fullWidth?: boolean;
@@ -16,6 +17,7 @@ interface ButtonProps {
 }
 
 export default function Button({
+  id,
   label,
   size,
   fullWidth = false,
@@ -30,6 +32,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
+      id={id}
       type={type === "button" ? "button" : "submit"}
       className={`
         ${styles.btn} 
