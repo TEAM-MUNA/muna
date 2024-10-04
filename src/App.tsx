@@ -23,13 +23,13 @@ import ComponentTest from "./pages/ComponentTest/ComponentTest";
 
 function AppHeader() {
   const location = useLocation();
-  const loginPage = location.pathname.includes("/login");
-  const reviewPage = location.pathname.includes("/review");
+  const isLoginPage = location.pathname.includes("/login");
+  const isReviewPage = location.pathname.includes("/review");
 
-  if (loginPage) {
+  if (isLoginPage) {
     return <Header buttonLeft='back' />;
   }
-  if (!reviewPage) {
+  if (!isReviewPage) {
     return <Header buttonLeft='profile' />;
   }
   return null;
