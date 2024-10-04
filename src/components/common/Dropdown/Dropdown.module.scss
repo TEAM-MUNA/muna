@@ -7,6 +7,9 @@
   button {
     color: $black;
   }
+  &:not(:last-of-type) {
+    margin-right: 10px;
+  }
 }
 
 .dropdown_ul {
