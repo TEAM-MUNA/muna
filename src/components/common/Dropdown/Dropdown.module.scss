@@ -20,7 +20,7 @@
   border: 1px solid $line-light;
   border-radius: 8px;
   background: $white;
-  z-index: 10;
+  z-index: $z-dropdown;
   width: fit-content;
   min-width: 100%;
 

@@ -13,7 +13,7 @@
   align-items: center;
   border-bottom: 1px solid $line-light;
   background: $white;
-  z-index: 1000;
+  z-index: $z-header;
 }
 
 .left_btn {
