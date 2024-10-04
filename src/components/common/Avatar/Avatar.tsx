@@ -30,6 +30,6 @@ export default function Avatar({
       {avatarContent}
     </Link>
   ) : (
-    <div className={styles.avatar}>{avatarContent}</div>
+    <div className={`${styles.avatar} ${styles[size]}`}>{avatarContent}</div>
   );
 }
