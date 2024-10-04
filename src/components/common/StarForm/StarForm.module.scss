@@ -1,0 +1,36 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.star_form {
+  width: 100%;
+  //   height: 138px;
+  background-color: $box-light;
+  border-radius: 8px;
+  padding: 8px;
+
+  span {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .desc_container {
+    display: flex;
+    justify-content: space-between;
+
+    .description {
+      font-size: $font-sm;
+      color: $black;
+      line-height: 14px;
+
+      &_not_selected {
+        font-size: $font-sm;
+        color: $black-lighter;
+      }
+    }
+  }
+
+  .starScore {
+    margin: 14px 0;
+  }
+}

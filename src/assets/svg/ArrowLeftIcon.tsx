@@ -14,7 +14,7 @@ export default function ArrowLeftIcon({
     >
       <path
         d='M10.5 19.5L3 12M3 12L10.5 4.5M3 12L21 12'
-        stroke='currentColor'
+        stroke='#1a1a1aeb'
         strokeOpacity='0.92'
         strokeWidth='1.5'
         strokeLinecap='round'
