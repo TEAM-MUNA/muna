@@ -4,16 +4,22 @@
 .card {
   display: inline-block;
   position: relative;
-  width: calc(50% - 5px);
+  width: calc((100% - 20px) / 3);
   margin-top: 20px;
-  &:nth-child(2n) {
-    margin-left: 10px;
+  &:not(:nth-child(3n)) {
+    margin-right: 10px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
   }
 
   .title {
     font-size: $font-md;
     text-align: center;
     margin-top: 8px;
+    @include text_ellipsis(2);
   }
 
   img {

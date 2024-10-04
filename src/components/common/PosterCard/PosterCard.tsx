@@ -20,15 +20,17 @@ export default function PosterCard({
 
   return (
     <Link to={concertLink} className={`${styles.card}`}>
-      <img className={styles.poster} src={poster} alt={title} />
-      <h3 className={styles.title}>{title}</h3>
-      <Button
-        className={styles.btn_bookmark}
-        label='북마크'
-        iconOnly={<BookmarkIcon active={isActive} />}
-        iconShadow
-        onClick={onToggle}
-      />
+      <div className={styles.container}>
+        <img className={styles.poster} src={poster} alt={title} />
+        <h3 className={styles.title}>{title}</h3>
+        <Button
+          className={styles.btn_bookmark}
+          label='북마크'
+          iconOnly={<BookmarkIcon active={isActive} />}
+          iconShadow
+          onClick={onToggle}
+        />
+      </div>
     </Link>
   );
 }
