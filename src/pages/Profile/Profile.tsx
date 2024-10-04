@@ -51,6 +51,25 @@ export default function Profile() {
         </section>
       )}
       {/* <div>
+      <h1>Profile</h1>
+      <DropdownMenu
+        onSelect={handleDropdownMenu}
+        options={dropdownMenuOptions}
+      />
+      <DropdownSelect
+        onSelect={handleDropdownSelect}
+        options={dropdownSelectOptions}
+      />
+      <ReviewCard reviewLink='#' />
+      <ReviewCard reviewLink='#' page='concert' />
+      <ReviewCard reviewLink='#' page='profile' />
+      <div>
+        <PosterCard concertLink='#' isBookmarked />
+        <PosterCard concertLink='#' />
+        <PosterCard concertLink='#' />
+        <PosterCard concertLink='#' />
+      </div>
+      <div>
         <ReviewGalleryCard reviewLink='#' hasMultiImages />
         <ReviewGalleryCard reviewLink='#' />
         <ReviewGalleryCard reviewLink='#' />
