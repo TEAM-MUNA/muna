@@ -35,23 +35,23 @@ export default function Tab({ tabList = [], withNumber = false }: TabProps) {
   };
 
   return (
-    <ul className={styles.tab}>
-      {tabTitleList.map(([title, number], index) => (
-        <li key={title}>
-          <button
-            type='button'
-            className={activeList[index] ? styles.active : ""}
-            onClick={() => onClick(index)}
-          >
-            {title}
-            {number !== null && (
-              <Tag color='default' label={number.toString()} />
-            )}
-          </button>
-        </li>
-      ))}
-
-      <div className={styles.line} />
-    </ul>
+    <div className={styles.tab_container}>
+      <ul className={styles.tab}>
+        {tabTitleList.map(([title, number], index) => (
+          <li key={title}>
+            <button
+              type='button'
+              className={activeList[index] ? styles.active : ""}
+              onClick={() => onClick(index)}
+            >
+              {title}
+              {number !== null && (
+                <Tag color='default' label={number.toString()} />
+              )}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
