@@ -8,6 +8,16 @@
 
   padding: 10px 10px 0 10px;
   position: relative;
+
+  overflow-x: auto; // 콘텐츠 넘칠 때만 스크롤바 표시
+  // scroll-snap-type: x mandatory; // 스크롤 스냅 적용
+  // 스크롤바 숨김
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   .line {
     background-color: $line-lighter;
     height: 1px;
@@ -19,6 +29,8 @@
   li {
     list-style: none;
     cursor: pointer;
+    // scroll-snap-align: start; // 탭을 스냅 포인트로 만듦
+    flex-shrink: 0; // 탭 항목이 축소되지 않도록 함
 
     button {
       color: $black-light;

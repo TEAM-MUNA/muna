@@ -2,10 +2,7 @@ import React from "react";
 import Header from "../../components/layout/Header/Header";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
-import StarTag from "../../components/common/StarTag/StarTag";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
-import { defaultReviewProps } from "../../types/reviewProps";
 
 export default function ConcertList() {
   const genreList = [
@@ -36,28 +33,16 @@ export default function ConcertList() {
     prfstate: "공연완료",
   };
 
-  const review = defaultReviewProps;
-
   return (
     <>
       <Header buttonLeft='profile' />
       <Tab tabList={genreList} />
-      <div>
+      <div style={{ display: "flex", gap: "10px", padding: "20px 0" }}>
         <DropdownSelect options={["최신순", "리뷰순"]} onSelect={() => {}} />
+        <DropdownSelect options={["전국", "인천"]} onSelect={() => {}} />
       </div>
 
-      <div style={{ display: "flex", gap: "8px", margin: "20px 0" }}>
-        <StarTag />
-        <StarTag rating={1} />
-        <StarTag rating={2} />
-        <StarTag rating={3} />
-        <StarTag rating={4} />
-        <StarTag rating={5} />
-      </div>
-
-      <ReviewBar review={review} />
-
-      <ul>
+      <ul style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <li>
           <ConcertCard concert={concert} />
         </li>
