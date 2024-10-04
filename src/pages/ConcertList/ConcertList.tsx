@@ -35,7 +35,6 @@ export default function ConcertList() {
 
   return (
     <>
-      <Header buttonLeft='profile' />
       <Tab tabList={genreList} />
       <div style={{ display: "flex", gap: "10px", padding: "20px 0" }}>
         <DropdownSelect options={["최신순", "리뷰순"]} onSelect={() => {}} />
