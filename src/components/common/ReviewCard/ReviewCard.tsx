@@ -40,7 +40,7 @@ export default function ReviewCard({
             nickname={nickname}
             userId={userId}
             userImage={userImage}
-            link={userLink}
+            userLink={userLink}
           />
           {page === "main" && <LikeButton size='sm' likeCount={20} />}
         </div>
