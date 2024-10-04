@@ -6,7 +6,13 @@ interface ButtonProps {
   label: string;
   size?: "sm" | "md" | "lg" | "xl" | undefined;
   fullWidth?: boolean;
-  color?: "default" | "primary" | "primary_line" | "danger" | undefined;
+  color?:
+    | "default"
+    | "primary"
+    | "primary_line"
+    | "danger"
+    | "black"
+    | undefined;
   iconRight?: ReactNode | undefined;
   iconOnly?: ReactNode | undefined;
   iconShadow?: boolean;
