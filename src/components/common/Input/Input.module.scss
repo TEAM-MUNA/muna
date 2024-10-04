@@ -19,6 +19,7 @@
     display: flex;
     align-items: center;
     font-size: $font-md;
+    line-height: 1;
 
     &::placeholder {
       color: $black-lighter;
