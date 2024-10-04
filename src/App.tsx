@@ -65,10 +65,10 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/search' element={<Search />} />
-          <Route path='/concert-list' element={<ConcertList />} />
-          <Route path='/concert-detail/:id' element={<ConcertDetail />} />
-          <Route path='/review-edit/:id' element={<ReviewEdit />} />
-          <Route path='/review-detail/:id' element={<ReviewDetail />} />
+          <Route path='/concert' element={<ConcertList />} />
+          <Route path='/concert/:id' element={<ConcertDetail />} />
+          <Route path='/review/edit/:id' element={<ReviewEdit />} />
+          <Route path='/review/:id' element={<ReviewDetail />} />
           <Route path='/profile/:userId' element={<Profile />} />
           <Route path='/settings' element={<Settings />} />
           <Route path='/component-test' element={<ComponentTest />} />
