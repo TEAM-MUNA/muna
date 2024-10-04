@@ -25,16 +25,14 @@ function AppHeader() {
   const location = useLocation();
   const loginPage = location.pathname.includes("/login");
   const reviewPage = location.pathname.includes("/review");
-  console.log(location.pathname);
 
-  let headerType = null;
   if (loginPage) {
-    headerType = <Header buttonLeft='back' />;
-  } else if (!reviewPage) {
-    headerType = <Header buttonLeft='profile' />;
+    return <Header buttonLeft='back' />;
   }
-
-  return headerType;
+  if (!reviewPage) {
+    return <Header buttonLeft='profile' />;
+  }
+  return null;
 }
 
 function App() {
