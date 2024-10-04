@@ -5,9 +5,14 @@ import Tag from "../Tag/Tag";
 interface TabProps {
   tabList?: (string | [string, number | null])[];
   withNumber?: boolean;
+  onTabChanged?: (index: number) => void;
 }
 
-export default function Tab({ tabList = [], withNumber = false }: TabProps) {
+export default function Tab({
+  tabList = [],
+  withNumber = false,
+  onTabChanged,
+}: TabProps) {
   const [activeList, setActiveList] = useState<boolean[]>([]);
   const [tabTitleList, setTabTitleList] = useState<[string, number | null][]>(
     []
@@ -28,10 +33,16 @@ export default function Tab({ tabList = [], withNumber = false }: TabProps) {
 
   const onClick = (index: number) => {
     setActiveList((prev) => prev.map((_, i) => i === index));
+    // onTabChanged(index);
 
     // 클릭한 요소
     const selectedItem = tabTitleList[index][0];
     console.log(selectedItem);
+
+    // 부모 컴포넌트로 선택된 탭 정보 전달
+    if (onTabChanged) {
+      onTabChanged(index);
+    }
   };
 
   return (
