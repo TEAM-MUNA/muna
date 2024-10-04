@@ -69,7 +69,7 @@ function App() {
           <Route path='/concert-detail/:id' element={<ConcertDetail />} />
           <Route path='/review-edit/:id' element={<ReviewEdit />} />
           <Route path='/review-detail/:id' element={<ReviewDetail />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:userId' element={<Profile />} />
           <Route path='/settings' element={<Settings />} />
           <Route path='/component-test' element={<ComponentTest />} />
         </Routes>
