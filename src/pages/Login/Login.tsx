@@ -64,9 +64,7 @@ export default function Login() {
 
   return (
     <article className={styles.login}>
-      <div>
-        <Toaster />
-      </div>
+      <Toaster />
       <header className={styles.header}>
         <h1>
           <img width={107} src={logo} alt='muna 로고' />
@@ -75,6 +73,7 @@ export default function Login() {
       </header>
       <main>
         <section>
+          <h2 className='sr_only'>로그인</h2>
           <form className={styles.form} onSubmit={handleLogin}>
             <Input
               value={email}
