@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 
-const useInput = (initialValue: string = "") => {
+/* eslint-disable default-param-last */
+const useInput = (
+  initialValue = "",
+  validate?: (value: string) => string | null
+) => {
   const [value, setValue] = useState<string>(initialValue);
+  const [error, setError] = useState<string | null>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    const newValue = e.target.value;
+    setValue(newValue);
+
+    if (!newValue) {
+      setError(null);
+    } else if (validate) {
+      setError(validate(newValue));
+    }
   };
-  return { value, onChange };
+  return { value, onChange, error };
 };
 
 export default useInput;
