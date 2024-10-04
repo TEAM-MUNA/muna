@@ -29,7 +29,7 @@ export default function ReviewCard({
   likeCount = defaultReviewProps.likeCount,
 }: ReviewCardProps) {
   return (
-    <div className={`${styles.card}`}>
+    <li className={`${styles.card} ${styles[page]}`}>
       {page === "profile" ? (
         <Link to={reviewLink}>
           <h3 className={styles.title}>{title}</h3>
@@ -75,6 +75,6 @@ export default function ReviewCard({
           )}
         </div>
       </Link>
-    </div>
+    </li>
   );
 }
