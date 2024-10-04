@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "../../components/layout/Header/Header";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
@@ -41,7 +40,7 @@ export default function ConcertList() {
         <DropdownSelect options={["전국", "인천"]} onSelect={() => {}} />
       </div>
 
-      <ul style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <ul>
         <li>
           <ConcertCard concert={concert} />
         </li>

@@ -87,6 +87,14 @@ li {
 }
 
 // 카드리스트 공통
+ul:has(.card_concert) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  li {
+    display: flex;
+  }
+}
 ul:has(.card_poster) {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
