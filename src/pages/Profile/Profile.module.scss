@@ -8,8 +8,25 @@
   margin: 28px 0;
 }
 
+.wrapper_tab {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 54px;
+  z-index: $z-tab;
+  .wrapper_btn {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: $z-tab;
+  }
+}
+
 .tab_content {
   &.bookmark {
     padding: 20px 0;
+  }
+  &.review_gallery {
+    margin: 0 -20px;
   }
 }

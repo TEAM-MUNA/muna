@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Profile.module.scss";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import SettingsIcon from "../../assets/svg/SettingsIcon";
+import QueueListIcon from "../../assets/svg/QueueListIcon";
+import GalleryIcon from "../../assets/svg/GalleryIcon";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 
-// import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
-// import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
+import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
 export default function Profile() {
   const tabList: (string | [string, number | null])[] = [
@@ -16,12 +18,17 @@ export default function Profile() {
     ["나의 후기", 10],
   ];
   const stateSelectOptions = ["공연전체", "진행중", "진행완료"];
-  const orderSelectOptions = ["최신순", "진행중", "진행완료"];
+  const orderSelectOptions = ["최신순", "북마크순"];
   const handleDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeView, setActiveView] = useState<number>(0);
   const handleTabChanged = (index: number) => {
     setActiveTab(index);
+  };
+  const handleViewButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const targetId = e.currentTarget.id;
+    setActiveView(targetId === "listView" ? 0 : 1);
   };
 
   return (
@@ -31,8 +38,27 @@ export default function Profile() {
         <Avatar size='lg' />
         <Button label='프로필 설정' iconOnly={<SettingsIcon />} />
       </article>
-      {/* TODO: 탭 선택시 > 현재 활성화 탭 필요 */}
-      <Tab tabList={tabList} withNumber onTabChanged={handleTabChanged} />
+      <nav className={styles.wrapper_tab}>
+        <Tab tabList={tabList} withNumber onTabChanged={handleTabChanged} />
+        {activeTab === 1 && (
+          <div className={styles.wrapper_btn}>
+            <Button
+              id='listView'
+              label='리스트 보기'
+              iconOnly={<QueueListIcon />}
+              onClick={handleViewButton}
+              className={activeView === 0 ? "text_black" : "text_black_lighter"}
+            />
+            <Button
+              id='galleryView'
+              label='갤러리 보기'
+              iconOnly={<GalleryIcon />}
+              onClick={handleViewButton}
+              className={activeView === 1 ? "text_black" : "text_black_lighter"}
+            />
+          </div>
+        )}
+      </nav>
       {activeTab === 0 && (
         <section className={`${styles.tab_content} ${styles.bookmark}`}>
           <DropdownSelect
@@ -50,35 +76,24 @@ export default function Profile() {
           </ul>
         </section>
       )}
-      {/* <div>
-      <h1>Profile</h1>
-      <DropdownMenu
-        onSelect={handleDropdownMenu}
-        options={dropdownMenuOptions}
-      />
-      <DropdownSelect
-        onSelect={handleDropdownSelect}
-        options={dropdownSelectOptions}
-      />
-      <ReviewCard reviewLink='#' />
-      <ReviewCard reviewLink='#' page='concert' />
-      <ReviewCard reviewLink='#' page='profile' />
-      <div>
-        <PosterCard concertLink='#' isBookmarked />
-        <PosterCard concertLink='#' />
-        <PosterCard concertLink='#' />
-        <PosterCard concertLink='#' />
-      </div>
-      <div>
-        <ReviewGalleryCard reviewLink='#' hasMultiImages />
-        <ReviewGalleryCard reviewLink='#' />
-        <ReviewGalleryCard reviewLink='#' />
-        <ReviewGalleryCard reviewLink='#' />
-      </div> */}
-      {/* <ReviewCard reviewLink='#' />
-      <ReviewCard reviewLink='#' page='concert' />
-      <ReviewCard reviewLink='#' page='profile' />
-       */}
+      {activeTab === 1 && activeView === 0 && (
+        <section className={`${styles.tab_content} ${styles.review_list}`}>
+          <ul>
+            <li>
+              <ReviewCard reviewLink='#' page='profile' />
+            </li>
+          </ul>
+        </section>
+      )}
+      {activeTab === 1 && activeView === 1 && (
+        <section className={`${styles.tab_content} ${styles.review_gallery}`}>
+          <ul>
+            <li>
+              <ReviewGalleryCard reviewLink='#' hasMultiImages />
+            </li>
+          </ul>
+        </section>
+      )}
     </div>
   );
 }
