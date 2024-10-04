@@ -2,7 +2,8 @@
 @import "../../../styles/_mixin";
 
 .header {
-  width: 100%;
+  width: calc(100% + 40px);
+  margin: 0 -20px;
   padding: 5px 20px;
   display: flex;
   justify-content: space-between;
