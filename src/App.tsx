@@ -23,9 +23,18 @@ import ComponentTest from "./pages/ComponentTest/ComponentTest";
 
 function AppHeader() {
   const location = useLocation();
-  const hasHeader = !location.pathname.includes("/review");
+  const loginPage = location.pathname.includes("/login");
+  const reviewPage = location.pathname.includes("/review");
+  console.log(location.pathname);
 
-  return hasHeader ? <Header buttonLeft='profile' /> : null;
+  let headerType = null;
+  if (loginPage) {
+    headerType = <Header buttonLeft='back' />;
+  } else if (!reviewPage) {
+    headerType = <Header buttonLeft='profile' />;
+  }
+
+  return headerType;
 }
 
 function App() {
