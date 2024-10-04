@@ -46,7 +46,7 @@ export default function ReviewCard({
         </div>
       )}
       <Link to={reviewLink}>
-        <div className={styles.main}>
+        <div className={styles.content}>
           <div className={styles.text}>
             {page === "main" && <h3 className={styles.title}>{title}</h3>}
             <p>{content}</p>
