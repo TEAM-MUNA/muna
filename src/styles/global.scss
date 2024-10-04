@@ -12,6 +12,7 @@ body {
 
 #root {
   background: $white;
+  min-height: 100vh;
   max-width: 480px;
   padding: 0 20px 40px;
   margin: 0 auto;

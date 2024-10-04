@@ -5,23 +5,31 @@ import { UserProps, defaultUserProps } from "../../../types/userProps";
 
 interface AvatarProps extends UserProps {
   size?: "md" | "lg";
-  link?: string;
+  userLink?: string;
 }
 
 export default function Avatar({
   size = "md",
-  link = "#",
+  userLink = defaultUserProps.userLink,
   nickname = defaultUserProps.nickname,
   userId = defaultUserProps.userId,
   userImage = defaultUserProps.userImage,
 }: AvatarProps) {
-  return (
-    <Link to={link} className={`${styles.avatar} ${styles[size]}`}>
+  const avatarContent = (
+    <>
       <img src={userImage} alt={nickname} />
       <div className={styles.text}>
         <p className={styles.nickname}>{nickname}</p>
         <p className={styles.id}>{userId}</p>
       </div>
+    </>
+  );
+
+  return userLink ? (
+    <Link to={userLink} className={`${styles.avatar} ${styles[size]}`}>
+      {avatarContent}
     </Link>
+  ) : (
+    <div className={styles.avatar}>{avatarContent}</div>
   );
 }
