@@ -10,16 +10,39 @@ import styles from "./Login.module.scss";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
+import { emailRegex, passwordRegex } from "../../utils/validations";
 
 export default function Login() {
-  const { value: email, onChange: onEmailChange } = useInput("");
-  const { value: password, onChange: onPasswordChange } = useInput("");
+  const {
+    value: email,
+    onChange: onEmailChange,
+    error: emailError,
+  } = useInput("", (value) =>
+    emailRegex.test(value) ? null : "유효한 이메일을 입력해 주세요."
+  );
+  const {
+    value: password,
+    onChange: onPasswordChange,
+    error: passwordError,
+  } = useInput("", (value) =>
+    passwordRegex.test(value)
+      ? null
+      : "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다."
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 입력되지 않았을 경우
+    if (!email || !password) {
+      const errorMessage = !email
+        ? "이메일을 입력해주세요."
+        : "비밀번호를 입력해주세요.";
+      toast.error(errorMessage);
+      return;
+    }
     const loadingToastId = toast.loading("로그인 중...");
 
     try {
@@ -56,6 +79,8 @@ export default function Login() {
             <Input
               value={email}
               onChange={onEmailChange}
+              error={!!emailError}
+              message={emailError || ""}
               label='이메일'
               placeholder='이메일 주소를 입력해 주세요.'
             />
@@ -63,6 +88,8 @@ export default function Login() {
               type='password'
               value={password}
               onChange={onPasswordChange}
+              error={!!passwordError}
+              message={passwordError || ""}
               label='비밀번호'
               placeholder='비밀번호를 입력해 주세요.'
             />
@@ -80,7 +107,6 @@ export default function Login() {
           </form>
         </section>
       </main>
-      {/* <LoginForm /> */}
     </article>
   );
 }
