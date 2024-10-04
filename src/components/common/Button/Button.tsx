@@ -12,6 +12,7 @@ interface ButtonProps {
   className?: string | "";
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit";
 }
 
 export default function Button({
@@ -25,10 +26,11 @@ export default function Button({
   className = "",
   disabled = false,
   onClick = () => {},
+  type = "button",
 }: ButtonProps) {
   return (
     <button
-      type='button'
+      type={type === "button" ? "button" : "submit"}
       className={`
         ${styles.btn} 
         ${size ? styles[size] : ""} 
