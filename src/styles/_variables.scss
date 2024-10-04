@@ -36,8 +36,12 @@ $font-medium: 500;
 $font-bold: 600;
 
 // z-index
-$z-dropdown: 800; // 드롭다운
-$z-toast: 900; // 토스트 알림
+$z-base: 0; // 기본
+$z-low: 10;
+$z-medium: 100;
+$z-dropdown: 500; // 드롭다운
+$z-toast: 600; // 토스트 알림
+$z-high: 1000;
 $z-header: 1000; // 메인 헤더
 $z-title: 1000; // 상단고정타이틀 (스크롤시 고정)
 $z-bar: 1000; // 하단고정바
