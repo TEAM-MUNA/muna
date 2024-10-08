@@ -1,7 +1,7 @@
 import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
-export default function SettingIcon({
+export default function SettingsIcon({
   size = defaultIconProps.size,
 }: IconProps) {
   return (

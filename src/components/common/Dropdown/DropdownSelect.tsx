@@ -8,12 +8,14 @@ interface DropdownSelectProps {
   options: string[];
   onSelect: (value: string) => void;
   outline?: boolean;
+  position?: "left" | "right";
 }
 
 export default function DropdownSelect({
   options = [],
   onSelect,
   outline = true,
+  position = "left",
 }: DropdownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(options[0]);
@@ -42,7 +44,9 @@ export default function DropdownSelect({
         size='md'
       />
       {isOpen && (
-        <ul className={`${styles.dropdown_ul}`}>
+        <ul
+          className={`${styles.dropdown_ul} ${position === "right" ? styles.dropdown_right : ""}`}
+        >
           {options.map((option) => (
             <li
               key={option}
