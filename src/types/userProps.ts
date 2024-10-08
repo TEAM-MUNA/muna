@@ -2,6 +2,7 @@ import userDefault from "../assets/img/user-default.png";
 
 export interface UserProps {
   nickname?: string;
+  email?: string | null;
   userId?: string;
   userImage?: string;
   userLink?: string | undefined;
@@ -9,7 +10,8 @@ export interface UserProps {
 
 export const defaultUserProps = {
   nickname: "닉네임",
+  email: "userEmail",
   userId: "userId",
   userImage: userDefault,
-  userLink: undefined,
+  userLink: "profile/1",
 };
