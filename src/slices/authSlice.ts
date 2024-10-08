@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
+
 import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { loginToFirebase, logoutFromFirebase } from "../api/authAPI";
+  loginToFirebase,
+  logoutFromFirebase,
+  setUserOnDoc,
+  signupToFirebase,
+  updateProfileToFirebase,
+} from "../api/authAPI";
 
 interface AuthState {
   user: {
@@ -43,34 +43,22 @@ export const signupAsync = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const auth = getAuth();
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(userCredential.user);
+      // 1. 회원가입
+      const user = await signupToFirebase(email, password);
 
-      // nickname(displayName), profileImage(photoURL) 업데이트
-      await updateProfile(userCredential.user, {
-        displayName: nickname,
-        photoURL: profileImage,
-      });
-      // Firestore에 사용자 정보 등록
-      const userRef = doc(db, "users", userCredential.user.uid);
-      await setDoc(userRef, {
-        email: userCredential.user.email,
-        nickname,
-        profileImage,
-      });
+      // 2. nickname(displayName), profileImage(photoURL) 업데이트
+      await updateProfileToFirebase(user, nickname, profileImage);
+
+      // 3. Firestore에 사용자 정보 등록
+      await setUserOnDoc(user, nickname, profileImage);
 
       return {
         user: {
-          uid: userCredential.user.uid,
-          email: userCredential.user.email,
-          nickname: userCredential.user.displayName,
-          profileImage: userCredential.user.photoURL,
+          uid: user.uid,
+          email: user.email,
+          nickname: user.displayName,
+          profileImage: user.photoURL,
         },
       };
     } catch (error: unknown) {
