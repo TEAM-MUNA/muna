@@ -61,7 +61,7 @@ export default function Signup() {
     const loadingToastId = toast.loading("회원가입 중...");
 
     try {
-      await dispatch(signupAsync({ email, password })).unwrap();
+      await dispatch(signupAsync({ email, password, nickname })).unwrap();
       toast.success("회원가입에 성공하였습니다.", { id: loadingToastId });
     } catch (error) {
       if (typeof error === "string") {

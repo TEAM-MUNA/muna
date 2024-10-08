@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
 import { loginToFirebase, logoutFromFirebase } from "../api/authAPI";
 
 interface AuthState {
-  user: { uid: string; email: string } | null;
+  user: { uid: string; email: string | null; displayName?: string } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -19,7 +23,11 @@ const initialState: AuthState = {
 export const signupAsync = createAsyncThunk(
   "auth/signup",
   async (
-    { email, password }: { email: string; password: string },
+    {
+      email,
+      password,
+      nickname,
+    }: { email: string; password: string; nickname: string },
     { rejectWithValue }
   ) => {
     const auth = getAuth();
@@ -30,10 +38,20 @@ export const signupAsync = createAsyncThunk(
         password
       );
       console.log(userCredential.user);
-      return { user: userCredential.user };
+
+      // 닉네임(displayName) 업데이트
+      await updateProfile(userCredential.user, {
+        displayName: nickname,
+      });
+      return {
+        user: {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          displayName: nickname,
+        },
+      };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        // console.log("파이어베이스 에러", error);
         console.log("파이어베이스 에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
@@ -97,11 +115,21 @@ const authSlice = createSlice({
       })
       .addCase(
         signupAsync.fulfilled,
-        (state, action: PayloadAction<{ user: User }>) => {
+        (
+          state,
+          action: PayloadAction<{
+            user: { uid: string; email: string | null; displayName: string };
+          }>
+        ) => {
           state.status = "succeeded";
           console.log(action.payload);
-          // state.user = action.payload; // 유저 정보를 업데이트
-          state.error = null; // 성공 시 에러를 초기화
+          // state.user = action.payload; // 유저 정보 업데이트
+          state.user = {
+            uid: action.payload.user.uid,
+            email: action.payload.user.email || null, // email이 null일 수 있으므로 || null 사용
+            displayName: action.payload.user.displayName,
+          };
+          state.error = null;
         }
       )
       .addCase(signupAsync.rejected, (state, action) => {
