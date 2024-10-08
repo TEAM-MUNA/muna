@@ -5,10 +5,12 @@ import userDefault from "../../../assets/img/user-default.png";
 
 interface ImageUploaderProps {
   image?: string;
+  onImageChange?: (image: File) => void;
 }
 
 export default function ImageUploader({
   image = userDefault,
+  onImageChange,
 }: ImageUploaderProps) {
   const [preview, setPreview] = useState<string>(image);
 
@@ -16,10 +18,15 @@ export default function ImageUploader({
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      if (onImageChange) {
+        onImageChange(file);
+      }
       reader.onloadend = () => {
-        setPreview(reader.result as string);
+        const newPreview = reader.result as string;
+        setPreview(newPreview);
       };
       reader.readAsDataURL(file);
+      console.log(file);
     }
   };
 
@@ -32,6 +39,7 @@ export default function ImageUploader({
         id='userImageInput'
         className='sr_only'
         onChange={handleFileChange}
+        name='profile-image'
       />
       <img src={preview} alt='프로필 이미지' />
       <span className={styles.btn_edit}>
