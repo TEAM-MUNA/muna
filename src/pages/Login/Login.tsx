@@ -51,7 +51,7 @@ export default function Login() {
       await dispatch(loginAsync({ email, password })).unwrap();
       toast.success("로그인에 성공하였습니다.", { id: loadingToastId });
       setTimeout(() => {
-        navigate("/");
+        navigate(-1);
       }, 500);
     } catch (error) {
       // TODO: 수정하기
