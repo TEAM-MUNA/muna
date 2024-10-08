@@ -9,6 +9,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   type?: string;
+  name?: string;
   message?: string;
   icon?: JSX.Element;
   fullWidth?: boolean;
@@ -23,6 +24,7 @@ export default function Input({
   disabled = false,
   onChange = () => {},
   type = "text",
+  name = "",
   icon = undefined,
   fullWidth = false,
 }: InputProps) {
@@ -32,6 +34,7 @@ export default function Input({
       <div className={styles.input_icon_container}>
         <input
           type={type}
+          name={name}
           className={styles.input}
           disabled={disabled}
           placeholder={placeholder}

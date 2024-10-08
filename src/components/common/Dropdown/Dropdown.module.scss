@@ -10,6 +10,10 @@
   &:not(:last-of-type) {
     margin-right: 10px;
   }
+  .noline {
+    padding: 8px;
+    color: $black-light;
+  }
 }
 
 .dropdown_ul {

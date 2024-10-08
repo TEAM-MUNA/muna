@@ -74,6 +74,56 @@ li {
   clip: rect(0 0 0 0);
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+// 카드리스트 공통
+ul:has(.card_concert) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  li {
+    display: flex;
+  }
+}
+ul:has(.card_poster) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  flex-wrap: wrap;
+  gap: 16px 10px;
+  li {
+    display: flex;
+  }
+}
+ul:has(.card_review) {
+  display: flex;
+  flex-direction: column;
+  &:has(.page_profile, .page_concert) {
+    margin-top: -20px;
+  }
+  li {
+    display: flex;
+  }
+}
+ul:has(.card_review_gallery) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin: 0 -20px;
+  li {
+    display: flex;
+  }
+}
+
 // 변수관련 공통스타일
 @function get-property($type) {
   @if $type == "text" {

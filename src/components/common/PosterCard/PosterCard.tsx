@@ -19,16 +19,18 @@ export default function PosterCard({
   const { isActive, onToggle } = useToggle(isBookmarked);
 
   return (
-    <Link to={concertLink} className={`${styles.card}`}>
-      <img className={styles.poster} src={poster} alt={title} />
-      <h3 className={styles.title}>{title}</h3>
-      <Button
-        className={styles.btn_bookmark}
-        label='북마크'
-        iconOnly={<BookmarkIcon active={isActive} />}
-        iconShadow
-        onClick={onToggle}
-      />
+    <Link to={concertLink} className={`${styles.card} card_poster`}>
+      <div className={styles.container}>
+        <img className={styles.poster} src={poster} alt={title} />
+        <h3 className={styles.title}>{title}</h3>
+        <Button
+          className={styles.btn_bookmark}
+          label='북마크'
+          iconOnly={<BookmarkIcon active={isActive} />}
+          iconShadow
+          onClick={onToggle}
+        />
+      </div>
     </Link>
   );
 }

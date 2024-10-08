@@ -4,12 +4,7 @@
 .card {
   display: inline-flex;
   position: relative;
-  width: calc((100% - 4px) / 3);
   aspect-ratio: 1/1;
-  margin-right: 2px;
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
 }
 
 .thumbnail {
