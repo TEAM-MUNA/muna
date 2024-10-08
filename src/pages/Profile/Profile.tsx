@@ -84,6 +84,7 @@ export default function Profile() {
               onSelect={handleDropdownSelect}
               options={concertOrderSelectOptions}
               outline={false}
+              position='right'
             />
           </div>
           <ul>
