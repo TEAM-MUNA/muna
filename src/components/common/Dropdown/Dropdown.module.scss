@@ -7,6 +7,13 @@
   button {
     color: $black;
   }
+  &:not(:last-of-type) {
+    margin-right: 10px;
+  }
+  .noline {
+    padding: 8px;
+    color: $black-light;
+  }
 }
 
 .dropdown_ul {
@@ -20,7 +27,7 @@
   border: 1px solid $line-light;
   border-radius: 8px;
   background: $white;
-  z-index: 10;
+  z-index: $z-dropdown;
   width: fit-content;
   min-width: 100%;
 

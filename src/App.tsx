@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  useLocation,
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import Button from "./components/common/Button/Button";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -16,6 +20,20 @@ import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
 import Profile from "./pages/Profile/Profile";
 import Settings from "./pages/Settings/Settings";
 import ComponentTest from "./pages/ComponentTest/ComponentTest";
+
+function AppHeader() {
+  const location = useLocation();
+  const isLoginPage = location.pathname.includes("/login");
+  const isReviewPage = location.pathname.includes("/review");
+
+  if (isLoginPage) {
+    return <Header buttonLeft='back' />;
+  }
+  if (!isReviewPage) {
+    return <Header buttonLeft='profile' />;
+  }
+  return null;
+}
 
 function App() {
   // firebase 사용 테스트
@@ -41,92 +59,20 @@ function App() {
   return (
     <div>
       <Router>
-        <div>
-          <Header buttonLeft='profile' />
-          <nav>
-            <ul
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                listStyle: "none",
-                gap: "4px",
-              }}
-            >
-              <li>
-                <Link to='/'>
-                  <Button label='Main' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/login'>
-                  <Button label='Login' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/signup'>
-                  <Button label='Signup' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/search'>
-                  <Button label='Search' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/concert-list'>
-                  <Button label='ConcertList' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/concert-detail/1'>
-                  <Button label='ConcertDetail' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/review-edit/1'>
-                  <Button label='ReviewEdit' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/review-detail/1'>
-                  <Button label='Review Detail' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/profile'>
-                  <Button label='Profile' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/settings'>
-                  <Button label='Settings' size='sm' color='default' />
-                </Link>
-              </li>
-              <li>
-                <Link to='/component-test'>
-                  <Button
-                    label='컴포넌트 테스트 페이지'
-                    size='sm'
-                    color='default'
-                  />
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <Routes>
-            <Route path='/' element={<Main />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/search' element={<Search />} />
-            <Route path='/concert-list' element={<ConcertList />} />
-            <Route path='/concert-detail/:id' element={<ConcertDetail />} />
-            <Route path='/review-edit/:id' element={<ReviewEdit />} />
-            <Route path='/review-detail/:id' element={<ReviewDetail />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/settings' element={<Settings />} />
-            <Route path='/component-test' element={<ComponentTest />} />
-          </Routes>
-        </div>
+        <AppHeader />
+        <Routes>
+          <Route path='/' element={<Main />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/search' element={<Search />} />
+          <Route path='/concert' element={<ConcertList />} />
+          <Route path='/concert/:id' element={<ConcertDetail />} />
+          <Route path='/review/edit/:id' element={<ReviewEdit />} />
+          <Route path='/review/:id' element={<ReviewDetail />} />
+          <Route path='/profile/:userId' element={<Profile />} />
+          <Route path='/settings' element={<Settings />} />
+          <Route path='/component-test' element={<ComponentTest />} />
+        </Routes>
       </Router>
     </div>
   );

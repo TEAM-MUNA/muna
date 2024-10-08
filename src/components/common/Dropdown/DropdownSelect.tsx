@@ -7,11 +7,13 @@ import useClickOutside from "../../../hooks/useCloseOnOutsideClick";
 interface DropdownSelectProps {
   options: string[];
   onSelect: (value: string) => void;
+  outline?: boolean;
 }
 
 export default function DropdownSelect({
   options = [],
   onSelect,
+  outline = true,
 }: DropdownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(options[0]);
@@ -35,7 +37,8 @@ export default function DropdownSelect({
         label={selected}
         iconRight={<CaretIcon />}
         onClick={toggleDropdown}
-        color='default'
+        color={outline ? "default" : undefined}
+        className={outline ? "" : styles.noline}
         size='md'
       />
       {isOpen && (

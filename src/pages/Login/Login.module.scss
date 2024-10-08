@@ -1,2 +1,31 @@
-@import "../../../styles/_variables";
-@import "../../../styles/_mixin";
+@import "../../styles/variables";
+@import "../../styles/_mixin";
+
+.login {
+  .header {
+    text-align: center;
+    margin-top: 80px;
+  }
+  .header h1 {
+    margin: 0;
+  }
+  .slogan {
+    font-size: $font-sm;
+    color: $black;
+    margin-top: 10px;
+  }
+  .form {
+    margin-top: 68px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .button {
+      margin-top: 20px;
+    }
+    .link {
+      font-size: $font-sm;
+      color: $black-light;
+      text-align: center;
+    }
+  }
+}

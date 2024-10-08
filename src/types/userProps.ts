@@ -4,12 +4,12 @@ export interface UserProps {
   nickname?: string;
   userId?: string;
   userImage?: string;
-  userLink?: string;
+  userLink?: string | undefined;
 }
 
 export const defaultUserProps = {
   nickname: "닉네임",
   userId: "userId",
   userImage: userDefault,
-  userLink: "#",
+  userLink: undefined,
 };

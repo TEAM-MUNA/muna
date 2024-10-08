@@ -27,7 +27,7 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
   } = concert;
 
   return (
-    <Link to={concertLink} className={styles.concertCard}>
+    <Link to={concertLink} className={`${styles.concertCard} card_concert`}>
       <div className={styles.poster}>
         <img src={poster} alt={title} />
       </div>

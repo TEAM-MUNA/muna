@@ -1,13 +1,11 @@
-import React from "react";
-import Header from "../../components/layout/Header/Header";
+import React, { useEffect } from "react";
+import xmlToJson from "../../utils/xmlToJson";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
-import StarTag from "../../components/common/StarTag/StarTag";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
-import { defaultReviewProps } from "../../types/reviewProps";
 
 export default function ConcertList() {
+  // const [concertList, setConcertList] = useState([]);
   const genreList = [
     "전체",
     "뮤지컬",
@@ -36,35 +34,52 @@ export default function ConcertList() {
     prfstate: "공연완료",
   };
 
-  const review = defaultReviewProps;
+  const getData = async () => {
+    try {
+      const response = await fetch(
+        `/openApi/restful/pblprfr?service=${process.env.REACT_APP_kopisKey}&stdate=20160101&eddate=20160630&rows=10&cpage=101`
+      );
+
+      if (!response.ok) {
+        // 오류 발생 시 오류 데이터를 JSON으로 출력
+        const errorData = await response.json();
+        console.error("Error fetching data:", errorData);
+        return;
+      }
+
+      const xmlString = await response.text();
+      const parser = new DOMParser();
+      const xmlNode = parser.parseFromString(xmlString, "text/xml");
+
+      // XML을 JSON으로 변환하여 출력
+      const item = xmlToJson(xmlNode);
+      console.log("🚀 ~ getData ~ item:", item);
+    } catch (error) {
+      // 네트워크 오류 등 기타 오류 처리
+      console.error("Network or parsing error:", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
-      <Header buttonLeft='profile' />
       <Tab tabList={genreList} />
-      <div>
+      <div style={{ display: "flex", gap: "10px", padding: "20px 0" }}>
         <DropdownSelect options={["최신순", "리뷰순"]} onSelect={() => {}} />
+        <DropdownSelect options={["전국", "인천"]} onSelect={() => {}} />
       </div>
-
-      <div style={{ display: "flex", gap: "8px", margin: "20px 0" }}>
-        <StarTag />
-        <StarTag rating={1} />
-        <StarTag rating={2} />
-        <StarTag rating={3} />
-        <StarTag rating={4} />
-        <StarTag rating={5} />
-      </div>
-
-      <ReviewBar review={review} />
 
       <ul>
-        <li>
+        <li key={1}>
           <ConcertCard concert={concert} />
         </li>
-        <li>
+        <li key={2}>
           <ConcertCard concert={concert} />
         </li>
-        <li>
+        <li key={3}>
           <ConcertCard concert={concert} />
         </li>
       </ul>

@@ -1,24 +1,38 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
+.tab_container {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 54px;
+  border-bottom: 1px solid $line-lighter;
+  margin: 0 -20px;
+  background: $white;
+  z-index: $z-tab;
+}
+
 .tab {
   display: flex;
   font-size: $font-lg;
   gap: 22px;
 
-  padding: 10px 10px 0 10px;
+  padding: 0 20px;
   position: relative;
-  .line {
-    background-color: $line-lighter;
-    height: 1px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
+
+  overflow-x: auto; // 콘텐츠 넘칠 때만 스크롤바 표시
+  // scroll-snap-type: x mandatory; // 스크롤 스냅 적용
+  // 스크롤바 숨김
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 
   li {
     list-style: none;
     cursor: pointer;
+    // scroll-snap-align: start; // 탭을 스냅 포인트로 만듦
+    flex-shrink: 0; // 탭 항목이 축소되지 않도록 함
 
     button {
       color: $black-light;
@@ -28,8 +42,8 @@
       display: flex;
       gap: 4px;
       align-items: center;
-      height: 100%;
-      padding-bottom: 8px;
+      padding-top: 12px;
+      padding-bottom: 10px;
       border-bottom: 2px solid transparent;
     }
 

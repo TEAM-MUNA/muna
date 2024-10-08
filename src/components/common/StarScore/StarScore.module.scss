@@ -1,6 +1,7 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
+<<<<<<< HEAD
 .container{
     display: flex;
     flex-direction: column;
@@ -39,3 +40,48 @@
     font-size: $font-lg;
     text-align: center;
 }
+=======
+.container {
+  display: flex;
+  flex-direction: column;
+  div {
+    margin: auto;
+  }
+
+  button {
+    background: none;
+    border: none;
+  }
+}
+
+.primary {
+  margin: auto;
+  color: $primary;
+  * {
+    color: $primary;
+  }
+}
+
+.black_lighter {
+  margin: auto;
+  color: $black-lighter;
+  * {
+    color: $black-lighter;
+  }
+}
+
+.black {
+  margin: auto;
+  color: $black;
+}
+
+.font_md {
+  font-size: $font-md;
+  text-align: center;
+}
+
+.font_lg {
+  font-size: $font-lg;
+  text-align: center;
+}
+>>>>>>> 756ee767a9823ce8755d2c8877b28da10f9caa89

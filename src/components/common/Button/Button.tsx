@@ -2,19 +2,28 @@ import React, { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
+  id?: string;
   label: string;
   size?: "sm" | "md" | "lg" | "xl" | undefined;
   fullWidth?: boolean;
-  color?: "default" | "primary" | "primary_line" | "danger" | undefined;
+  color?:
+    | "default"
+    | "primary"
+    | "primary_line"
+    | "danger"
+    | "black"
+    | undefined;
   iconRight?: ReactNode | undefined;
   iconOnly?: ReactNode | undefined;
   iconShadow?: boolean;
   className?: string | "";
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit";
 }
 
 export default function Button({
+  id,
   label,
   size,
   fullWidth = false,
@@ -25,10 +34,12 @@ export default function Button({
   className = "",
   disabled = false,
   onClick = () => {},
+  type = "button",
 }: ButtonProps) {
   return (
     <button
-      type='button'
+      id={id}
+      type={type === "button" ? "button" : "submit"}
       className={`
         ${styles.btn} 
         ${size ? styles[size] : ""} 

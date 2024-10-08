@@ -19,7 +19,7 @@ export default function ReviewGalleryCard({
   hasMultiImages,
 }: ReviewGalleryCardProps) {
   return (
-    <Link to={reviewLink} className={styles.card}>
+    <Link to={reviewLink} className={`${styles.card} card_review_gallery`}>
       <img className={styles.thumbnail} src={thumbnail || poster} alt={title} />
       {hasMultiImages && (
         <span className={`${styles.icon} ${styles.icon_layers}`}>
