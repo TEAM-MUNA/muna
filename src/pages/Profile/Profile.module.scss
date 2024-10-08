@@ -24,9 +24,7 @@
 
 .tab_content {
   padding: 20px 0;
-  &.concert_bookmark {
-    ul {
-      margin-top: 20px;
-    }
+  .wrapper_dropdown {
+    margin-bottom: 20px;
   }
 }
