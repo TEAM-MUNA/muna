@@ -35,6 +35,8 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // TODO: 인풋 오류가 있을 경우 처리
+
     // 입력되지 않았을 경우
     if (!email || !password) {
       const errorMessage = !email
@@ -52,6 +54,7 @@ export default function Login() {
         navigate("/");
       }, 500);
     } catch (error) {
+      // TODO: 수정하기
       if (error instanceof FirebaseError) {
         toast.error(error.message, { id: loadingToastId });
       } else {
