@@ -4,6 +4,7 @@ import {
   ref,
   uploadString,
 } from "firebase/storage";
+import getResizeImage from "../utils/getResizeImage";
 /**
  * Firebase storage에 이미지를 등록합니다.
  * 일반 ImageUploader 컴포넌트 (이미지 셀렉) 관련 훅이 아닌, Firebase 관련 훅입니다.
@@ -22,9 +23,12 @@ const useGetImageDownloadUrl = () => {
     category: ImageCategory
   ) => {
     const storage = getStorage();
-    // TODO: 업로드 시 사진 사이즈 줄이기
+    // 업로드 시 사진 사이즈 줄이기
+    const canvas = await getResizeImage(imageUrl, 300, 300);
+    const resizedImageUrl = canvas.toDataURL();
+
     const storageRef = ref(storage, `${category}/${Date.now()}`);
-    await uploadString(storageRef, imageUrl, "data_url");
+    await uploadString(storageRef, resizedImageUrl, "data_url");
     const downloadUrl = await getDownloadURL(storageRef);
     console.log("download url", downloadUrl);
 
