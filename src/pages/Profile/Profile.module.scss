@@ -23,10 +23,10 @@
 }
 
 .tab_content {
-  &.bookmark {
-    padding: 20px 0;
-  }
-  &.review_gallery {
-    margin: 0 -20px;
+  padding: 20px 0;
+  &.concert_bookmark {
+    ul {
+      margin-top: 20px;
+    }
   }
 }

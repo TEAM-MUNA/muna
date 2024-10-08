@@ -17,8 +17,9 @@ export default function Profile() {
     ["북마크한 공연", null],
     ["나의 후기", 10],
   ];
-  const stateSelectOptions = ["공연전체", "진행중", "진행완료"];
-  const orderSelectOptions = ["최신순", "북마크순"];
+  const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
+  const concertOrderSelectOptions = ["최신순", "북마크순"];
+  const reviewOrderSelectOptions = ["최신순", "인기순"];
   const handleDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -60,14 +61,14 @@ export default function Profile() {
         )}
       </nav>
       {activeTab === 0 && (
-        <section className={`${styles.tab_content} ${styles.bookmark}`}>
+        <section className={`${styles.tab_content} ${styles.concert_bookmark}`}>
           <DropdownSelect
             onSelect={handleDropdownSelect}
-            options={stateSelectOptions}
+            options={concertStateSelectOptions}
           />
           <DropdownSelect
             onSelect={handleDropdownSelect}
-            options={orderSelectOptions}
+            options={concertOrderSelectOptions}
           />
           <ul>
             <li>
@@ -78,6 +79,13 @@ export default function Profile() {
       )}
       {activeTab === 1 && activeView === 0 && (
         <section className={`${styles.tab_content} ${styles.review_list}`}>
+          <div className={styles.wrapper_dropdown}>
+            <DropdownSelect
+              onSelect={handleDropdownSelect}
+              options={concertOrderSelectOptions}
+              outline={false}
+            />
+          </div>
           <ul>
             <li>
               <ReviewCard reviewLink='#' page='profile' />
