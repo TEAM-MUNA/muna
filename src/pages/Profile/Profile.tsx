@@ -79,7 +79,7 @@ export default function Profile() {
       )}
       {activeTab === 1 && activeView === 0 && (
         <section className={`${styles.tab_content} ${styles.review_list}`}>
-          <div className={styles.wrapper_dropdown}>
+          <div className='wrapper_dropdown_noline'>
             <DropdownSelect
               onSelect={handleDropdownSelect}
               options={concertOrderSelectOptions}
