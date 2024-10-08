@@ -5,6 +5,8 @@ import {
   getAuth,
   updateProfile,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { loginToFirebase, logoutFromFirebase } from "../api/authAPI";
 
 interface AuthState {
@@ -55,6 +57,14 @@ export const signupAsync = createAsyncThunk(
         displayName: nickname,
         photoURL: profileImage,
       });
+      // Firestore에 사용자 정보 등록
+      const userRef = doc(db, "users", userCredential.user.uid);
+      await setDoc(userRef, {
+        email: userCredential.user.email,
+        nickname,
+        profileImage,
+      });
+
       return {
         user: {
           uid: userCredential.user.uid,
