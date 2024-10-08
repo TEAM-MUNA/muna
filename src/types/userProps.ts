@@ -5,7 +5,7 @@ export interface UserProps {
   email?: string | null;
   userId?: string;
   userImage?: string;
-  userLink?: string | undefined;
+  userLink?: string | undefined | null;
 }
 
 export const defaultUserProps = {
