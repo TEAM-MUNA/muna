@@ -8,7 +8,12 @@ import {
 import { loginToFirebase, logoutFromFirebase } from "../api/authAPI";
 
 interface AuthState {
-  user: { uid: string; email: string | null; displayName?: string } | null;
+  user: {
+    uid: string;
+    email: string | null;
+    nickname?: string | null;
+    profileImage?: string | null;
+  } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -27,7 +32,13 @@ export const signupAsync = createAsyncThunk(
       email,
       password,
       nickname,
-    }: { email: string; password: string; nickname: string },
+      profileImage,
+    }: {
+      email: string;
+      password: string;
+      nickname: string;
+      profileImage: string | null;
+    },
     { rejectWithValue }
   ) => {
     const auth = getAuth();
@@ -39,15 +50,17 @@ export const signupAsync = createAsyncThunk(
       );
       console.log(userCredential.user);
 
-      // 닉네임(displayName) 업데이트
+      // nickname(displayName), profileImage(photoURL) 업데이트
       await updateProfile(userCredential.user, {
         displayName: nickname,
+        photoURL: profileImage,
       });
       return {
         user: {
           uid: userCredential.user.uid,
           email: userCredential.user.email,
-          displayName: nickname,
+          nickname: userCredential.user.displayName,
+          profileImage: userCredential.user.photoURL,
         },
       };
     } catch (error: unknown) {
@@ -69,6 +82,7 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
+      console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -118,7 +132,12 @@ const authSlice = createSlice({
         (
           state,
           action: PayloadAction<{
-            user: { uid: string; email: string | null; displayName: string };
+            user: {
+              uid: string;
+              email: string | null;
+              nickname: string | null;
+              profileImage: string | null;
+            };
           }>
         ) => {
           state.status = "succeeded";
@@ -126,8 +145,9 @@ const authSlice = createSlice({
           // state.user = action.payload; // 유저 정보 업데이트
           state.user = {
             uid: action.payload.user.uid,
-            email: action.payload.user.email || null, // email이 null일 수 있으므로 || null 사용
-            displayName: action.payload.user.displayName,
+            email: action.payload.user.email || null,
+            nickname: action.payload.user.nickname,
+            profileImage: action.payload.user.profileImage,
           };
           state.error = null;
         }

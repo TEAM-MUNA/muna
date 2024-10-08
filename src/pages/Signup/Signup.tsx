@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -9,10 +9,12 @@ import Button from "../../components/common/Button/Button";
 import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import useInput from "../../hooks/useInput";
-// import { FirebaseError } from "firebase/app";
+import { uploadProfileImage } from "../../slices/imageSlice";
 
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
   const {
     value: email,
     onChange: onEmailChange,
@@ -47,6 +49,8 @@ export default function Signup() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
+    console.log(data);
+
     const hasEmptyInput = Object.values(data).every((value) => value === "");
     const hasErrors = !!emailError || !!passwordError || !!passwordCheckError;
 
@@ -61,7 +65,9 @@ export default function Signup() {
     const loadingToastId = toast.loading("회원가입 중...");
 
     try {
-      await dispatch(signupAsync({ email, password, nickname })).unwrap();
+      await dispatch(
+        signupAsync({ email, password, nickname, profileImage })
+      ).unwrap();
       toast.success("회원가입에 성공하였습니다.", { id: loadingToastId });
     } catch (error) {
       if (typeof error === "string") {
@@ -76,6 +82,19 @@ export default function Signup() {
     }
   };
 
+  const handleProfileImage = async (imageUrl: string) => {
+    try {
+      const profileImageUrl = await dispatch(
+        uploadProfileImage(imageUrl)
+      ).unwrap();
+
+      console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
+      setProfileImage(profileImageUrl);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <article className={styles.signup}>
       <Toaster />
@@ -83,7 +102,7 @@ export default function Signup() {
         <h2 className={styles.title}>회원가입</h2>
         <form className={styles.form} onSubmit={handleSignup}>
           <span className={styles.image_uploader}>
-            <ImageUploader />
+            <ImageUploader onImageChange={handleProfileImage} />
           </span>
           <Input
             name='email'

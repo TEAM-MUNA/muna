@@ -5,7 +5,7 @@ import userDefault from "../../../assets/img/user-default.png";
 
 interface ImageUploaderProps {
   image?: string;
-  onImageChange?: (image: File) => void;
+  onImageChange?: (imageUrl: string) => void;
 }
 
 export default function ImageUploader({
@@ -18,12 +18,13 @@ export default function ImageUploader({
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      if (onImageChange) {
-        onImageChange(file);
-      }
+
       reader.onloadend = () => {
         const newPreview = reader.result as string;
         setPreview(newPreview);
+        if (onImageChange) {
+          onImageChange(newPreview);
+        }
       };
       reader.readAsDataURL(file);
       console.log(file);
