@@ -5,7 +5,6 @@ import { UserProps, defaultUserProps } from "../../../types/userProps";
 
 interface AvatarProps extends UserProps {
   size?: "md" | "lg";
-  userLink?: string;
 }
 
 export default function Avatar({
