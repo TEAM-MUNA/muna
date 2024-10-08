@@ -123,6 +123,11 @@ ul:has(.card_review_gallery) {
     display: flex;
   }
 }
+.wrapper_dropdown_noline {
+  display: flex;
+  justify-content: flex-end;
+  margin: -10px 0 0;
+}
 
 // 변수관련 공통스타일
 @function get-property($type) {

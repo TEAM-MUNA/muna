@@ -1,2 +1,32 @@
-@import "../../../styles/_variables";
-@import "../../../styles/_mixin";
+@import "../../styles/_variables";
+@import "../../styles/_mixin";
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0;
+}
+
+.wrapper_tab {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 54px;
+  z-index: $z-tab;
+  .wrapper_btn {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: $z-tab;
+  }
+}
+
+.tab_content {
+  padding: 20px 0;
+  &.concert_bookmark {
+    ul {
+      margin-top: 20px;
+    }
+  }
+}
