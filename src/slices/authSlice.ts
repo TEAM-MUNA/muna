@@ -1,9 +1,21 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import { loginToFirebase, logoutFromFirebase } from "../api/authAPI";
+
+import {
+  loginToFirebase,
+  logoutFromFirebase,
+  setUserOnDoc,
+  signupToFirebase,
+  updateProfileToFirebase,
+} from "../api/authAPI";
 
 interface AuthState {
-  user: { uid: string; email: string } | null;
+  user: {
+    uid: string;
+    email: string | null;
+    nickname?: string | null;
+    profileImage?: string | null;
+  } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -14,6 +26,51 @@ const initialState: AuthState = {
   error: null,
 };
 
+// 회원가입 액션
+export const signupAsync = createAsyncThunk(
+  "auth/signup",
+  async (
+    {
+      email,
+      password,
+      nickname,
+      profileImage,
+    }: {
+      email: string;
+      password: string;
+      nickname: string;
+      profileImage: string | null;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      // 1. 회원가입
+      const user = await signupToFirebase(email, password);
+
+      // 2. nickname(displayName), profileImage(photoURL) 업데이트
+      await updateProfileToFirebase(user, nickname, profileImage);
+
+      // 3. Firestore에 사용자 정보 등록
+      await setUserOnDoc(user, nickname, profileImage);
+
+      return {
+        user: {
+          uid: user.uid,
+          email: user.email,
+          nickname: user.displayName,
+          profileImage: user.photoURL,
+        },
+      };
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        console.log("파이어베이스 에러:", error.message);
+        return rejectWithValue(error.message); // firebase 오류일 경우
+      }
+      return rejectWithValue("회원가입 중 에러 발생"); // 그 외 오류: 기본 메시지
+    }
+  }
+);
+
 // 로그인 액션
 export const loginAsync = createAsyncThunk(
   "auth/login",
@@ -23,6 +80,7 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
+      console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -62,6 +120,42 @@ const authSlice = createSlice({
   // extraReducers - 다른 슬라이스에서 생성된 액션 (특히 비동기작업)
   // 주로 createAsyncThunk를 통해 생생된 비동기 작업에 대한 액션을 처리
   extraReducers: (builder) => {
+    // 회원가입 처리
+    builder
+      .addCase(signupAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        signupAsync.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            user: {
+              uid: string;
+              email: string | null;
+              nickname: string | null;
+              profileImage: string | null;
+            };
+          }>
+        ) => {
+          state.status = "succeeded";
+          console.log(action.payload);
+          // state.user = action.payload; // 유저 정보 업데이트
+          state.user = {
+            uid: action.payload.user.uid,
+            email: action.payload.user.email || null,
+            nickname: action.payload.user.nickname,
+            profileImage: action.payload.user.profileImage,
+          };
+          state.error = null;
+        }
+      )
+      .addCase(signupAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string; // 사용자 정의 에러 메시지 저장
+        console.error("에러 확인:", state.error, action.error.message);
+      });
+
     // 로그인 처리
     builder
       .addCase(loginAsync.pending, (state) => {
@@ -76,6 +170,7 @@ const authSlice = createSlice({
       )
       .addCase(loginAsync.rejected, (state, action) => {
         state.status = "failed";
+        // TODO: state.error = action.payload as string; 으로 변경하기
         state.error =
           action.error.message ?? "알 수 없는 오류가 발생하였습니다.";
       });
