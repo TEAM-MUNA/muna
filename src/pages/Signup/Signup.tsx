@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import styles from "./Signup.module.scss";
@@ -14,6 +15,7 @@ import { uploadProfileImage } from "../../slices/imageSlice";
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const {
     value: email,
@@ -69,6 +71,9 @@ export default function Signup() {
         signupAsync({ email, password, nickname, profileImage })
       ).unwrap();
       toast.success("회원가입에 성공하였습니다.", { id: loadingToastId });
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
     } catch (error) {
       if (typeof error === "string") {
         if (error.includes("email-already-in-use")) {
