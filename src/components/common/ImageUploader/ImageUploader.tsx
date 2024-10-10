@@ -32,12 +32,12 @@ export default function ImageUploader({
   };
 
   return (
-    <label htmlFor='userImageInput' className={`${styles.container}`}>
+    <label htmlFor='profileImageInput' className={`${styles.container}`}>
       <span className='sr_only'>프로필 이미지 설정</span>
       <input
         type='file'
         accept='image/*'
-        id='userImageInput'
+        id='profileImageInput'
         className='sr_only'
         onChange={handleFileChange}
         name='profile-image'
