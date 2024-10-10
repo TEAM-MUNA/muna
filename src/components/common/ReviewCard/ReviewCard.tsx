@@ -18,7 +18,7 @@ export default function ReviewCard({
   // page = "profile",
   userLink = defaultUserProps.userLink,
   reviewLink = defaultReviewProps.reviewLink,
-  userImage = defaultUserProps.userImage,
+  profileImage = defaultUserProps.profileImage,
   nickname = defaultUserProps.nickname,
   userId = defaultUserProps.userId,
   title = defaultReviewProps.title,
@@ -39,7 +39,7 @@ export default function ReviewCard({
           <Avatar
             nickname={nickname}
             userId={userId}
-            userImage={userImage}
+            profileImage={profileImage}
             userLink={userLink}
           />
           {page === "main" && <LikeButton size='sm' likeCount={20} />}

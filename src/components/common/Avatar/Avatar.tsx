@@ -12,11 +12,11 @@ export default function Avatar({
   userLink = defaultUserProps.userLink,
   nickname = defaultUserProps.nickname,
   userId = defaultUserProps.userId,
-  userImage = defaultUserProps.userImage,
+  profileImage = defaultUserProps.profileImage,
 }: AvatarProps) {
   const avatarContent = (
     <>
-      <img src={userImage} alt={nickname} />
+      <img src={profileImage} alt={nickname} />
       <div className={styles.text}>
         <p className={styles.nickname}>{nickname}</p>
         <p className={styles.id}>{userId}</p>
