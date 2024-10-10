@@ -8,11 +8,9 @@ import QueueListIcon from "../../assets/svg/QueueListIcon";
 import GalleryIcon from "../../assets/svg/GalleryIcon";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
-
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
-
 import useProfile from "../../hooks/useProfile";
 
 // 1. 현재 로그인한 사용자의 정보 불러오기 (화)
@@ -27,8 +25,7 @@ import useProfile from "../../hooks/useProfile";
 // ㄴ 콘서트, 리뷰 - 순서 정렬
 
 export default function Profile() {
-  const { userId, nickname, userImage } = useProfile();
-
+  const { userId, nickname, profileImage } = useProfile();
   const tabList: (string | [string, number | null])[] = [
     ["북마크한 공연", null],
     ["나의 후기", 10],
@@ -54,9 +51,9 @@ export default function Profile() {
       <h1 className='sr_only'>{nickname}님의 프로필페이지</h1>
       <article className={styles.top}>
         <Avatar
-          nickname={nickname}
+          nickname={nickname || undefined}
           userId={userId}
-          userImage={userImage}
+          userImage={profileImage || undefined}
           size='lg'
           userLink={null}
         />

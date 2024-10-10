@@ -6,7 +6,7 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, DocumentData, getDoc, setDoc } from "firebase/firestore";
 import { db, firebaseAuth } from "../firebase";
 
 // Firebase 회원가입 API 호출
@@ -60,3 +60,11 @@ export const loginToFirebase = async (email: string, password: string) => {
 export const logoutFromFirebase = async () => {
   await signOut(firebaseAuth);
 };
+
+// Firebase 사용자 불러오는 API
+export async function getUserFromFirebase(
+  uid: string
+): Promise<DocumentData | undefined> {
+  const result = await getDoc(doc(db, "users", uid));
+  return result.data();
+}

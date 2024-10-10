@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../../app/store";
+
 import styles from "./Header.module.scss";
 import Button from "../../common/Button/Button";
 import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
@@ -8,13 +12,19 @@ import SearchIcon from "../../../assets/svg/SearchIcon";
 import SearchInput from "../../common/SearchInput/SearchInput";
 
 interface HeaderProps {
-  buttonLeft?: "back" | "login" | "profile";
+  buttonLeft?: "back" | "profile";
 }
 
 export default function Header({ buttonLeft }: HeaderProps) {
+  const navigate = useNavigate();
+
+  // const { user, isLoggedIn } = useSelector((state: RootState) => state.auth);
+
   const [search, setSearch] = useState(false);
 
-  const handleBackButton = () => {};
+  const handleBackButton = () => {
+    navigate(-1);
+  };
   const handleProfileButton = () => {};
 
   const handleSearchButton = () => {
@@ -24,31 +34,40 @@ export default function Header({ buttonLeft }: HeaderProps) {
   return (
     <header className={`${styles.header}`}>
       <div className={`${styles.left_btn}`}>
-        {buttonLeft === "back" && (
+        {buttonLeft === "back" ? (
           <Button
             label='back'
             iconOnly={<ArrowLeftIcon />}
             onClick={handleBackButton}
           />
-        )}
-        {buttonLeft === "login" && (
-          <Button label='로그인' size='md' color='default' />
-        )}
-        {buttonLeft === "profile" && (
-          <Button
-            label='profile'
-            iconOnly={<UserIcon />}
-            onClick={handleProfileButton}
-          />
+        ) : (
+          <>
+            {/* !isLoggedIn : 로그아웃 상태일때 */}
+            {/* {!isLoggedIn && ( */}
+            <Link to='/login'>
+              <Button label='로그인' size='md' color='default' />
+            </Link>
+            {/* )} */}
+            {/* !isLoggedIn : 로그인 상태일때 */}
+            {/* {isLoggedIn && (
+              <Link to={`/profile/${user?.uid}`}>
+                <Button
+                  label='profile'
+                  iconOnly={<UserIcon />}
+                  onClick={handleProfileButton}
+                />
+              </Link>
+            )} */}
+          </>
         )}
       </div>
       {search ? (
         <SearchInput placeholder='검색어를 입력하세요' fullWidth />
       ) : (
         <>
-          <div className={`${styles.logo}`}>
+          <Link to='/' className={`${styles.logo}`}>
             <Button label='muna logo' iconOnly={<Logo />} />
-          </div>
+          </Link>
           <div>
             <Button
               label='search'
