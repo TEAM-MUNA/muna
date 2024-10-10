@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { XMLParser } from "fast-xml-parser";
+// import { XMLParser } from "fast-xml-parser";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertProps } from "../../types/concertProps";
+import fetchConcertData from "./concertAPI";
 
-interface ConcertItem {
+interface ConcertListItem {
   mt20id: string;
   prfnm: string;
   prfpdfrom: string;
@@ -19,7 +20,7 @@ interface ConcertItem {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
-function mapApiDataToConcertProps(apiData: ConcertItem): ConcertProps {
+function mapApiDataToConcertProps(apiData: ConcertListItem): ConcertProps {
   return {
     title: apiData.prfnm,
     poster: apiData.poster,
@@ -44,38 +45,14 @@ const genreMap: { [key: string]: string } = {
 };
 
 export default function ConcertList() {
-  const [concertList, setConcertList] = useState<ConcertItem[]>([]);
+  const [concertList, setConcertList] = useState<ConcertListItem[]>([]);
   const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
   const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
   const [regionCode, setRegionCode] = useState<string>(""); // 전국
 
   const getData = async () => {
-    try {
-      const response = await fetch(
-        `/openApi/restful/pblprfr?service=${process.env.REACT_APP_kopisKey}&stdate=20240901&eddate=20241230&rows=30&cpage=3&shcate=${genreCode}&prfstate=${pfStateCode}&signgucode=${regionCode}`
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error fetching data:", errorData);
-        return;
-      }
-
-      const xmlString = await response.text();
-      const parser = new XMLParser();
-      const jsonObj = parser.parse(xmlString);
-
-      // 원하는 데이터에 접근하기
-      const dbs = jsonObj.dbs;
-      const dbList = dbs.db;
-
-      // dbList가 배열인지 확인하고, 아니면 배열로 변환
-      const list = Array.isArray(dbList) ? dbList : [dbList];
-      // 상태 업데이트
-      setConcertList(list);
-    } catch (error) {
-      console.error("Network or parsing error:", error);
-    }
+    const data = await fetchConcertData(genreCode, pfStateCode, regionCode);
+    setConcertList(data);
   };
 
   useEffect(() => {
