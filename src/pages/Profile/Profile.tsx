@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
@@ -16,10 +16,10 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
 // 1. 현재 로그인한 사용자의 정보 불러오기 (화)
+// * 주소에 따라 해당 유저 프로필이 보여야 함
 // ㄴ 상단 프로필
 // ㄴ 북마크한 콘서트 - 제목, 이미지
 // ㄴ 리뷰 - 공연제목, 썸네일, 복수 이미지 여부, 내용미리보기, 좋아요, 별점, 관람일
-// * 주소에 따라 해당 유저 프로필이 보여야 함
 // 2. 북마크 기능 (-목)
 // ㄴ 북마크 버튼 누르면 해제 + 토스트 알림 (실행취소 버튼)
 // 3. 필터와 정렬기능 - 여러페이지에서 중복사용됨 (-금)
@@ -29,8 +29,7 @@ import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewG
 export default function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const currentUserId = useCurrentUser().userId;
-  const profile = useProfile(userId);
-  console.log("프로필임", profile);
+  const { profile, loading } = useProfile(userId);
 
   const tabList: (string | [string, number | null])[] = [
     ["북마크한 공연", null],
@@ -52,8 +51,11 @@ export default function Profile() {
     setActiveView(targetId === "listView" ? 0 : 1);
   };
 
+  if (loading) {
+    return <p>로딩중</p>;
+  }
   if (!profile) {
-    return <p>로딩중 or 존재하지 않는 회원</p>;
+    return <p>존재하지 않는 회원</p>;
   }
   return (
     <div>
