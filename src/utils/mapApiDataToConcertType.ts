@@ -1,8 +1,8 @@
-import { ConcertProps, ConcertReturnType } from "../types/concertProps";
+import { ConcertType, ConcertReturnType } from "../types/concertType";
 
 export function mapApiDataToConcertType(
   apiData: ConcertReturnType
-): ConcertProps {
+): ConcertType {
   return {
     title: apiData.prfnm,
     poster: apiData.poster,

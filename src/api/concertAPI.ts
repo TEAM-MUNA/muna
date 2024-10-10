@@ -1,6 +1,6 @@
 import axios from "axios";
 import parseXml from "../utils/parseXml";
-import { ConcertReturnType } from "../types/concertProps";
+import { ConcertReturnType } from "../types/concertType";
 
 axios.defaults.baseURL = "/openApi/restful/pblprfr";
 

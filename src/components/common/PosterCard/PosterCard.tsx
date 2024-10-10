@@ -1,19 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./PosterCard.module.scss";
-import { ConcertProps, defaultConcertProps } from "../../../types/concertProps";
+import { ConcertType, defaultConcertType } from "../../../types/concertType";
 import Button from "../Button/Button";
 import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
 import useToggle from "../../../hooks/useToggle";
 
-interface PosterCardProps extends ConcertProps {
+interface PosterCardProps extends ConcertType {
   isBookmarked?: boolean;
 }
 
 export default function PosterCard({
-  concertLink = defaultConcertProps.concertLink,
-  title = defaultConcertProps.title,
-  poster = defaultConcertProps.poster,
+  concertLink = defaultConcertType.concertLink,
+  title = defaultConcertType.title,
+  poster = defaultConcertType.poster,
   isBookmarked = false,
 }: PosterCardProps) {
   const { isActive, onToggle } = useToggle(isBookmarked);

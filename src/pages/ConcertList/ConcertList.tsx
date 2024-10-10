@@ -3,7 +3,7 @@ import { HeartSpinner } from "react-spinners-kit";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import { ConcertProps } from "../../types/concertProps";
+import { ConcertType } from "../../types/concertType";
 import fetchConcertData from "./concertAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
@@ -22,8 +22,8 @@ interface ConcertListItem {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
-// ConcertCard에 props로 전달하기 위해 ConcertProps로 매핑하는 함수
-function mapApiDataToConcertProps(apiData: ConcertListItem): ConcertProps {
+// ConcertCard에 props로 전달하기 위해 ConcertType로 매핑하는 함수
+function mapApiDataToConcertType(apiData: ConcertListItem): ConcertType {
   return {
     title: apiData.prfnm,
     poster: apiData.poster,
@@ -202,7 +202,7 @@ export default function ConcertList() {
           if (!concert || !concert.prfnm) {
             return null;
           }
-          const concertProps = mapApiDataToConcertProps(concert);
+          const concertProps = mapApiDataToConcertType(concert);
           return (
             <li key={concert.mt20id}>
               <ConcertCard concert={concertProps} />

@@ -1,7 +1,7 @@
 import posterDefault from "../assets/img/test-cat.png";
 
 // TODO: 변수명 Props 대신 Type 등으로 변경하는게 좋을 것 같음.
-export interface ConcertProps {
+export interface ConcertType {
   concertId?: string;
   concertLink?: string;
   title?: string;
@@ -32,7 +32,7 @@ export interface ConcertReturnType {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
-export const defaultConcertProps = {
+export const defaultConcertType = {
   concertId: "",
   concertLink: "#",
   title: "공연명",
