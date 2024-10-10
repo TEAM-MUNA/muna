@@ -54,6 +54,7 @@
   .main_showing_concert_reviews {
     background-color: $primary;
     color: $white;
+    // TODO: mixin 적용하기
     width: calc(100% + 40px);
     margin: -26px -20px 0 -20px;
     padding: 42px 23.5px 24px 23.5px;
