@@ -2,19 +2,17 @@
 @import "../../../styles/_mixin";
 
 .concertCard {
-  display: flex;
   // border: 1px solid #000;
   gap: 16px;
   width: fit-content;
+  display: flex;
 
   .poster {
     width: 110px;
     height: 170px;
     img {
-      width: 100%;
-      height: 100%;
+      width: 110px;
       aspect-ratio: 110 / 170;
-      object-fit: cover;
     }
   }
 
