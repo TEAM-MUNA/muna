@@ -22,6 +22,7 @@ interface ConcertListItem {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
+// ConcertCard에 props로 전달하기 위해 ConcertProps로 매핑하는 함수
 function mapApiDataToConcertProps(apiData: ConcertListItem): ConcertProps {
   return {
     title: apiData.prfnm,
@@ -54,6 +55,19 @@ export default function ConcertList() {
   const [page, setPage] = useState(1);
   const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState<string>("최신순");
+
+  // 공연 목록 최신순으로 정렬하기
+  const sortConcertList = (list: ConcertListItem[]) => {
+    const sortedList = [...list];
+    if (sortOrder === "최신순") {
+      sortedList.sort(
+        (a, b) =>
+          new Date(b.prfpdfrom).getTime() - new Date(a.prfpdfrom).getTime()
+      );
+    }
+    return sortedList;
+  };
 
   const getData = async () => {
     const data = await fetchConcertData(
@@ -62,7 +76,7 @@ export default function ConcertList() {
       regionCode,
       page
     );
-    setConcertList((prevData) => [...prevData, ...data]);
+    setConcertList((prevData) => sortConcertList([...prevData, ...data]));
   };
 
   useEffect(() => {
@@ -136,6 +150,16 @@ export default function ConcertList() {
     setRegionCode(code);
   };
 
+  // 공연목록 정렬 기준 변경
+  const handleSortChange = (selected: string) => {
+    setSortOrder(selected);
+  };
+
+  // 정렬이 변경될 때마다 concertList 정렬
+  useEffect(() => {
+    setConcertList((prevData) => sortConcertList(prevData));
+  }, [sortOrder]);
+
   return (
     <>
       <Tab tabList={genreList} onTabChanged={handleTabChange} />
@@ -165,7 +189,7 @@ export default function ConcertList() {
         </div>
         <DropdownSelect
           options={["최신순", "북마크순", "리뷰순", "평점순"]}
-          onSelect={() => {}}
+          onSelect={handleSortChange}
         />
       </div>
       {isLoading && (
