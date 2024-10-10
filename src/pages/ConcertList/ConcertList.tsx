@@ -138,13 +138,7 @@ export default function ConcertList() {
   return (
     <>
       <Tab tabList={genreList} onTabChanged={handleTabChange} />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "20px 0",
-        }}
-      >
+      <div className={styles.flex_container}>
         <div>
           <DropdownSelect
             options={["공연중", "공연예정", "공연완료", "공연전체"]}
@@ -173,30 +167,24 @@ export default function ConcertList() {
           onSelect={() => {}}
         />
       </div>
-      {isLoading ? (
-        <div
-          className={`
-          ${styles.center} 
-        `}
-        >
+      {isLoading && (
+        <div className={styles.center}>
           <HeartSpinner size={100} color='#7926ff' />
         </div>
-      ) : (
-        <ul>
-          {concertList.map((concert) => {
-            if (!concert || !concert.prfnm) {
-              // concert이 null이거나 prfnm 속성이 없으면 스킵합니다.
-              return null;
-            }
-            const concertProps = mapApiDataToConcertProps(concert);
-            return (
-              <li key={concert.mt20id}>
-                <ConcertCard concert={concertProps} />
-              </li>
-            );
-          })}
-        </ul>
       )}
+      <ul className={isLoading ? styles.faded : ""}>
+        {concertList.map((concert) => {
+          if (!concert || !concert.prfnm) {
+            return null;
+          }
+          const concertProps = mapApiDataToConcertProps(concert);
+          return (
+            <li key={concert.mt20id}>
+              <ConcertCard concert={concertProps} />
+            </li>
+          );
+        })}
+      </ul>
     </>
   );
 }
