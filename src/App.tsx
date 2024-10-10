@@ -5,8 +5,8 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "./firebase";
+// import { doc, getDoc } from "firebase/firestore";
+// import { db } from "./firebase";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -40,23 +40,23 @@ function App() {
   useUser();
 
   // firebase 사용 테스트
-  const getDocs = async () => {
-    try {
-      const docRef = doc(db, "concert", "concert123");
-      const docSnap = await getDoc(docRef);
+  // const getDocs = async () => {
+  //   try {
+  //     const docRef = doc(db, "concert", "concert123");
+  //     const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-      } else {
-        console.log("No such document!");
-      }
-    } catch (e) {
-      console.error("에러", e);
-    }
-  };
+  //     if (docSnap.exists()) {
+  //       console.log("Document data:", docSnap.data());
+  //     } else {
+  //       console.log("No such document!");
+  //     }
+  //   } catch (e) {
+  //     console.error("에러", e);
+  //   }
+  // };
 
   useEffect(() => {
-    getDocs();
+    // getDocs();
   }, []);
 
   return (

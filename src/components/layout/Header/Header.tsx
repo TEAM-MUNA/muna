@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { RootState } from "../../../app/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 import styles from "./Header.module.scss";
 import Button from "../../common/Button/Button";
@@ -17,8 +17,7 @@ interface HeaderProps {
 
 export default function Header({ buttonLeft }: HeaderProps) {
   const navigate = useNavigate();
-
-  // const { user, isLoggedIn } = useSelector((state: RootState) => state.auth);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const [search, setSearch] = useState(false);
 
@@ -42,14 +41,12 @@ export default function Header({ buttonLeft }: HeaderProps) {
           />
         ) : (
           <>
-            {/* !isLoggedIn : 로그아웃 상태일때 */}
-            {/* {!isLoggedIn && ( */}
-            <Link to='/login'>
-              <Button label='로그인' size='md' color='default' />
-            </Link>
-            {/* )} */}
-            {/* !isLoggedIn : 로그인 상태일때 */}
-            {/* {isLoggedIn && (
+            {!user && (
+              <Link to='/login'>
+                <Button label='로그인' size='md' color='default' />
+              </Link>
+            )}
+            {user && (
               <Link to={`/profile/${user?.uid}`}>
                 <Button
                   label='profile'
@@ -57,7 +54,7 @@ export default function Header({ buttonLeft }: HeaderProps) {
                   onClick={handleProfileButton}
                 />
               </Link>
-            )} */}
+            )}
           </>
         )}
       </div>
