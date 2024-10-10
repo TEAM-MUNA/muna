@@ -5,6 +5,7 @@ import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertProps } from "../../types/concertProps";
 import fetchConcertData from "./concertAPI";
+import useScroll from "../../hooks/useScroll";
 
 interface ConcertListItem {
   mt20id: string;
@@ -49,15 +50,31 @@ export default function ConcertList() {
   const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
   const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
   const [regionCode, setRegionCode] = useState<string>(""); // 전국
+  const [page, setPage] = useState(1);
+  const isEnd = useScroll();
 
   const getData = async () => {
-    const data = await fetchConcertData(genreCode, pfStateCode, regionCode);
-    setConcertList(data);
+    const data = await fetchConcertData(
+      genreCode,
+      pfStateCode,
+      regionCode,
+      page
+    );
+    setConcertList((prevData) => [...prevData, ...data]);
   };
 
+  // 공연 목록 정보 조회 요청
   useEffect(() => {
     getData();
-  }, [genreCode, pfStateCode, regionCode]);
+  }, [genreCode, pfStateCode, regionCode, page]);
+
+  // 화면 하단부 도착시 페이지 변경
+  useEffect(() => {
+    if (isEnd) {
+      setPage((prevPage) => prevPage + 1);
+    }
+    console.log(page);
+  }, [isEnd]);
 
   // onTabChanged 함수 정의
   const handleTabChange = (index: number) => {

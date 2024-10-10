@@ -19,11 +19,12 @@ interface ConcertListItem {
 export default async function fetchConcertData(
   genreCode: string,
   pfStateCode: string,
-  regionCode: string
+  regionCode: string,
+  page: number
 ): Promise<ConcertListItem[]> {
   try {
     const response = await fetch(
-      `/openApi/restful/pblprfr?service=${process.env.REACT_APP_kopisKey}&stdate=20240901&eddate=20241230&rows=30&cpage=3&shcate=${genreCode}&prfstate=${pfStateCode}&signgucode=${regionCode}`
+      `/openApi/restful/pblprfr?service=${process.env.REACT_APP_kopisKey}&stdate=20240901&eddate=20241230&rows=30&cpage=${page}&shcate=${genreCode}&prfstate=${pfStateCode}&signgucode=${regionCode}`
     );
 
     if (!response.ok) {
