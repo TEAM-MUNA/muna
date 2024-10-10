@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./ReviewCard.module.scss";
 import { UserType, defaultUserType } from "../../../types/userType";
-import { ReviewProps, defaultReviewProps } from "../../../types/reviewProps";
+import { ReviewType, defaultReviewType } from "../../../types/reviewType";
 import StarIcon from "../../../assets/svg/StarIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import LikeButton from "../Button/LikeButton";
 import Avatar from "../Avatar/Avatar";
 
-interface ReviewCardProps extends UserType, ReviewProps {
+interface ReviewCardProps extends UserType, ReviewType {
   page?: "concert" | "profile" | "main";
 }
 
@@ -17,16 +17,16 @@ export default function ReviewCard({
   // page = "concert",
   // page = "profile",
   userLink = defaultUserType.userLink,
-  reviewLink = defaultReviewProps.reviewLink,
+  reviewLink = defaultReviewType.reviewLink,
   profileImage = defaultUserType.profileImage,
   nickname = defaultUserType.nickname,
   userId = defaultUserType.userId,
-  title = defaultReviewProps.title,
-  content = defaultReviewProps.content,
-  date = defaultReviewProps.date,
-  thumbnail = defaultReviewProps.thumbnail,
-  starRate = defaultReviewProps.starRate,
-  likeCount = defaultReviewProps.likeCount,
+  title = defaultReviewType.title,
+  content = defaultReviewType.content,
+  date = defaultReviewType.date,
+  thumbnail = defaultReviewType.thumbnail,
+  starRate = defaultReviewType.starRate,
+  likeCount = defaultReviewType.likeCount,
 }: ReviewCardProps) {
   return (
     <div className={`${styles.card} card_review page_${page}`}>
