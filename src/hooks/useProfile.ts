@@ -1,17 +1,17 @@
 // hooks/useProfile.ts
 import { useEffect, useState } from "react";
 import { getUserFromFirebase } from "../api/authAPI";
-import { UserProps } from "../types/userProps";
+import { UserType } from "../types/userType";
 
 const useProfile = (userId: string | undefined) => {
-  const [profile, setProfile] = useState<UserProps | null>(null);
+  const [profile, setProfile] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
         try {
-          const userProfile: UserProps | undefined =
+          const userProfile: UserType | undefined =
             await getUserFromFirebase(userId);
           if (userProfile) {
             setProfile(userProfile);

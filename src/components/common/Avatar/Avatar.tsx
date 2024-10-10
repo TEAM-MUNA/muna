@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Avatar.module.scss";
-import { UserProps, defaultUserProps } from "../../../types/userProps";
+import { UserType, defaultUserType } from "../../../types/userType";
 
-interface AvatarProps extends UserProps {
+interface AvatarProps extends UserType {
   size?: "md" | "lg";
 }
 
 export default function Avatar({
   size = "md",
-  userLink = defaultUserProps.userLink,
-  nickname = defaultUserProps.nickname,
-  userId = defaultUserProps.userId,
-  profileImage = defaultUserProps.profileImage,
+  userLink = defaultUserType.userLink,
+  nickname = defaultUserType.nickname,
+  userId = defaultUserType.userId,
+  profileImage = defaultUserType.profileImage,
 }: AvatarProps) {
   const avatarContent = (
     <>
