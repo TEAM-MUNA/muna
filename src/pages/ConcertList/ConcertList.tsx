@@ -194,7 +194,7 @@ export default function ConcertList() {
       </div>
       {isLoading && (
         <div className={styles.center}>
-          <HeartSpinner size={100} color='#7926ff' />
+          <HeartSpinner size={65} color='#7926ff' />
         </div>
       )}
       <ul className={isLoading ? styles.faded : ""}>
