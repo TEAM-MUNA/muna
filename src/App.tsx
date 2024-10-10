@@ -20,6 +20,7 @@ import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
 import Profile from "./pages/Profile/Profile";
 import Settings from "./pages/Settings/Settings";
 import ComponentTest from "./pages/ComponentTest/ComponentTest";
+import useUser from "./hooks/useUser";
 
 function AppHeader() {
   const location = useLocation();
@@ -36,6 +37,8 @@ function AppHeader() {
 }
 
 function App() {
+  useUser();
+
   // firebase 사용 테스트
   const getDocs = async () => {
     try {

@@ -115,6 +115,9 @@ const authSlice = createSlice({
   // ex) 상태를 수정하거나 변경하는 동기 액션
   reducers: {
     // logout: () => {},
+    setUser: (state, action: PayloadAction<AuthState["user"]>) => {
+      state.user = action.payload;
+    },
   },
 
   // extraReducers - 다른 슬라이스에서 생성된 액션 (특히 비동기작업)
@@ -191,5 +194,5 @@ const authSlice = createSlice({
       });
   },
 });
-
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;
