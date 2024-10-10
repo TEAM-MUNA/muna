@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./ReviewCard.module.scss";
-import { UserProps, defaultUserProps } from "../../../types/userProps";
+import { UserType, defaultUserType } from "../../../types/userType";
 import { ReviewProps, defaultReviewProps } from "../../../types/reviewProps";
 import StarIcon from "../../../assets/svg/StarIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import LikeButton from "../Button/LikeButton";
 import Avatar from "../Avatar/Avatar";
 
-interface ReviewCardProps extends UserProps, ReviewProps {
+interface ReviewCardProps extends UserType, ReviewProps {
   page?: "concert" | "profile" | "main";
 }
 
@@ -16,11 +16,11 @@ export default function ReviewCard({
   page = "main",
   // page = "concert",
   // page = "profile",
-  userLink = defaultUserProps.userLink,
+  userLink = defaultUserType.userLink,
   reviewLink = defaultReviewProps.reviewLink,
-  profileImage = defaultUserProps.profileImage,
-  nickname = defaultUserProps.nickname,
-  userId = defaultUserProps.userId,
+  profileImage = defaultUserType.profileImage,
+  nickname = defaultUserType.nickname,
+  userId = defaultUserType.userId,
   title = defaultReviewProps.title,
   content = defaultReviewProps.content,
   date = defaultReviewProps.date,

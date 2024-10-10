@@ -1,14 +1,14 @@
 import styles from "./Avatar.module.scss";
-import { UserProps, defaultUserProps } from "../../../types/userProps";
+import { UserType, defaultUserType } from "../../../types/userType";
 
-interface ReviewAvatarProps extends UserProps {
+interface ReviewAvatarProps extends UserType {
   watchDate?: string;
 }
 
 export default function ReviewAvatar({
-  nickname = defaultUserProps.nickname,
-  userId = defaultUserProps.userId,
-  profileImage = defaultUserProps.profileImage,
+  nickname = defaultUserType.nickname,
+  userId = defaultUserType.userId,
+  profileImage = defaultUserType.profileImage,
   watchDate = "2020.10.21 관람",
 }: ReviewAvatarProps) {
   return (
