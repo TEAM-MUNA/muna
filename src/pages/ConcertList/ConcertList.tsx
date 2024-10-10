@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import { XMLParser } from "fast-xml-parser";
+import { HeartSpinner } from "react-spinners-kit";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertProps } from "../../types/concertProps";
 import fetchConcertData from "./concertAPI";
 import useScroll from "../../hooks/useScroll";
+import styles from "./ConcertList.module.scss";
 
 interface ConcertListItem {
   mt20id: string;
@@ -21,6 +22,7 @@ interface ConcertListItem {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
+// ConcertCard에 props로 전달하기 위해 ConcertProps로 매핑하는 함수
 function mapApiDataToConcertProps(apiData: ConcertListItem): ConcertProps {
   return {
     title: apiData.prfnm,
@@ -52,6 +54,20 @@ export default function ConcertList() {
   const [regionCode, setRegionCode] = useState<string>(""); // 전국
   const [page, setPage] = useState(1);
   const isEnd = useScroll();
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState<string>("최신순");
+
+  // 공연 목록 최신순으로 정렬하기
+  const sortConcertList = (list: ConcertListItem[]) => {
+    const sortedList = [...list];
+    if (sortOrder === "최신순") {
+      sortedList.sort(
+        (a, b) =>
+          new Date(b.prfpdfrom).getTime() - new Date(a.prfpdfrom).getTime()
+      );
+    }
+    return sortedList;
+  };
 
   const getData = async () => {
     const data = await fetchConcertData(
@@ -60,12 +76,22 @@ export default function ConcertList() {
       regionCode,
       page
     );
-    setConcertList((prevData) => [...prevData, ...data]);
+    setConcertList((prevData) => sortConcertList([...prevData, ...data]));
   };
+
+  useEffect(() => {
+    setConcertList([]); // 필터 값 변경 시 리스트 초기화
+  }, [genreCode, pfStateCode, regionCode]);
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getData();
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [genreCode, pfStateCode, regionCode, page]);
 
   // 화면 하단부 도착시 페이지 변경
@@ -124,16 +150,20 @@ export default function ConcertList() {
     setRegionCode(code);
   };
 
+  // 공연목록 정렬 기준 변경
+  const handleSortChange = (selected: string) => {
+    setSortOrder(selected);
+  };
+
+  // 정렬이 변경될 때마다 concertList 정렬
+  useEffect(() => {
+    setConcertList((prevData) => sortConcertList(prevData));
+  }, [sortOrder]);
+
   return (
     <>
       <Tab tabList={genreList} onTabChanged={handleTabChange} />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "20px 0",
-        }}
-      >
+      <div className={styles.flex_container}>
         <div>
           <DropdownSelect
             options={["공연중", "공연예정", "공연완료", "공연전체"]}
@@ -159,14 +189,17 @@ export default function ConcertList() {
         </div>
         <DropdownSelect
           options={["최신순", "북마크순", "리뷰순", "평점순"]}
-          onSelect={() => {}}
+          onSelect={handleSortChange}
         />
       </div>
-
-      <ul>
+      {isLoading && (
+        <div className={styles.center}>
+          <HeartSpinner size={100} color='#7926ff' />
+        </div>
+      )}
+      <ul className={isLoading ? styles.faded : ""}>
         {concertList.map((concert) => {
           if (!concert || !concert.prfnm) {
-            // concert이 null이거나 prfnm 속성이 없으면 스킵합니다.
             return null;
           }
           const concertProps = mapApiDataToConcertProps(concert);
