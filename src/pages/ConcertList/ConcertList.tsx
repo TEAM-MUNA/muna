@@ -56,8 +56,6 @@ export default function ConcertList() {
   const [isLoading, setIsLoading] = useState(false);
 
   const getData = async () => {
-    const scrollPosition = window.scrollY;
-
     const data = await fetchConcertData(
       genreCode,
       pfStateCode,
@@ -65,8 +63,11 @@ export default function ConcertList() {
       page
     );
     setConcertList((prevData) => [...prevData, ...data]);
-    window.scrollTo(0, scrollPosition); // 스크롤 위치 유지
   };
+
+  useEffect(() => {
+    setConcertList([]); // 필터 값 변경 시 리스트 초기화
+  }, [genreCode, pfStateCode, regionCode]);
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
