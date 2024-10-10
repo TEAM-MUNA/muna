@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import { XMLParser } from "fast-xml-parser";
+import { HeartSpinner } from "react-spinners-kit";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertProps } from "../../types/concertProps";
 import fetchConcertData from "./concertAPI";
 import useScroll from "../../hooks/useScroll";
+import styles from "./ConcertList.module.scss";
 
 interface ConcertListItem {
   mt20id: string;
@@ -52,8 +53,11 @@ export default function ConcertList() {
   const [regionCode, setRegionCode] = useState<string>(""); // 전국
   const [page, setPage] = useState(1);
   const isEnd = useScroll();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getData = async () => {
+    const scrollPosition = window.scrollY;
+
     const data = await fetchConcertData(
       genreCode,
       pfStateCode,
@@ -61,11 +65,18 @@ export default function ConcertList() {
       page
     );
     setConcertList((prevData) => [...prevData, ...data]);
+    window.scrollTo(0, scrollPosition); // 스크롤 위치 유지
   };
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getData();
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [genreCode, pfStateCode, regionCode, page]);
 
   // 화면 하단부 도착시 페이지 변경
@@ -162,21 +173,30 @@ export default function ConcertList() {
           onSelect={() => {}}
         />
       </div>
-
-      <ul>
-        {concertList.map((concert) => {
-          if (!concert || !concert.prfnm) {
-            // concert이 null이거나 prfnm 속성이 없으면 스킵합니다.
-            return null;
-          }
-          const concertProps = mapApiDataToConcertProps(concert);
-          return (
-            <li key={concert.mt20id}>
-              <ConcertCard concert={concertProps} />
-            </li>
-          );
-        })}
-      </ul>
+      {isLoading ? (
+        <div
+          className={`
+          ${styles.center} 
+        `}
+        >
+          <HeartSpinner size={100} color='#7926ff' />
+        </div>
+      ) : (
+        <ul>
+          {concertList.map((concert) => {
+            if (!concert || !concert.prfnm) {
+              // concert이 null이거나 prfnm 속성이 없으면 스킵합니다.
+              return null;
+            }
+            const concertProps = mapApiDataToConcertProps(concert);
+            return (
+              <li key={concert.mt20id}>
+                <ConcertCard concert={concertProps} />
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </>
   );
 }
