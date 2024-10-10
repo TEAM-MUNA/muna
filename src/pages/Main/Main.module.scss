@@ -1,0 +1,83 @@
+@import "../../styles/_variables";
+@import "../../styles/_mixin";
+
+.main {
+  text-align: center;
+
+  .star {
+    width: 100px;
+    height: 20px;
+    background-color: aliceblue;
+    margin: 0 auto;
+    margin-top: 35px;
+  }
+
+  .main_showing_concert_title {
+    font-size: $font-xl;
+    letter-spacing: -0.02em;
+    color: $black;
+    line-height: 1.5;
+    margin-top: 8px;
+    margin-bottom: 15px;
+  }
+
+  .main_showing_concert_posters {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+
+    img {
+      @include poster_shadow;
+      flex-shrink: 0;
+      position: absolute;
+
+      &:first-child {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 20%;
+      }
+      &:nth-child(2) {
+        z-index: 10;
+        position: relative;
+      }
+      &:last-child {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 20%;
+      }
+    }
+  }
+  .main_showing_concert_reviews {
+    background-color: $primary;
+    color: $white;
+    width: calc(100% + 40px);
+    margin: -26px -20px 0 -20px;
+    padding: 42px 23.5px 24px 23.5px;
+    letter-spacing: -0.02em;
+
+    div {
+      .review {
+        @include text_ellipsis(1);
+        font-size: $font-md;
+        margin: 0;
+      }
+      .nickname {
+        color: $white-lighter;
+        font-size: $font-xs;
+        margin-top: 4px;
+        font-style: normal;
+      }
+
+      &:last-child {
+        margin-top: 12px;
+      }
+    }
+  }
+  .category_nav {
+    margin-top: 36px;
+  }
+}

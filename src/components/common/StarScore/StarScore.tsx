@@ -5,7 +5,7 @@ import getRatingText from "../../../utils/getRatingText";
 
 export interface StarScoreProps {
   rating: number;
-  handleClick: (newRating: number) => void;
+  handleClick?: (newRating: number) => void;
   // setRating:
 }
 
@@ -35,7 +35,11 @@ export default function StarScore({ rating, handleClick }: StarScoreProps) {
             <button
               type='button'
               key={starValue}
-              onClick={() => handleClick(starValue)}
+              onClick={() => {
+                if (handleClick) {
+                  handleClick(starValue);
+                }
+              }}
               className={`${rating === 0 ? styles.black_lighter : styles.primary}`}
             >
               <StarIcon active={starValue <= rating} size='40' />
