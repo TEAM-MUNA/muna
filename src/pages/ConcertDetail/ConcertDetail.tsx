@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styles from "./ConcertDetail.module.scss";
 import src from "../../assets/img/temp-poster1.png";
 import Tag from "../../components/common/Tag/Tag";
@@ -6,12 +7,22 @@ import Button from "../../components/common/Button/Button";
 import BookmarkIcon from "../../assets/svg/BookmarkIcon";
 import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
-// import StarScore from "../../components/common/StarScore/StarScore";
+import useGetConcertDetail from "../../hooks/useGetConcertDetail";
+// import { getConcertDetail } from "../../api/concertAPI";
+
 export default function ConcertDetail() {
+  const { id } = useParams<{ id: string | undefined }>();
+
   const finalUpdateDate = "2024.09.13."; // string 말고 날짜형식으로 변경하기
   const bookingRate: number = 74.8;
   const genre = "뮤지컬";
   const title = "랭보";
+
+  const { concertDetail } = useGetConcertDetail(id);
+  useEffect(() => {
+    console.log(concertDetail);
+  }, [concertDetail]);
+
   return (
     <section className={styles.concert_detail}>
       <h2 className='sr_only'>공연 상세</h2>

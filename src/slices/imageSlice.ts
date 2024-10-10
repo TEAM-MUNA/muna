@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import useGetImageDownloadUrl, { ImageCategory } from "../hooks/useUploadImage";
-
+// TODO: 그냥 훅으로 만들기
 interface ImageSlice {
   profileImage: string | null;
   contentImage: string | null;
