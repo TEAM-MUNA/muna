@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { XMLParser } from "fast-xml-parser";
+// import { XMLParser } from "fast-xml-parser";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertProps } from "../../types/concertProps";
+import fetchConcertData from "./concertAPI";
 
-interface ConcertItem {
+interface ConcertListItem {
   mt20id: string;
   prfnm: string;
   prfpdfrom: string;
@@ -19,7 +20,7 @@ interface ConcertItem {
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
 
-function mapApiDataToConcertProps(apiData: ConcertItem): ConcertProps {
+function mapApiDataToConcertProps(apiData: ConcertListItem): ConcertProps {
   return {
     title: apiData.prfnm,
     poster: apiData.poster,
@@ -35,69 +36,123 @@ function mapApiDataToConcertProps(apiData: ConcertItem): ConcertProps {
   };
 }
 
+const genreList = ["전체", "뮤지컬", "연극", "클래식"];
+const genreMap: { [key: string]: string } = {
+  전체: "", // 전체 장르
+  뮤지컬: "GGGA",
+  연극: "AAAA",
+  클래식: "CCCA",
+};
+
 export default function ConcertList() {
-  const [concertList, setConcertList] = useState<ConcertItem[]>([]);
-
-  const genreList = ["전체", "뮤지컬", "연극", "콘서트", "클래식", "가족"];
-
-  const concert = {
-    mt20id: "PF210776",
-    prfnm: "김광석 다시부르기 [울산]",
-    prfpdfrom: "2016.05.21",
-    prfpdto: "2016.05.21",
-    fcltynm: "현대예술관",
-    poster:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF210604_230216_151032.gif",
-    area: "울산광역시",
-    genrenm: "대중음악",
-    openrun: "N",
-    prfstate: "공연완료",
-  };
+  const [concertList, setConcertList] = useState<ConcertListItem[]>([]);
+  const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
+  const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
+  const [regionCode, setRegionCode] = useState<string>(""); // 전국
 
   const getData = async () => {
-    try {
-      const response = await fetch(
-        `/openApi/restful/pblprfr?service=${process.env.REACT_APP_kopisKey}&stdate=20240901&eddate=20241230&rows=30&cpage=1`
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error fetching data:", errorData);
-        return;
-      }
-
-      const xmlString = await response.text();
-      const parser = new XMLParser();
-      const jsonObj = parser.parse(xmlString);
-
-      // 원하는 데이터에 접근하기
-      const dbs = jsonObj.dbs;
-      const dbList = dbs.db;
-
-      // dbList가 배열인지 확인하고, 아니면 배열로 변환
-      const list = Array.isArray(dbList) ? dbList : [dbList];
-      // 상태 업데이트
-      setConcertList(list);
-    } catch (error) {
-      console.error("Network or parsing error:", error);
-    }
+    const data = await fetchConcertData(genreCode, pfStateCode, regionCode);
+    setConcertList(data);
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [genreCode, pfStateCode, regionCode]);
+
+  // onTabChanged 함수 정의
+  const handleTabChange = (index: number) => {
+    const selectedGenre = genreList[index];
+    const code = genreMap[selectedGenre];
+    setGenreCode(code);
+  };
+
+  // 공연 상태 onSelect 함수 정의
+  const handlePfStateChange = (selected: string) => {
+    let code = "";
+    switch (selected) {
+      case "공연중":
+        code = "02";
+        break;
+      case "공연예정":
+        code = "01";
+        break;
+      case "공연완료":
+        code = "03";
+        break;
+      default:
+        code = "";
+    }
+    setPfStateCode(code);
+  };
+
+  // 공연 상태 onSelect 함수 정의
+  const handleRegionStateChange = (selected: string) => {
+    let code = "";
+    switch (selected) {
+      case "서울":
+        code = "11";
+        break;
+      case "인천":
+        code = "28";
+        break;
+      case "강원":
+        code = "51";
+        break;
+      case "부산":
+        code = "26";
+        break;
+      default:
+        code = "";
+    }
+    setRegionCode(code);
+  };
 
   return (
     <>
-      <Tab tabList={genreList} />
-      <div style={{ display: "flex", gap: "10px", padding: "20px 0" }}>
-        <DropdownSelect options={["최신순", "리뷰순"]} onSelect={() => {}} />
-        <DropdownSelect options={["전국", "인천"]} onSelect={() => {}} />
+      <Tab tabList={genreList} onTabChanged={handleTabChange} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px 0",
+        }}
+      >
+        <div>
+          <DropdownSelect
+            options={["공연중", "공연예정", "공연완료", "공연전체"]}
+            onSelect={handlePfStateChange}
+          />
+          <DropdownSelect
+            options={[
+              // "전국",
+              // "서울/경기/인천",
+              // "충청/대전/세종",
+              // "경상/부산/대구/울산",
+              // "전라/광주",
+              // "강원",
+              // "제주",
+              "전국",
+              "서울",
+              "인천",
+              "강원",
+              "부산",
+            ]}
+            onSelect={handleRegionStateChange}
+          />
+        </div>
+        <DropdownSelect
+          options={["최신순", "북마크순", "리뷰순", "평점순"]}
+          onSelect={() => {}}
+        />
       </div>
 
       <ul>
-        {concertList.map((item) => {
-          const concertProps = mapApiDataToConcertProps(item);
+        {concertList.map((concert) => {
+          if (!concert || !concert.prfnm) {
+            // concert이 null이거나 prfnm 속성이 없으면 스킵합니다.
+            return null;
+          }
+          const concertProps = mapApiDataToConcertProps(concert);
           return (
             <li key={concert.mt20id}>
               <ConcertCard concert={concertProps} />
