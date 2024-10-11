@@ -4,26 +4,26 @@ import Tag from "../Tag/Tag";
 import StarIcon from "../../../assets/svg/StarIcon";
 import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
 import ReviewIcon from "../../../assets/svg/ReviewIcon";
-import { ConcertProps, defaultConcertProps } from "../../../types/concertProps";
+import { ConcertType, defaultConcertType } from "../../../types/concertType";
 import styles from "./ConcertCard.module.scss";
 
 interface ConcertCardProps {
-  concert: ConcertProps; // 통합된 콘서트 데이터
+  concert: ConcertType; // 통합된 콘서트 데이터
 }
 
 export default function ConcertCard({ concert }: ConcertCardProps) {
   const {
-    title = defaultConcertProps.title,
-    poster = defaultConcertProps.poster,
-    state = defaultConcertProps.state,
-    startDate = defaultConcertProps.startDate,
-    endDate = defaultConcertProps.endDate,
+    title = defaultConcertType.title,
+    poster = defaultConcertType.poster,
+    state = defaultConcertType.state,
+    startDate = defaultConcertType.startDate,
+    endDate = defaultConcertType.endDate,
     location = "광림아트센터 BBCH홀",
-    age = defaultConcertProps.age,
+    age = defaultConcertType.age,
     starRate = "4.7",
     reviewCount = "718",
     bookmarkCount = "24",
-    concertLink = defaultConcertProps.concertLink,
+    concertLink = defaultConcertType.concertLink,
   } = concert;
 
   return (

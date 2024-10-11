@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
+import useCurrentUser from "../../../hooks/useCurrentUser";
 
 import styles from "./Header.module.scss";
 import Button from "../../common/Button/Button";
@@ -17,7 +16,7 @@ interface HeaderProps {
 
 export default function Header({ buttonLeft }: HeaderProps) {
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const currentUser = useCurrentUser();
 
   const [search, setSearch] = useState(false);
 
@@ -41,13 +40,13 @@ export default function Header({ buttonLeft }: HeaderProps) {
           />
         ) : (
           <>
-            {!user && (
+            {!currentUser && (
               <Link to='/login'>
                 <Button label='로그인' size='md' color='default' />
               </Link>
             )}
-            {user && (
-              <Link to={`/profile/${user?.uid}`}>
+            {currentUser && (
+              <Link to={`/profile/${currentUser?.userId}`}>
                 <Button
                   label='profile'
                   iconOnly={<UserIcon />}
