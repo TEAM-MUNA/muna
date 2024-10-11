@@ -117,26 +117,27 @@ export default function ConcertDetail() {
             alt='/'
           />
           <div className={styles.info}>
-            <div>
-              <span className={styles.booking_info}>
-                <span>
-                  <Tag label={concertDetail.prfstate} color='white' />
-                </span>
-                <Button
-                  className={styles.bookmark}
-                  iconOnly={<BookmarkIcon active={isBookmarked} />}
-                  label='북마크'
-                  onClick={handleBookmark}
-                />
+            {/* <div> */}
+            <Button
+              className={styles.bookmark}
+              iconOnly={<BookmarkIcon active={isBookmarked} />}
+              label='북마크'
+              onClick={handleBookmark}
+            />
+            <span className={styles.booking_info}>
+              <span>
+                <Tag label={concertDetail.prfstate} color='white' />
               </span>
-              <p className={styles.title}>
-                {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
-              </p>
-              <span className={styles.rating}>
-                <div className={styles.star_score} />
-                <p className={styles.rating_text}>평점 8.0</p>
-              </span>
-            </div>
+              {/* <span>예매율</span> */}
+            </span>
+            <p className={styles.title}>
+              {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
+            </p>
+            <span className={styles.rating}>
+              <div className={styles.star_score} />
+              <p className={styles.rating_text}>평점 8.0</p>
+            </span>
+
             <div>
               <p className={styles.concert_info}>
                 {concertDetail.genrenm} | {concertDetail.prfruntime} |{" "}

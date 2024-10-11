@@ -25,6 +25,7 @@
       flex-direction: column;
       justify-content: space-between;
       color: $black;
+      position: relative;
 
       .booking_info {
         span {
@@ -42,10 +43,15 @@
       }
       .bookmark {
         color: $primary;
+        right: 0;
+        top: 0;
+        position: absolute;
+        padding: 0;
       }
       .title {
         font-size: $font-2xl;
         font-weight: $font-bold;
+        margin-top: 10px;
       }
 
       .rating {
