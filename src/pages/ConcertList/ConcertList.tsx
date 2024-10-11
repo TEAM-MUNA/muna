@@ -3,41 +3,11 @@ import { HeartSpinner } from "react-spinners-kit";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import { ConcertType } from "../../types/concertType";
+import mapApiDataToConcertType from "../../utils/mapApiDataToConcertType";
 import { fetchConcertList } from "../../api/concertAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
-
-interface ConcertListItem {
-  mt20id: string;
-  prfnm: string;
-  prfpdfrom: string;
-  prfpdto: string;
-  fcltynm: string;
-  poster: string;
-  area: string;
-  genrenm: string;
-  openrun: string;
-  prfstate: "공연중" | "공연예정" | "공연완료" | undefined;
-  // [key: string]: any; // 필요에 따라 추가적인 키를 허용
-}
-
-// ConcertCard에 props로 전달하기 위해 ConcertType로 매핑하는 함수
-function mapApiDataToConcertType(apiData: ConcertListItem): ConcertType {
-  return {
-    title: apiData.prfnm,
-    poster: apiData.poster,
-    state: apiData.prfstate,
-    startDate: apiData.prfpdfrom,
-    endDate: apiData.prfpdto,
-    location: apiData.fcltynm,
-    age: "전체 관람가", // API 데이터에 없으므로 기본값 설정
-    starRate: "4.7", // 임시 값 또는 다른 데이터 소스에서 가져오기
-    reviewCount: 777, // 임시 값 또는 다른 데이터 소스에서 가져오기
-    bookmarkCount: 77, // 임시 값 또는 다른 데이터 소스에서 가져오기
-    concertLink: `/concert/${apiData.mt20id}`, // 상세 페이지 링크 생성
-  };
-}
+import { ConcertReturnType } from "../../types/concertType";
 
 const genreList = ["전체", "뮤지컬", "연극", "클래식"];
 const genreMap: { [key: string]: string } = {
@@ -48,7 +18,7 @@ const genreMap: { [key: string]: string } = {
 };
 
 export default function ConcertList() {
-  const [concertList, setConcertList] = useState<ConcertListItem[]>([]);
+  const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
   const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
   const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
   const [regionCodeList, setRegionCodeList] = useState<string[]>([""]); // 선택된 지역코드 리스트
@@ -58,7 +28,7 @@ export default function ConcertList() {
   const [sortOrder, setSortOrder] = useState<string>("최신순");
 
   // 공연 목록 최신순으로 정렬하기
-  const sortConcertList = (list: ConcertListItem[]) => {
+  const sortConcertList = (list: ConcertReturnType[]) => {
     const sortedList = [...list];
     if (sortOrder === "최신순") {
       sortedList.sort(
