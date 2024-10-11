@@ -4,7 +4,7 @@ import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import mapApiDataToConcertType from "../../utils/mapApiDataToConcertType";
-import { fetchConcertList } from "../../api/concertAPI";
+import { fetchConcertList } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType } from "../../types/concertType";
