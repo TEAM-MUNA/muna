@@ -11,6 +11,7 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
 import { emailRegex, passwordRegex } from "../../utils/validations";
+import { placeholder } from "../../utils/placeholder";
 
 export default function Login() {
   const {
@@ -84,7 +85,7 @@ export default function Login() {
               error={!!emailError}
               message={emailError || ""}
               label='이메일'
-              placeholder='이메일 주소를 입력해 주세요.'
+              placeholder={placeholder.email}
             />
             <Input
               type='password'
@@ -93,7 +94,7 @@ export default function Login() {
               error={!!passwordError}
               message={passwordError || ""}
               label='비밀번호'
-              placeholder='비밀번호를 입력해 주세요.'
+              placeholder={placeholder.password}
             />
             <Button
               size='xl'

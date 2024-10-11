@@ -9,9 +9,10 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
-import { errorMessages } from "../../utils/errorMessages";
 import useInput from "../../hooks/useInput";
 import { uploadProfileImage } from "../../slices/imageSlice";
+import { errorMessages } from "../../utils/errorMessages";
+import { placeholder } from "../../utils/placeholder";
 
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();
@@ -115,7 +116,7 @@ export default function Signup() {
             label='이메일'
             error={!!emailError}
             message={emailError || ""}
-            placeholder='이메일 주소를 입력해 주세요.'
+            placeholder={placeholder.email}
           />
           <Input
             name='password'
@@ -125,7 +126,7 @@ export default function Signup() {
             label='비밀번호'
             error={!!passwordError}
             message={passwordError || ""}
-            placeholder='비밀번호를 입력해 주세요.'
+            placeholder={placeholder.password}
           />
           <Input
             name='password-check'
@@ -135,14 +136,14 @@ export default function Signup() {
             onChange={onPasswordCheckChange}
             error={!!passwordCheckError}
             message={passwordCheckError || ""}
-            placeholder='현재 비밀번호를 입력해 주세요.'
+            placeholder={placeholder.passwordCheck}
           />
           <Input
             name='nickname'
             value={nickname}
             onChange={onNicknameChange}
             label='사용자 닉네임'
-            placeholder='닉네임을 입력해 주세요.'
+            placeholder={placeholder.nickname}
           />
           <Button
             size='xl'
