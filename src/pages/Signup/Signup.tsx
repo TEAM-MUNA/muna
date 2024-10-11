@@ -9,6 +9,7 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
+import { errorMessages } from "../../utils/errorMessages";
 import useInput from "../../hooks/useInput";
 import { uploadProfileImage } from "../../slices/imageSlice";
 
@@ -22,7 +23,7 @@ export default function Signup() {
     onChange: onEmailChange,
     error: emailError,
   } = useInput("", (value) =>
-    emailRegex.test(value) ? null : "유효한 이메일을 입력해 주세요."
+    emailRegex.test(value) ? null : errorMessages.invalidEmail
   );
 
   const {
@@ -30,9 +31,7 @@ export default function Signup() {
     onChange: onPasswordChange,
     error: passwordError,
   } = useInput("", (value) =>
-    passwordRegex.test(value)
-      ? null
-      : "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다."
+    passwordRegex.test(value) ? null : errorMessages.invalidPassword
   );
 
   const {
@@ -40,7 +39,7 @@ export default function Signup() {
     onChange: onPasswordCheckChange,
     error: passwordCheckError,
   } = useInput("", (value) =>
-    value === password ? null : "비밀번호가 일치하지 않습니다."
+    value === password ? null : errorMessages.passwordMismatch
   );
 
   const { value: nickname, onChange: onNicknameChange } = useInput("");
@@ -57,7 +56,7 @@ export default function Signup() {
     const hasErrors = !!emailError || !!passwordError || !!passwordCheckError;
 
     if (hasEmptyInput) {
-      toast.error("모든 항목을 입력해주세요.");
+      toast.error(errorMessages.allFieldsRequired);
       return;
     }
     if (hasErrors) {
