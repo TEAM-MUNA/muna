@@ -8,10 +8,11 @@ import useToggle from "../../../hooks/useToggle";
 
 interface PosterCardProps extends ConcertType {
   isBookmarked?: boolean;
+  concertLink?: string;
 }
 
 export default function PosterCard({
-  concertLink = defaultConcertType.concertLink,
+  concertLink = "/",
   title = defaultConcertType.title,
   poster = defaultConcertType.poster,
   isBookmarked = false,

@@ -5,14 +5,15 @@ import { UserType, defaultUserType } from "../../../types/userType";
 
 interface AvatarProps extends UserType {
   size?: "md" | "lg";
+  userLink?: string;
 }
 
 export default function Avatar({
   size = "md",
-  userLink = defaultUserType.userLink,
   nickname = defaultUserType.nickname,
   userId = defaultUserType.userId,
   profileImage = defaultUserType.profileImage,
+  userLink = "/임시",
 }: AvatarProps) {
   const avatarContent = (
     <>

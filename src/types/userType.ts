@@ -6,6 +6,9 @@ export interface UserType {
   nickname?: string | null;
   profileImage?: string | null | undefined;
   userLink?: string;
+  bookmarkedConcerts?: string[];
+  reviews?: string[];
+  likedReviews?: string[];
 }
 
 export const defaultUserType = {
@@ -13,5 +16,4 @@ export const defaultUserType = {
   email: "userEmail",
   nickname: "닉네임",
   profileImage: userDefault,
-  userLink: "",
 };

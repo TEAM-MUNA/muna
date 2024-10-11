@@ -1,20 +1,24 @@
 import posterDefault from "../assets/img/test-cat.png";
 
+export const defaultConcertType = {
+  concertId: "",
+  title: "공연명",
+  poster: posterDefault,
+  averageRating: 5.0,
+  bookmarkedBy: [],
+  reviews: [],
+  // TODO: ..살펴보기
+  concertLink: "/",
+};
+
 // TODO: 변수명 Props 대신 Type 등으로 변경하는게 좋을 것 같음.
 export interface ConcertType {
   concertId?: string;
-  concertLink?: string;
   title?: string;
   poster?: string;
-  state?: "공연중" | "공연예정" | "공연완료" | undefined;
-  startDate?: string;
-  endDate?: string;
-  location?: string;
-  age?: string;
-  starRate?: string;
-  reviewCount?: number;
-  bookmarkCount?: number;
-  bookmarkList?: string[];
+  averageRating?: number;
+  bookmarkedBy?: string[];
+  reviews?: string[];
 }
 
 // 공연 정보 api로부터 받아오는 값의 타입
@@ -34,19 +38,3 @@ export interface ConcertReturnType {
   updatedate: string; // 업데이트 날짜
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
-
-export const defaultConcertType = {
-  concertId: "",
-  concertLink: "#",
-  title: "공연명",
-  poster: posterDefault,
-  state: "공연중",
-  startDate: "2016.05.12",
-  endDate: "2016.07.30",
-  location: "",
-  age: "만 12세 이상",
-  starRate: "5.0",
-  reviewCount: 50,
-  bookmarkCount: 50,
-  bookmarkList: ["test"],
-};
