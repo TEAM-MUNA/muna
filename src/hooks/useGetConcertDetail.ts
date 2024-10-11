@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ConcertReturnType } from "../types/concertType";
-import { fetchConcertDetail } from "../api/concertAPI";
+import { fetchConcertDetail } from "../api/kopisAPI";
 
 const useGetConcertDetail = (mt20id: string | undefined) => {
   const [concertDetail, setConcertDetail] = useState<ConcertReturnType | null>(

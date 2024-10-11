@@ -62,9 +62,9 @@ export const logoutFromFirebase = async () => {
 };
 
 // Firebase 사용자 불러오는 API
-export async function getUserFromFirebase(
+export const getUserFromFirebase = async (
   uid: string
-): Promise<DocumentData | undefined> {
+): Promise<DocumentData | undefined> => {
   const result = await getDoc(doc(db, "users", uid));
   return result.data();
-}
+};
