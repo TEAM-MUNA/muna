@@ -4,7 +4,7 @@ import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
 import { ConcertType } from "../../types/concertType";
-import fetchConcertData from "./concertAPI";
+import { fetchConcertList } from "../../api/concertAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 
@@ -51,7 +51,7 @@ export default function ConcertList() {
   const [concertList, setConcertList] = useState<ConcertListItem[]>([]);
   const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
   const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
-  const [regionCode, setRegionCode] = useState<string>(""); // 전국
+  const [regionCodeList, setRegionCodeList] = useState<string[]>([""]); // 선택된 지역코드 리스트
   const [page, setPage] = useState(1);
   const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
@@ -70,18 +70,21 @@ export default function ConcertList() {
   };
 
   const getData = async () => {
-    const data = await fetchConcertData(
-      genreCode,
-      pfStateCode,
-      regionCode,
-      page
+    const dataList = await Promise.all(
+      regionCodeList.map((regionCode) =>
+        fetchConcertList(genreCode, pfStateCode, regionCode, page)
+      )
     );
-    setConcertList((prevData) => sortConcertList([...prevData, ...data]));
+    // 모든 데이터를 평평하게 펼쳐서 concertList에 추가
+    const combinedData = dataList.flat();
+    setConcertList((prevData) =>
+      sortConcertList([...prevData, ...combinedData])
+    );
   };
 
   useEffect(() => {
     setConcertList([]); // 필터 값 변경 시 리스트 초기화
-  }, [genreCode, pfStateCode, regionCode]);
+  }, [genreCode, pfStateCode, regionCodeList]);
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
@@ -92,7 +95,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [genreCode, pfStateCode, regionCode, page]);
+  }, [genreCode, pfStateCode, regionCodeList, page]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -128,26 +131,42 @@ export default function ConcertList() {
     setPfStateCode(code);
   };
 
+  const regionList = [
+    "전국",
+    "서울/경기/인천",
+    "충청/대전/세종",
+    "경상/부산/대구/울산",
+    "전라/광주",
+    "강원",
+    "제주",
+  ];
+
   // 공연 상태 onSelect 함수 정의
   const handleRegionStateChange = (selected: string) => {
-    let code = "";
+    let codes = [""];
     switch (selected) {
-      case "서울":
-        code = "11";
+      case "서울/경기/인천":
+        codes = ["11", "41", "28"];
         break;
-      case "인천":
-        code = "28";
+      case "충청/대전/세종":
+        codes = ["43", "44", "30", "36"];
+        break;
+      case "경상/부산/대구/울산":
+        codes = ["47", "48", "26", "27", "31"];
+        break;
+      case "전라/광주":
+        codes = ["45", "46", "29"];
         break;
       case "강원":
-        code = "51";
+        codes = ["51"];
         break;
-      case "부산":
-        code = "26";
+      case "제주":
+        codes = ["50"];
         break;
       default:
-        code = "";
+        codes = [""];
     }
-    setRegionCode(code);
+    setRegionCodeList(codes);
   };
 
   // 공연목록 정렬 기준 변경
@@ -170,20 +189,7 @@ export default function ConcertList() {
             onSelect={handlePfStateChange}
           />
           <DropdownSelect
-            options={[
-              // "전국",
-              // "서울/경기/인천",
-              // "충청/대전/세종",
-              // "경상/부산/대구/울산",
-              // "전라/광주",
-              // "강원",
-              // "제주",
-              "전국",
-              "서울",
-              "인천",
-              "강원",
-              "부산",
-            ]}
+            options={regionList}
             onSelect={handleRegionStateChange}
           />
         </div>
