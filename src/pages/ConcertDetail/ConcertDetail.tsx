@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
-
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -14,56 +13,19 @@ import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import useToggle from "../../hooks/useToggle";
-// import { getConcertFromFirebase } from "../../api/concertAPI";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import ConcertList from "../ConcertList/ConcertList";
-import { UserType } from "../../types/userType";
-import { getUserFromFirebase } from "../../api/firebase/authAPI";
-// import mapApiDataToConcertType from "../../utils/mapApiDataToConcertType";
-// import { ConcertType } from "../../types/concertType";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
 
   // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
-  // 유저가 북마크했는지를 확인하면됨!!그게 더 빠르지
   const { concertDetail, isLoading, error } = useGetConcertDetail(concertId); // kopis
-  // let concert: ConcertType;
-  if (concertDetail) {
-    // concert = mapApiDataToConcertType(concertDetail);
-  }
+
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
     useToggle(false);
-  const { userId, email } = useCurrentUser();
-
-  // const fetchFirebase = async () => {
-  //   const res = await getConcertFromFirebase("PF250702");
-  //   console.log(res);
-  // };
-  // useEffect(() => {
-  //   if (concertDetail) {
-  //     fetchFirebase();
-  //     // const concertInfo = mapApiDataToConcertType(concertDetail);
-  //     // console.log(concertInfo);
-  //   }
-  // }, [concertDetail]);
-
-  const getUser = async () => {
-    if (userId) {
-      console.log(userId, email);
-      const userDoc: UserType | undefined = await getUserFromFirebase(userId);
-      console.log(userDoc);
-      if (userDoc?.bookmarkedConcerts) {
-        // const retrn = userDoc?.bookmarkedConcerts.find(concertId);
-        // console.log(retrn);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, [userId]);
+  const { userId } = useCurrentUser();
 
   useEffect(() => {
     if (error) {
