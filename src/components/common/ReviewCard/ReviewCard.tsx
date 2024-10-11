@@ -16,7 +16,7 @@ export default function ReviewCard({
   page = "main",
   // page = "concert",
   // page = "profile",
-  userLink = defaultUserType.userLink,
+  // userLink = defaultUserType.userLink,
   reviewLink = defaultReviewType.reviewLink,
   profileImage = defaultUserType.profileImage,
   nickname = defaultUserType.nickname,
@@ -40,7 +40,7 @@ export default function ReviewCard({
             nickname={nickname}
             userId={userId}
             profileImage={profileImage}
-            userLink={userLink}
+            userLink='/임시'
           />
           {page === "main" && <LikeButton size='sm' likeCount={20} />}
         </div>

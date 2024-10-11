@@ -10,18 +10,31 @@ import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import useToggle from "../../hooks/useToggle";
+import {
+  bookmarkConcertToFirebase,
+  getConcertFromFirebase,
+} from "../../api/concertAPI";
+import useCurrentUser from "../../hooks/useCurrentUser";
+import ConcertList from "../ConcertList/ConcertList";
 
 export default function ConcertDetail() {
-  const { id } = useParams<{ id: string | undefined }>();
-  // PF132236
+  const { id } = useParams<{ id: string }>();
 
+  // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
   const { concertDetail, isLoading, error } = useGetConcertDetail(id);
+
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
     useToggle(false);
+  const { userId } = useCurrentUser();
 
-  const handleBookmark = () => {
-    onBookmarkToggle();
+  const fetchDetail = async () => {
+    const res = await getConcertFromFirebase("PF250702");
+    console.log(res);
   };
+
+  useEffect(() => {
+    fetchDetail();
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -29,9 +42,30 @@ export default function ConcertDetail() {
     }
   }, [error]);
 
+  if (!id) {
+    return <ConcertList />;
+  }
+
   if (isLoading) {
     return <HeartSpinner />;
   }
+
+  // 북마크 토글
+  const handleBookmark = async () => {
+    // 아이디 매칭해서 그거에다가 북마크 하나 업데이트하기
+    if (userId) {
+      try {
+        await bookmarkConcertToFirebase(userId, id, isBookmarked);
+      } catch (e) {
+        console.error(e);
+        toast.error("북마크를 추가하지 못했습니다.");
+      }
+      onBookmarkToggle();
+    } else {
+      // TODO: 로그인 페이지로 이동 등 처리 필요
+      toast.error("로그인 후 이용 가능합니다.");
+    }
+  };
 
   if (concertDetail) {
     return (
