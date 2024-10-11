@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import {
   useLocation,
   BrowserRouter as Router,
@@ -63,6 +64,7 @@ function App() {
 
   return (
     <div>
+      <Toaster />
       <Router>
         <AppHeader />
         <Routes>

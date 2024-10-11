@@ -1,14 +1,27 @@
 import React from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../app/store";
+import useToggle from "../../hooks/useToggle";
+import { logoutAsync } from "../../slices/authSlice";
+
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
-import useToggle from "../../hooks/useToggle";
 
 export default function Settings() {
+  const dispatch = useDispatch<AppDispatch>();
+
   const navigate = useNavigate();
 
   const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
     useToggle(false);
+
+  const handleLogout = () => {
+    dispatch(logoutAsync());
+    toast.success("로그아웃 되었습니다.");
+    navigate("/");
+  };
 
   return (
     <ul>
@@ -45,12 +58,7 @@ export default function Settings() {
           console.log("탈퇴 팝업");
         }}
       />
-      <ColumnMenuItem
-        label='로그아웃'
-        onClick={() => {
-          console.log("로그아웃");
-        }}
-      />
+      <ColumnMenuItem label='로그아웃' onClick={handleLogout} />
     </ul>
   );
 }
