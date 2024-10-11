@@ -8,14 +8,9 @@ import { fetchConcertList } from "../../api/concertAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType } from "../../types/concertType";
-
-const genreList = ["전체", "뮤지컬", "연극", "클래식"];
-const genreMap: { [key: string]: string } = {
-  전체: "", // 전체 장르
-  뮤지컬: "GGGA",
-  연극: "AAAA",
-  클래식: "CCCA",
-};
+import { genreList, genreMap } from "./constants/genreData";
+import regionList from "./constants/regionData";
+import sortConcertList from "./sortConcertList";
 
 export default function ConcertList() {
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
@@ -27,18 +22,6 @@ export default function ConcertList() {
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("최신순");
 
-  // 공연 목록 최신순으로 정렬하기
-  const sortConcertList = (list: ConcertReturnType[]) => {
-    const sortedList = [...list];
-    if (sortOrder === "최신순") {
-      sortedList.sort(
-        (a, b) =>
-          new Date(b.prfpdfrom).getTime() - new Date(a.prfpdfrom).getTime()
-      );
-    }
-    return sortedList;
-  };
-
   const getData = async () => {
     const dataList = await Promise.all(
       regionCodeList.map((regionCode) =>
@@ -48,7 +31,7 @@ export default function ConcertList() {
     // 모든 데이터를 평평하게 펼쳐서 concertList에 추가
     const combinedData = dataList.flat();
     setConcertList((prevData) =>
-      sortConcertList([...prevData, ...combinedData])
+      sortConcertList([...prevData, ...combinedData], sortOrder)
     );
   };
 
@@ -101,16 +84,6 @@ export default function ConcertList() {
     setPfStateCode(code);
   };
 
-  const regionList = [
-    "전국",
-    "서울/경기/인천",
-    "충청/대전/세종",
-    "경상/부산/대구/울산",
-    "전라/광주",
-    "강원",
-    "제주",
-  ];
-
   // 공연 상태 onSelect 함수 정의
   const handleRegionStateChange = (selected: string) => {
     let codes = [""];
@@ -146,7 +119,7 @@ export default function ConcertList() {
 
   // 정렬이 변경될 때마다 concertList 정렬
   useEffect(() => {
-    setConcertList((prevData) => sortConcertList(prevData));
+    setConcertList((prevData) => sortConcertList(prevData, sortOrder));
   }, [sortOrder]);
 
   return (
