@@ -24,7 +24,7 @@ export default function Avatar({
     </>
   );
 
-  return userLink !== undefined ? (
+  return userLink !== "" ? (
     <Link to={userLink} className={`${styles.avatar} ${styles[size]}`}>
       {avatarContent}
     </Link>
