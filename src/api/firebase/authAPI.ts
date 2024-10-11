@@ -6,8 +6,16 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { doc, DocumentData, getDoc, setDoc } from "firebase/firestore";
-import { db, firebaseAuth } from "../firebase";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  DocumentData,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db, firebaseAuth } from "../../firebase";
 
 // Firebase 회원가입 API 호출
 export const signupToFirebase = async (email: string, password: string) => {
@@ -67,4 +75,18 @@ export const getUserFromFirebase = async (
 ): Promise<DocumentData | undefined> => {
   const result = await getDoc(doc(db, "users", uid));
   return result.data();
+};
+
+// 해당 사용자에 북마크한 공연 추가/삭제
+export const updateUserBookmark = async (
+  userId: string,
+  concertId: string,
+  cancel: boolean = false
+) => {
+  const usersDocRef = doc(db, "users", userId);
+  const action = cancel ? arrayRemove : arrayUnion;
+
+  await updateDoc(usersDocRef, {
+    bookmarkedConcerts: action(concertId),
+  });
 };
