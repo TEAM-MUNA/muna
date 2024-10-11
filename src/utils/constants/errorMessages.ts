@@ -5,3 +5,5 @@ export const errorMessages = {
   passwordMismatch: "비밀번호가 일치하지 않습니다.",
   allFieldsRequired: "모든 항목을 입력해주세요.",
 };
+
+export default errorMessages;

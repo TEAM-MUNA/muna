@@ -11,7 +11,7 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
 import { emailRegex, passwordRegex } from "../../utils/validations";
-import { placeholder } from "../../utils/placeholder";
+import { placeholder } from "../../utils/constants/placeholder";
 
 export default function Login() {
   const {

@@ -11,8 +11,8 @@ import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import useInput from "../../hooks/useInput";
 import { uploadProfileImage } from "../../slices/imageSlice";
-import { errorMessages } from "../../utils/errorMessages";
-import { placeholder } from "../../utils/placeholder";
+import { errorMessages } from "../../utils/constants/errorMessages";
+import { placeholder } from "../../utils/constants/placeholder";
 
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();

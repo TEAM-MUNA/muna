@@ -7,6 +7,7 @@ export const placeholder = {
   currentPassword: "현재 비밀번호를 입력해 주세요.",
   newPassword: "새로운 비밀번호를 입력해 주세요.",
   newPasswordCheck: "새로운 비밀번호를 다시 입력해 주세요.",
+  newNickname: "새로운 닉네임을 입력해 주세요.",
 };
 
 export default placeholder;
