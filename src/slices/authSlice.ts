@@ -8,13 +8,14 @@ import {
   signupToFirebase,
   updateProfileToFirebase,
 } from "../api/authAPI";
+import { UserType } from "../types/userType";
 
 interface AuthState {
   user: {
-    uid: string;
-    email: string | null;
-    nickname?: string | null;
-    profileImage?: string | null;
+    uid: UserType["userId"];
+    email: UserType["email"];
+    nickname?: UserType["nickname"];
+    profileImage?: UserType["profileImage"];
   } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -36,22 +37,22 @@ export const signupAsync = createAsyncThunk(
       nickname,
       profileImage,
     }: {
-      email: string;
+      email: UserType["email"];
       password: string;
-      nickname: string;
-      profileImage: string | null;
+      nickname: UserType["nickname"];
+      profileImage: UserType["profileImage"];
     },
     { rejectWithValue }
   ) => {
     try {
       // 1. 회원가입
-      const user = await signupToFirebase(email, password);
+      const user = await signupToFirebase(email || "", password || "");
 
       // 2. nickname(displayName), profileImage(photoURL) 업데이트
-      await updateProfileToFirebase(user, nickname, profileImage);
+      await updateProfileToFirebase(user, nickname || "", profileImage || "");
 
       // 3. Firestore에 사용자 정보 등록
-      await setUserOnDoc(user, nickname, profileImage);
+      await setUserOnDoc(user, nickname || "", profileImage || "");
 
       return {
         user: {
@@ -75,11 +76,11 @@ export const signupAsync = createAsyncThunk(
 export const loginAsync = createAsyncThunk(
   "auth/login",
   async (
-    { email, password }: { email: string; password: string },
+    { email, password }: { email: UserType["email"]; password: string },
     { rejectWithValue }
   ) => {
     try {
-      const user = await loginToFirebase(email, password);
+      const user = await loginToFirebase(email || "", password || "");
       console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
@@ -118,6 +119,9 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<AuthState["user"]>) => {
       state.user = action.payload;
     },
+    logout: (state) => {
+      state.user = null;
+    },
   },
 
   // extraReducers - 다른 슬라이스에서 생성된 액션 (특히 비동기작업)
@@ -133,22 +137,17 @@ const authSlice = createSlice({
         (
           state,
           action: PayloadAction<{
-            user: {
-              uid: string;
-              email: string | null;
-              nickname: string | null;
-              profileImage: string | null;
-            };
+            user: AuthState["user"];
           }>
         ) => {
           state.status = "succeeded";
           console.log(action.payload);
           // state.user = action.payload; // 유저 정보 업데이트
           state.user = {
-            uid: action.payload.user.uid,
-            email: action.payload.user.email || null,
-            nickname: action.payload.user.nickname,
-            profileImage: action.payload.user.profileImage,
+            uid: action.payload.user?.uid || "",
+            email: action.payload.user?.email || "",
+            nickname: action.payload.user?.nickname || "",
+            profileImage: action.payload.user?.profileImage || undefined,
           };
           state.error = null;
         }
@@ -166,7 +165,13 @@ const authSlice = createSlice({
       })
       .addCase(
         loginAsync.fulfilled,
-        (state, action: PayloadAction<{ uid: string; email: string }>) => {
+        (
+          state,
+          action: PayloadAction<{
+            uid: UserType["userId"];
+            email: UserType["email"];
+          }>
+        ) => {
           state.status = "succeeded";
           state.user = action.payload; // 유저 정보를 업데이트
         }
@@ -194,5 +199,5 @@ const authSlice = createSlice({
       });
   },
 });
-export const { setUser } = authSlice.actions;
+export const { setUser, logout } = authSlice.actions;
 export default authSlice.reducer;
