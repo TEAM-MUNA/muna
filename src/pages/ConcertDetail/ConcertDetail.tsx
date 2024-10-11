@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
+
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { bookmarkConcertAsync } from "../../slices/interactionSlice";
 import styles from "./ConcertDetail.module.scss";
 import Tag from "../../components/common/Tag/Tag";
 import Button from "../../components/common/Button/Button";
@@ -10,31 +14,56 @@ import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import useToggle from "../../hooks/useToggle";
-import {
-  bookmarkConcertToFirebase,
-  getConcertFromFirebase,
-} from "../../api/concertAPI";
+// import { getConcertFromFirebase } from "../../api/concertAPI";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import ConcertList from "../ConcertList/ConcertList";
+import { UserType } from "../../types/userType";
+import { getUserFromFirebase } from "../../api/firebase/authAPI";
+// import mapApiDataToConcertType from "../../utils/mapApiDataToConcertType";
+// import { ConcertType } from "../../types/concertType";
 
 export default function ConcertDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id: concertId } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
 
   // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
-  const { concertDetail, isLoading, error } = useGetConcertDetail(id);
-
+  // 유저가 북마크했는지를 확인하면됨!!그게 더 빠르지
+  const { concertDetail, isLoading, error } = useGetConcertDetail(concertId); // kopis
+  // let concert: ConcertType;
+  if (concertDetail) {
+    // concert = mapApiDataToConcertType(concertDetail);
+  }
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
     useToggle(false);
-  const { userId } = useCurrentUser();
+  const { userId, email } = useCurrentUser();
 
-  const fetchDetail = async () => {
-    const res = await getConcertFromFirebase("PF250702");
-    console.log(res);
+  // const fetchFirebase = async () => {
+  //   const res = await getConcertFromFirebase("PF250702");
+  //   console.log(res);
+  // };
+  // useEffect(() => {
+  //   if (concertDetail) {
+  //     fetchFirebase();
+  //     // const concertInfo = mapApiDataToConcertType(concertDetail);
+  //     // console.log(concertInfo);
+  //   }
+  // }, [concertDetail]);
+
+  const getUser = async () => {
+    if (userId) {
+      console.log(userId, email);
+      const userDoc: UserType | undefined = await getUserFromFirebase(userId);
+      console.log(userDoc);
+      if (userDoc?.bookmarkedConcerts) {
+        // const retrn = userDoc?.bookmarkedConcerts.find(concertId);
+        // console.log(retrn);
+      }
+    }
   };
 
   useEffect(() => {
-    fetchDetail();
-  }, []);
+    getUser();
+  }, [userId]);
 
   useEffect(() => {
     if (error) {
@@ -42,7 +71,7 @@ export default function ConcertDetail() {
     }
   }, [error]);
 
-  if (!id) {
+  if (!concertId) {
     return <ConcertList />;
   }
 
@@ -52,15 +81,18 @@ export default function ConcertDetail() {
 
   // 북마크 토글
   const handleBookmark = async () => {
-    // 아이디 매칭해서 그거에다가 북마크 하나 업데이트하기
     if (userId) {
+      onBookmarkToggle();
       try {
-        await bookmarkConcertToFirebase(userId, id, isBookmarked);
+        await dispatch(
+          bookmarkConcertAsync({ userId, concertId, cancel: isBookmarked })
+        ).unwrap();
+        toast.success("북마크에 추가되었습니다.");
       } catch (e) {
         console.error(e);
-        toast.error("북마크를 추가하지 못했습니다.");
+        onBookmarkToggle();
+        toast.error("북마크에 추가하지 못했습니다.");
       }
-      onBookmarkToggle();
     } else {
       // TODO: 로그인 페이지로 이동 등 처리 필요
       toast.error("로그인 후 이용 가능합니다.");

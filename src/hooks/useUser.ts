@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { firebaseAuth } from "../firebase";
 import { setUser } from "../slices/authSlice";
-import { getUserFromFirebase } from "../api/authAPI";
+import { getUserFromFirebase } from "../api/firebase/authAPI";
 
 const useUser = () => {
   const dispatch = useDispatch();

@@ -7,7 +7,7 @@ import {
   setUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
-} from "../api/authAPI";
+} from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
 
 interface AuthState {
