@@ -9,12 +9,19 @@ import BookmarkIcon from "../../assets/svg/BookmarkIcon";
 import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
+import useToggle from "../../hooks/useToggle";
 
 export default function ConcertDetail() {
   const { id } = useParams<{ id: string | undefined }>();
   // PF132236
 
   const { concertDetail, isLoading, error } = useGetConcertDetail(id);
+  const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
+    useToggle(false);
+
+  const handleBookmark = () => {
+    onBookmarkToggle();
+  };
 
   useEffect(() => {
     if (error) {
@@ -49,7 +56,12 @@ export default function ConcertDetail() {
                 <span>
                   <Tag label={concertDetail.prfstate} color='white' />
                 </span>
-                <BookmarkIcon active={false} />
+                <Button
+                  className={styles.bookmark}
+                  iconOnly={<BookmarkIcon active={isBookmarked} />}
+                  label='북마크'
+                  onClick={handleBookmark}
+                />
               </span>
               <p className={styles.title}>
                 {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
