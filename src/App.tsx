@@ -19,6 +19,8 @@ import ReviewEdit from "./pages/ReviewEdit/ReviewEdit";
 import ReviewDetail from "./pages/ReviewDetail/ReviewDetail";
 import Profile from "./pages/Profile/Profile";
 import Settings from "./pages/Settings/Settings";
+import SettingsProfile from "./pages/Settings/SettingsProfile";
+import SettingsPassword from "./pages/Settings/SettingsPassword";
 import ComponentTest from "./pages/ComponentTest/ComponentTest";
 import useUser from "./hooks/useUser";
 
@@ -74,6 +76,8 @@ function App() {
           <Route path='/review/:id' element={<ReviewDetail />} />
           <Route path='/profile/:userId' element={<Profile />} />
           <Route path='/settings' element={<Settings />} />
+          <Route path='/settings-profile' element={<SettingsProfile />} />
+          <Route path='/settings-password' element={<SettingsPassword />} />
           <Route path='/component-test' element={<ComponentTest />} />
         </Routes>
       </Router>

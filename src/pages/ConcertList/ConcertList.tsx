@@ -8,8 +8,8 @@ import { fetchConcertList } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType } from "../../types/concertType";
-import { genreList, genreMap } from "./constants/genreData";
-import regionList from "./constants/regionData";
+import { genreList, genreMap } from "../../utils/constants/genreData";
+import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
 
 export default function ConcertList() {

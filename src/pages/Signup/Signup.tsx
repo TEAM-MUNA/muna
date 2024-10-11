@@ -11,6 +11,8 @@ import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import useInput from "../../hooks/useInput";
 import { uploadProfileImage } from "../../slices/imageSlice";
+import { errorMessages } from "../../utils/constants/errorMessages";
+import { placeholder } from "../../utils/constants/placeholder";
 
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +24,7 @@ export default function Signup() {
     onChange: onEmailChange,
     error: emailError,
   } = useInput("", (value) =>
-    emailRegex.test(value) ? null : "유효한 이메일을 입력해 주세요."
+    emailRegex.test(value) ? null : errorMessages.invalidEmail
   );
 
   const {
@@ -30,9 +32,7 @@ export default function Signup() {
     onChange: onPasswordChange,
     error: passwordError,
   } = useInput("", (value) =>
-    passwordRegex.test(value)
-      ? null
-      : "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다."
+    passwordRegex.test(value) ? null : errorMessages.invalidPassword
   );
 
   const {
@@ -40,7 +40,7 @@ export default function Signup() {
     onChange: onPasswordCheckChange,
     error: passwordCheckError,
   } = useInput("", (value) =>
-    value === password ? null : "비밀번호가 일치하지 않습니다."
+    value === password ? null : errorMessages.passwordMismatch
   );
 
   const { value: nickname, onChange: onNicknameChange } = useInput("");
@@ -57,7 +57,7 @@ export default function Signup() {
     const hasErrors = !!emailError || !!passwordError || !!passwordCheckError;
 
     if (hasEmptyInput) {
-      toast.error("모든 항목을 입력해주세요.");
+      toast.error(errorMessages.allFieldsRequired);
       return;
     }
     if (hasErrors) {
@@ -116,7 +116,7 @@ export default function Signup() {
             label='이메일'
             error={!!emailError}
             message={emailError || ""}
-            placeholder='이메일 주소를 입력해 주세요.'
+            placeholder={placeholder.email}
           />
           <Input
             name='password'
@@ -126,7 +126,7 @@ export default function Signup() {
             label='비밀번호'
             error={!!passwordError}
             message={passwordError || ""}
-            placeholder='비밀번호를 입력해 주세요.'
+            placeholder={placeholder.password}
           />
           <Input
             name='password-check'
@@ -136,14 +136,14 @@ export default function Signup() {
             onChange={onPasswordCheckChange}
             error={!!passwordCheckError}
             message={passwordCheckError || ""}
-            placeholder='현재 비밀번호를 입력해 주세요.'
+            placeholder={placeholder.passwordCheck}
           />
           <Input
             name='nickname'
             value={nickname}
             onChange={onNicknameChange}
             label='사용자 닉네임'
-            placeholder='닉네임을 입력해 주세요.'
+            placeholder={placeholder.nickname}
           />
           <Button
             size='xl'

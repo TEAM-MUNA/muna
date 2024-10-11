@@ -1,0 +1,49 @@
+import React, { useEffect } from "react";
+import useCurrentUser from "../../hooks/useCurrentUser";
+// import useProfile from "../../hooks/useProfile";
+
+import styles from "./Settings.module.scss";
+
+// import { errorMessages } from "../../utils/messages";
+import useInput from "../../hooks/useInput";
+import placeholder from "../../utils/constants/placeholder";
+
+import Title from "../../components/common/Title/Title";
+import ImageUploader from "../../components/common/ImageUploader/ImageUploader";
+import Input from "../../components/common/Input/Input";
+
+export default function SettingsProfile() {
+  const currentUser = useCurrentUser();
+  // const { profile, loading } = useProfile(userId);
+  const { value: nickname, onChange: onNicknameChange } = useInput("");
+
+  // if (loading) {
+  //   return <p>로딩중</p>;
+  // }
+  if (!currentUser) {
+    return <p>잘못된 접근</p>;
+  }
+  return (
+    <div className={styles.container}>
+      <Title label='프로필 변경' buttonLeft='back' />
+      <form action='POST'>
+        <ImageUploader />
+        <div className={styles.wrapper_input}>
+          <Input
+            name='email'
+            value={currentUser?.email || ""}
+            label='이메일'
+            disabled
+          />
+          <Input
+            name='nickname'
+            value={nickname}
+            onChange={onNicknameChange}
+            label='닉네임'
+            placeholder={placeholder.newNickname}
+          />
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -1,6 +1,23 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
+.column_menu_li {
+  @include full_width;
+  display: flex;
+  align-items: center;
+  min-height: 68px;
+  border-bottom: 1px solid $line-lighter;
+  &.faded {
+    padding: 20px;
+    .column_menu_item {
+      padding: 0;
+      width: auto;
+      color: $black-lighter;
+      text-decoration: underline;
+    }
+  }
+}
+
 .column_menu_item {
   display: flex;
   width: 100%;
@@ -10,7 +27,6 @@
   align-items: center;
   padding: 20px;
   line-height: 23px;
-  border-bottom: 1.6px solid $line-lighter;
   color: $black;
 
   &.without_icon {
