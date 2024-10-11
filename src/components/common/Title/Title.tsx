@@ -1,5 +1,5 @@
 import React from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./Title.module.scss";
 import Button from "../Button/Button";
 import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
@@ -19,8 +19,9 @@ export default function Title({
   buttonRight,
   handleDoneButton,
 }: TitleProps) {
+  const navigate = useNavigate();
   const handleBackButton = () => {
-    // navigate(-1);
+    navigate(-1);
   };
 
   return (
