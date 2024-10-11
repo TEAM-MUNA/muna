@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ConcertReturnType } from "../types/concertProps";
+import { ConcertReturnType } from "../types/concertType";
 import { fetchConcertDetail } from "../api/concertAPI";
 
 const useGetConcertDetail = (mt20id: string | undefined) => {

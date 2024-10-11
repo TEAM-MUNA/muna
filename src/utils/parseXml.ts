@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { ConcertReturnType } from "../types/concertProps";
+import { ConcertReturnType } from "../types/concertType";
 
 // XML 파싱 함수
 const parseXml = (
