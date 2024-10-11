@@ -1,17 +1,19 @@
 import userDefault from "../assets/img/user-default.png";
 
 export interface UserType {
-  nickname?: string;
-  email?: string;
   userId?: string;
-  profileImage?: string | undefined; // 프로필이미지 초기화 기능이 생긴다면 null도 필요할듯
+  email?: string;
+  nickname?: string;
+  profileImage?: string;
   userLink?: string;
+  bookmarkedConcerts?: string[];
+  reviews?: string[];
+  likedReviews?: string[];
 }
 
 export const defaultUserType = {
-  nickname: "닉네임",
-  email: "userEmail",
   userId: "userId",
+  email: "userEmail",
+  nickname: "닉네임",
   profileImage: userDefault,
-  userLink: "",
 };

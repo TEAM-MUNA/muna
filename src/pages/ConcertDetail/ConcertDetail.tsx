@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { bookmarkConcertAsync } from "../../slices/interactionSlice";
 import styles from "./ConcertDetail.module.scss";
 import Tag from "../../components/common/Tag/Tag";
 import Button from "../../components/common/Button/Button";
@@ -10,18 +13,19 @@ import CalendarIcon from "../../assets/svg/CalendarIcon";
 import LocationIcon from "../../assets/svg/LocationIcon";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import useToggle from "../../hooks/useToggle";
+import useCurrentUser from "../../hooks/useCurrentUser";
+import ConcertList from "../ConcertList/ConcertList";
 
 export default function ConcertDetail() {
-  const { id } = useParams<{ id: string | undefined }>();
-  // PF132236
+  const { id: concertId } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { concertDetail, isLoading, error } = useGetConcertDetail(id);
+  // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
+  const { concertDetail, isLoading, error } = useGetConcertDetail(concertId); // kopis
+
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
     useToggle(false);
-
-  const handleBookmark = () => {
-    onBookmarkToggle();
-  };
+  const { userId } = useCurrentUser();
 
   useEffect(() => {
     if (error) {
@@ -29,9 +33,33 @@ export default function ConcertDetail() {
     }
   }, [error]);
 
+  if (!concertId) {
+    return <ConcertList />;
+  }
+
   if (isLoading) {
     return <HeartSpinner />;
   }
+
+  // 북마크 토글
+  const handleBookmark = async () => {
+    if (userId) {
+      onBookmarkToggle();
+      try {
+        await dispatch(
+          bookmarkConcertAsync({ userId, concertId, cancel: isBookmarked })
+        ).unwrap();
+        toast.success("북마크에 추가되었습니다.");
+      } catch (e) {
+        console.error(e);
+        onBookmarkToggle();
+        toast.error("북마크에 추가하지 못했습니다.");
+      }
+    } else {
+      // TODO: 로그인 페이지로 이동 등 처리 필요
+      toast.error("로그인 후 이용 가능합니다.");
+    }
+  };
 
   if (concertDetail) {
     return (
@@ -51,26 +79,27 @@ export default function ConcertDetail() {
             alt='/'
           />
           <div className={styles.info}>
-            <div>
-              <span className={styles.booking_info}>
-                <span>
-                  <Tag label={concertDetail.prfstate} color='white' />
-                </span>
-                <Button
-                  className={styles.bookmark}
-                  iconOnly={<BookmarkIcon active={isBookmarked} />}
-                  label='북마크'
-                  onClick={handleBookmark}
-                />
+            {/* <div> */}
+            <Button
+              className={styles.bookmark}
+              iconOnly={<BookmarkIcon active={isBookmarked} />}
+              label='북마크'
+              onClick={handleBookmark}
+            />
+            <span className={styles.booking_info}>
+              <span>
+                <Tag label={concertDetail.prfstate} color='white' />
               </span>
-              <p className={styles.title}>
-                {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
-              </p>
-              <span className={styles.rating}>
-                <div className={styles.star_score} />
-                <p className={styles.rating_text}>평점 8.0</p>
-              </span>
-            </div>
+              {/* <span>예매율</span> */}
+            </span>
+            <p className={styles.title}>
+              {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
+            </p>
+            <span className={styles.rating}>
+              <div className={styles.star_score} />
+              <p className={styles.rating_text}>평점 8.0</p>
+            </span>
+
             <div>
               <p className={styles.concert_info}>
                 {concertDetail.genrenm} | {concertDetail.prfruntime} |{" "}

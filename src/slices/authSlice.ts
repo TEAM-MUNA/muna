@@ -7,15 +7,11 @@ import {
   setUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
-} from "../api/authAPI";
+} from "../api/firebase/authAPI";
+import { UserType } from "../types/userType";
 
 interface AuthState {
-  user: {
-    uid: string;
-    email: string | null;
-    nickname?: string | null;
-    profileImage?: string | null;
-  } | null;
+  user: UserType | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -55,7 +51,7 @@ export const signupAsync = createAsyncThunk(
 
       return {
         user: {
-          uid: user.uid,
+          userId: user.uid,
           email: user.email,
           nickname: user.displayName,
           profileImage: user.photoURL,
@@ -134,7 +130,7 @@ const authSlice = createSlice({
           state,
           action: PayloadAction<{
             user: {
-              uid: string;
+              userId: string;
               email: string | null;
               nickname: string | null;
               profileImage: string | null;
@@ -145,10 +141,10 @@ const authSlice = createSlice({
           console.log(action.payload);
           // state.user = action.payload; // 유저 정보 업데이트
           state.user = {
-            uid: action.payload.user.uid,
-            email: action.payload.user.email || null,
-            nickname: action.payload.user.nickname,
-            profileImage: action.payload.user.profileImage,
+            userId: action.payload.user.userId,
+            email: action.payload.user.email || undefined,
+            nickname: action.payload.user.nickname || undefined,
+            profileImage: action.payload.user.profileImage || undefined,
           };
           state.error = null;
         }

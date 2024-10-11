@@ -2,21 +2,28 @@
 @import "./variables";
 @import "./mixin";
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: none;
   line-height: 1.2;
   background: #ddd;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #root {
   background: $white;
-  min-height: 100vh;
+  height: 100%;
   max-width: 480px;
   padding: 0 20px 40px;
   margin: 0 auto;
   border: 1px solid transparent;
+  overflow-y: auto;
 }
 
 h1,

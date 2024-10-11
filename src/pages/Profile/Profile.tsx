@@ -68,7 +68,6 @@ export default function Profile() {
           userId={userId}
           profileImage={profile.profileImage || undefined}
           size='lg'
-          userLink={undefined}
         />
         {userId === currentUserId && (
           <Link to='/settings'>

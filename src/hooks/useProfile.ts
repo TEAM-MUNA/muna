@@ -1,6 +1,6 @@
 // hooks/useProfile.ts
 import { useEffect, useState } from "react";
-import { getUserFromFirebase } from "../api/authAPI";
+import { getUserFromFirebase } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
 
 const useProfile = (userId: string | undefined) => {
