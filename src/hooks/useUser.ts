@@ -11,7 +11,7 @@ const useUser = () => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
         const userInfo = await getUserFromFirebase(currentUser.uid);
-        console.log(currentUser);
+        // console.log(currentUser);
         dispatch(
           setUser({
             uid: currentUser.uid,
