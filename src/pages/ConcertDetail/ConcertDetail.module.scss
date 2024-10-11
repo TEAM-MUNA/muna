@@ -40,6 +40,9 @@
           font-weight: $font-medium;
         }
       }
+      .bookmark {
+        color: $primary;
+      }
       .title {
         font-size: $font-2xl;
         font-weight: $font-bold;
@@ -80,7 +83,7 @@
 
   .icon_text_container {
     display: flex;
-    align-items: center;
     gap: 4px;
+    margin-bottom: 6px;
   }
 }

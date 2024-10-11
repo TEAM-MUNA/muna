@@ -11,7 +11,7 @@ const parseXml = (
   const dbs = jsonObj.dbs;
   const dbList = dbs.db;
 
-  return Array.isArray(dbList) ? dbList : [dbList];
+  return dbList;
 };
 
 export default parseXml;

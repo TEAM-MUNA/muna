@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { ConcertReturnType } from "../types/concertType";
-import { fetchConcertDetail } from "../api/concertAPI";
+import { fetchConcertDetail } from "../api/kopisAPI";
 
 const useGetConcertDetail = (mt20id: string | undefined) => {
   const [concertDetail, setConcertDetail] = useState<ConcertReturnType | null>(
     null
   );
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
-      setLoading(true);
+      setIsLoading(true);
       setError(null);
 
       if (!mt20id) {
@@ -26,14 +26,14 @@ const useGetConcertDetail = (mt20id: string | undefined) => {
         console.error(err);
         setError("공연 상세 정보를 가져오는 데 실패했습니다.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     getData();
   }, [mt20id]);
 
-  return { concertDetail, loading, error };
+  return { concertDetail, isLoading, error };
 };
 
 export default useGetConcertDetail;
