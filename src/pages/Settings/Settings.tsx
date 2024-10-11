@@ -14,7 +14,14 @@ export default function Settings() {
     <ul>
       <ColumnMenuItem
         label='이메일 알림'
-        buttonRight={<Toggle isActive={isSettingToggleActive} />}
+        buttonRight={
+          <Toggle
+            isActive={isSettingToggleActive}
+            onClick={() => {
+              onSettingToggle();
+            }}
+          />
+        }
         onClick={() => {
           onSettingToggle();
         }}
