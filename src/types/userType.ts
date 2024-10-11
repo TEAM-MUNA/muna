@@ -13,5 +13,5 @@ export const defaultUserType = {
   email: "userEmail",
   userId: "userId",
   profileImage: userDefault,
-  userLink: undefined,
+  userLink: "",
 };
