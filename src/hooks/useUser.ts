@@ -14,10 +14,10 @@ const useUser = () => {
         // console.log(currentUser);
         dispatch(
           setUser({
-            uid: currentUser.uid,
-            email: currentUser.email,
-            nickname: currentUser.displayName || null,
-            profileImage: userInfo?.profileImage || null,
+            userId: currentUser.uid,
+            email: currentUser.email || undefined,
+            nickname: currentUser.displayName || undefined,
+            profileImage: userInfo?.profileImage,
           })
         );
       } else {

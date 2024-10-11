@@ -2,9 +2,9 @@ import userDefault from "../assets/img/user-default.png";
 
 export interface UserType {
   userId?: string;
-  email?: string | null;
-  nickname?: string | null;
-  profileImage?: string | null | undefined;
+  email?: string;
+  nickname?: string;
+  profileImage?: string;
   userLink?: string;
   bookmarkedConcerts?: string[];
   reviews?: string[];

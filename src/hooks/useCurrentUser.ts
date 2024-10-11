@@ -5,7 +5,7 @@ const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   return {
-    userId: user?.uid,
+    userId: user?.userId,
     email: user?.email,
     nickname: user?.nickname,
     profileImage: user?.profileImage,
