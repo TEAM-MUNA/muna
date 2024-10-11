@@ -1,6 +1,6 @@
 import { ConcertType, ConcertReturnType } from "../types/concertType";
 
-export function mapApiDataToConcertType(
+export default function mapApiDataToConcertType(
   apiData: ConcertReturnType
 ): ConcertType {
   return {
