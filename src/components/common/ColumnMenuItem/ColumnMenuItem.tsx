@@ -7,6 +7,7 @@ interface ColumnMenuItemProps {
   // className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isFaded?: boolean;
+  disabled?: boolean;
 }
 
 export default function ColumnMenuItem({
@@ -14,6 +15,7 @@ export default function ColumnMenuItem({
   buttonRight,
   onClick,
   isFaded = false,
+  disabled = false,
 }: ColumnMenuItemProps) {
   return (
     <li className={`${styles.column_menu_li} ${isFaded ? styles.faded : ""}`}>
@@ -21,6 +23,7 @@ export default function ColumnMenuItem({
         type='button'
         onClick={onClick}
         className={`${styles.column_menu_item} ${!buttonRight ? styles.without_icon : ""}`}
+        disabled={disabled}
       >
         {label}
         {buttonRight && buttonRight}

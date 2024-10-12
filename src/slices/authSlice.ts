@@ -110,10 +110,10 @@ const authSlice = createSlice({
   // reducers - 해당 슬라이스에서 기본적으로 사용할 수 있는 액션들 정의
   // ex) 상태를 수정하거나 변경하는 동기 액션
   reducers: {
-    // logout: () => {},
     setUser: (state, action: PayloadAction<AuthState["user"]>) => {
       state.user = action.payload;
     },
+    // logout은 extraReducers에서 처리
   },
 
   // extraReducers - 다른 슬라이스에서 생성된 액션 (특히 비동기작업)
