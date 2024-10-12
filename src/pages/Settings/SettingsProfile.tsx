@@ -11,6 +11,7 @@ import placeholder from "../../utils/constants/placeholder";
 import Title from "../../components/common/Title/Title";
 import ImageUploader from "../../components/common/ImageUploader/ImageUploader";
 import Input from "../../components/common/Input/Input";
+import Button from "../../components/common/Button/Button";
 
 export default function SettingsProfile() {
   const currentUser = useCurrentUser();
@@ -28,7 +29,7 @@ export default function SettingsProfile() {
       <Title label='프로필 변경' buttonLeft='back' />
       <form action='POST'>
         <ImageUploader />
-        <div className={styles.wrapper_input}>
+        <div className={styles.wrapper_inner}>
           <Input
             name='email'
             value={currentUser?.email || ""}
@@ -42,6 +43,9 @@ export default function SettingsProfile() {
             label='닉네임'
             placeholder={placeholder.newNickname}
           />
+        </div>
+        <div className={styles.wrapper_inner}>
+          <Button label='변경하기' size='lg' color='black' fullWidth />
         </div>
       </form>
     </div>

@@ -23,8 +23,12 @@ const useUser = () => {
       } else {
         dispatch(setUser(null)); // 로그아웃 -> null
       }
-      return unsubscribe;
     });
+
+    // 컴포넌트 언마운트 시 리스너 해제
+    return () => {
+      unsubscribe();
+    };
   }, [dispatch]);
 };
 
