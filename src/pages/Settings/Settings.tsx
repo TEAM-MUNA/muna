@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,16 +11,25 @@ import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuIte
 
 export default function Settings() {
   const dispatch = useDispatch<AppDispatch>();
-
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
     useToggle(false);
 
-  const handleLogout = () => {
-    dispatch(logoutAsync());
-    toast.success("로그아웃 되었습니다.");
-    navigate("/");
+  const handleLogout = async () => {
+    if (isLoggingOut) return; // 이미 로그아웃 중이라면 중복 요청 방지
+
+    setIsLoggingOut(true);
+    try {
+      await dispatch(logoutAsync()).unwrap(); // unwrap()을 사용해 오류 처리
+      toast.success("로그아웃 되었습니다.");
+      navigate("/");
+    } catch (error) {
+      // 에러 메시지는 슬라이스에서 처리
+    } finally {
+      setIsLoggingOut(false); // 완료 후 플래그 초기화
+    }
   };
 
   return (
@@ -58,7 +67,11 @@ export default function Settings() {
           console.log("탈퇴 팝업");
         }}
       />
-      <ColumnMenuItem label='로그아웃' onClick={handleLogout} />
+      <ColumnMenuItem
+        label='로그아웃'
+        onClick={handleLogout}
+        disabled={isLoggingOut} // 로그아웃 진행 중 버튼 비활성화
+      />
     </ul>
   );
 }
