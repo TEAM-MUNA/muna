@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useCurrentUser from "../../../hooks/useCurrentUser";
+import { UserType } from "../../../types/userType";
 
 import styles from "./Header.module.scss";
 import Button from "../../common/Button/Button";
@@ -10,21 +11,50 @@ import UserIcon from "../../../assets/svg/UserIcon";
 import SearchIcon from "../../../assets/svg/SearchIcon";
 import SearchInput from "../../common/SearchInput/SearchInput";
 
-interface HeaderProps {
+interface HeaderProps extends UserType {
   buttonLeft?: "back" | "profile";
 }
 
-export default function Header({ buttonLeft }: HeaderProps) {
+function HeaderLeftButton({ buttonLeft, userId }: HeaderProps) {
   const navigate = useNavigate();
-  const currentUser = useCurrentUser();
-
-  const [search, setSearch] = useState(false);
 
   const handleBackButton = () => {
     navigate(-1);
   };
   const handleProfileButton = () => {};
 
+  if (buttonLeft === "back") {
+    return (
+      <Button
+        label='back'
+        iconOnly={<ArrowLeftIcon />}
+        onClick={handleBackButton}
+      />
+    );
+  }
+
+  if (userId) {
+    return (
+      <Link to={`/profile/${userId}`}>
+        <Button
+          label='profile'
+          iconOnly={<UserIcon />}
+          onClick={handleProfileButton}
+        />
+      </Link>
+    );
+  }
+
+  return (
+    <Link to='/login'>
+      <Button label='로그인' size='md' color='default' />
+    </Link>
+  );
+}
+
+export default function Header({ buttonLeft }: HeaderProps) {
+  const currentUserId = useCurrentUser().userId;
+  const [search, setSearch] = useState(false);
   const handleSearchButton = () => {
     setSearch(!search);
   };
@@ -32,30 +62,7 @@ export default function Header({ buttonLeft }: HeaderProps) {
   return (
     <header className={`${styles.header}`}>
       <div className={`${styles.left_btn}`}>
-        {buttonLeft === "back" ? (
-          <Button
-            label='back'
-            iconOnly={<ArrowLeftIcon />}
-            onClick={handleBackButton}
-          />
-        ) : (
-          <>
-            {!currentUser && (
-              <Link to='/login'>
-                <Button label='로그인' size='md' color='default' />
-              </Link>
-            )}
-            {currentUser && (
-              <Link to={`/profile/${currentUser?.userId}`}>
-                <Button
-                  label='profile'
-                  iconOnly={<UserIcon />}
-                  onClick={handleProfileButton}
-                />
-              </Link>
-            )}
-          </>
-        )}
+        <HeaderLeftButton buttonLeft={buttonLeft} userId={currentUserId} />
       </div>
       {search ? (
         <SearchInput placeholder='검색어를 입력하세요' fullWidth />
