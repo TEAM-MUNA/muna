@@ -5,14 +5,15 @@ import { UserType, defaultUserType } from "../../../types/userType";
 
 interface ReviewAvatarProps extends UserType {
   watchDate?: string;
+  userLink?: string;
 }
 
 export default function ReviewAvatar({
-  userLink = defaultUserType.userLink,
-  nickname = defaultUserType.nickname,
-  userId = defaultUserType.userId,
-  profileImage = defaultUserType.profileImage,
-  watchDate = "2020.10.21 관람",
+    nickname = defaultUserType.nickname,
+    userId = defaultUserType.userId,
+    profileImage = defaultUserType.profileImage,
+    watchDate = "2020.10.21 관람",
+    userLink = "",
 }: ReviewAvatarProps) {
   return (
     <Link to={userLink} className={styles.reviewAvatar}>
