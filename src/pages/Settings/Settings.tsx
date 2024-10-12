@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../app/store";
 import useToggle from "../../hooks/useToggle";
 import { logoutAsync } from "../../slices/authSlice";
+import useUserRedirect from "../../hooks/useUserRedirect";
 
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 
 export default function Settings() {
+  useUserRedirect();
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);

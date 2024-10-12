@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import useCurrentUser from "../../hooks/useCurrentUser";
+import useUserRedirect from "../../hooks/useUserRedirect";
 // import useProfile from "../../hooks/useProfile";
 
 import styles from "./Settings.module.scss";
@@ -14,6 +15,8 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 
 export default function SettingsProfile() {
+  useUserRedirect();
+
   const currentUser = useCurrentUser();
   // const { profile, loading } = useProfile(userId);
   const { value: nickname, onChange: onNicknameChange } = useInput("");
