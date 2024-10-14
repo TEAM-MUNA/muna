@@ -52,6 +52,7 @@
         font-size: $font-2xl;
         font-weight: $font-bold;
         margin-top: 10px;
+        margin-bottom: 8px;
       }
 
       .rating {
@@ -68,6 +69,12 @@
         .rating_text {
           font-size: $font-sm;
           font-weight: $font-medium;
+
+          &_gray {
+            font-size: $font-sm;
+            font-weight: $font-medium;
+            color: $black-light;
+          }
         }
       }
       .concert_info {
@@ -89,7 +96,50 @@
 
   .icon_text_container {
     display: flex;
+
     gap: 4px;
     margin-bottom: 6px;
+  }
+  .tab_section {
+    position: relative;
+    margin-top: 20px;
+    .write_review {
+      position: absolute;
+      right: 0;
+      z-index: 10;
+      top: 6px;
+    }
+    div {
+      z-index: 0;
+    }
+  }
+  .reviews {
+    // background-color: yellow;
+    // position: relative; /* 부모 요소가 필요하면 relative 설정 */
+  }
+  .more_info {
+    dl {
+      font-size: $font-md;
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      column-gap: 24px;
+      row-gap: 8px;
+      padding: 30px 2px;
+      word-break: keep-all;
+      white-space: normal;
+    }
+    .poster {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    .label {
+      color: $black-light;
+    }
+    .detail {
+      font-size: $black;
+    }
   }
 }

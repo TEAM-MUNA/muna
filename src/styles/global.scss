@@ -17,13 +17,15 @@ body {
 }
 
 #root {
+  position: relative;
   background: $white;
   height: 100%;
-  max-width: 480px;
+  max-width: $page-x-max;
   padding: 0 20px 40px;
   margin: 0 auto;
   border: 1px solid transparent;
   overflow-y: auto;
+  min-height: 100vh;
 }
 
 h1,
@@ -69,6 +71,12 @@ li {
   list-style: none;
 }
 
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
 .sr_only {
   position: absolute;
   width: 1px;
@@ -91,6 +99,13 @@ li {
 
 .flex-row {
   flex-direction: row;
+}
+
+.overlay {
+  @include fixed_bottom;
+  top: 0;
+  background-color: $black-lighter;
+  z-index: $z-modal;
 }
 
 // 카드리스트 공통

@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-// import useCurrentUser from "../../hooks/useCurrentUser";
-// import useProfile from "../../hooks/useProfile";
+import React from "react";
+import useUserRedirect from "../../hooks/useUserRedirect";
 
 import styles from "./Settings.module.scss";
 
@@ -14,6 +13,8 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 
 export default function SettingsPassword() {
+  useUserRedirect();
+
   const {
     value: password,
     onChange: onPasswordChange,

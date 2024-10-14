@@ -41,3 +41,12 @@
   width: calc(100% + 40px);
   margin: 0 -20px;
 }
+
+@mixin fixed_bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: $page-x-max;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -9,6 +9,7 @@ export default function StarIcon({
     switch (iconSize) {
       case "40":
         return "1";
+      case "20":
       case "14":
         return "1.5";
       default:
