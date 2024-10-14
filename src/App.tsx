@@ -6,8 +6,6 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-// import { doc, getDoc } from "firebase/firestore";
-// import { db } from "./firebase";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -22,7 +20,6 @@ import Profile from "./pages/Profile/Profile";
 import Settings from "./pages/Settings/Settings";
 import SettingsProfile from "./pages/Settings/SettingsProfile";
 import SettingsPassword from "./pages/Settings/SettingsPassword";
-import ComponentTest from "./pages/ComponentTest/ComponentTest";
 import useUser from "./hooks/useUser";
 
 function AppHeader() {
@@ -41,30 +38,12 @@ function AppHeader() {
 
 function App() {
   useUser();
-
-  // firebase 사용 테스트
-  // const getDocs = async () => {
-  //   try {
-  //     const docRef = doc(db, "concert", "concert123");
-  //     const docSnap = await getDoc(docRef);
-
-  //     if (docSnap.exists()) {
-  //       console.log("Document data:", docSnap.data());
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   } catch (e) {
-  //     console.error("에러", e);
-  //   }
-  // };
-
   useEffect(() => {
     // getDocs();
   }, []);
 
   return (
-    <div>
-      <Toaster />
+    <>
       <Router>
         <AppHeader />
         <Routes>
@@ -80,10 +59,10 @@ function App() {
           <Route path='/settings' element={<Settings />} />
           <Route path='/settings-profile' element={<SettingsProfile />} />
           <Route path='/settings-password' element={<SettingsPassword />} />
-          <Route path='/component-test' element={<ComponentTest />} />
         </Routes>
       </Router>
-    </div>
+      <Toaster />
+    </>
   );
 }
 
