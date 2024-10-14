@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ButtonProps } from "../components/common/Button/Button";
+import { DialogButtonProps } from "../components/common/Modal/Modal";
 
 interface ModalState {
   isOpen: boolean;
   title: string;
   description: string;
-  buttons: {
-    label: string;
-    color: ButtonProps["color"];
-    onClick: () => void;
-  }[];
+  buttons: DialogButtonProps[];
 }
 
 const initialState: ModalState = {
