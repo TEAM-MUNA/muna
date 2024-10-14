@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ConcertReturnType } from "../types/concertType";
 import { fetchConcertDetail } from "../api/kopisAPI";
 
+// kopis
 const useGetConcertDetail = (mt20id: string | undefined) => {
   const [concertDetail, setConcertDetail] = useState<ConcertReturnType | null>(
     null
@@ -24,7 +25,7 @@ const useGetConcertDetail = (mt20id: string | undefined) => {
         setConcertDetail(concertData);
       } catch (err) {
         console.error(err);
-        setError("공연 상세 정보를 가져오는 데 실패했습니다.");
+        setError("kopis 공연 상세 정보를 가져오는 데 실패했습니다.");
       } finally {
         setIsLoading(false);
       }
