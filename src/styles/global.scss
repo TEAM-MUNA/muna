@@ -14,9 +14,11 @@ body {
   line-height: 1.2;
   background: #ddd;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 #root {
+  position: relative;
   background: $white;
   height: 100%;
   max-width: 480px;
