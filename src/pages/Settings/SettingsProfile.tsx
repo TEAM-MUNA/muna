@@ -17,9 +17,12 @@ import Button from "../../components/common/Button/Button";
 export default function SettingsProfile() {
   useUserRedirect();
 
+  // const [initialNickname, setInitialNickname] = useState();
+
   const currentUser = useCurrentUser();
-  // const { profile, loading } = useProfile(userId);
-  const { value: nickname, onChange: onNicknameChange } = useInput("");
+  const initialNickname = currentUser?.nickname || "";
+  const { value: nickname, onChange: onNicknameChange } =
+    useInput(initialNickname);
 
   // if (loading) {
   //   return <p>로딩중</p>;
@@ -31,7 +34,7 @@ export default function SettingsProfile() {
     <div className={styles.container}>
       <Title label='프로필 변경' buttonLeft='back' />
       <form action='POST'>
-        <ImageUploader />
+        <ImageUploader image={currentUser.profileImage} />
         <div className={styles.wrapper_inner}>
           <Input
             name='email'
