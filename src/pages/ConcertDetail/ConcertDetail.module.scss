@@ -110,4 +110,29 @@
     // background-color: yellow;
     // position: relative; /* 부모 요소가 필요하면 relative 설정 */
   }
+  .more_info {
+    dl {
+      font-size: $font-md;
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      column-gap: 24px;
+      row-gap: 8px;
+      padding: 30px 2px;
+      word-break: keep-all;
+      white-space: normal;
+    }
+    .poster {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    .label {
+      color: $black-light;
+    }
+    .detail {
+      font-size: $black;
+    }
+  }
 }

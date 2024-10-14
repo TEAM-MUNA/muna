@@ -37,4 +37,7 @@ export interface ConcertReturnType {
   prfage: string; // 연령
   updatedate: string; // 업데이트 날짜
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
+  prfcast: string; // 출연진(캐스팅)
+  dtguidance: string; // 공연시간
+  entrpsnm: string; // 극단 등
 }
