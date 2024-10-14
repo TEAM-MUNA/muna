@@ -66,7 +66,12 @@ export const loginToFirebase = async (email: string, password: string) => {
 
 // Firebase 로그아웃 API 호출
 export const logoutFromFirebase = async () => {
+  try {
   await signOut(firebaseAuth);
+    console.log("로그아웃 성공");
+  } catch (error) {
+    console.error("로그아웃 실패:", error);
+  }
 };
 
 // Firebase 사용자 불러오는 API
