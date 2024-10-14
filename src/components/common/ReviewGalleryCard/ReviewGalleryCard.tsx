@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./ReviewGalleryCard.module.scss";
-import { ReviewType, defaultReviewType } from "../../../types/reviewType";
+import { ReviewPropType, defaultReviewType } from "../../../types/reviewType";
 import { ConcertType, defaultConcertType } from "../../../types/concertType";
 import ImageLayersIcon from "../../../assets/svg/ImageLayersIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 
-interface ReviewGalleryCardProps extends ReviewType, ConcertType {
+interface ReviewGalleryCardProps extends ReviewPropType, ConcertType {
   hasMultiImages?: boolean;
 }
 

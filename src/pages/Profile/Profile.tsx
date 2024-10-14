@@ -132,7 +132,7 @@ export default function Profile() {
           </div>
           <ul>
             <li>
-              <ReviewCard reviewLink='#' page='profile' />
+              <ReviewCard reviewLink='#' />
             </li>
           </ul>
         </section>

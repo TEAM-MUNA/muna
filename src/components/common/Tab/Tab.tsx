@@ -29,7 +29,7 @@ export default function Tab({
 
     setActiveList(new Array(temp.length).fill(false).fill(true, 0, 1));
     setTabTitleList(temp);
-  }, []);
+  }, [tabList]);
 
   const onClick = (index: number) => {
     setActiveList((prev) => prev.map((_, i) => i === index));

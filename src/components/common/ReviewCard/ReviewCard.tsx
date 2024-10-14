@@ -1,19 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styles from "./ReviewCard.module.scss";
 import { UserType, defaultUserType } from "../../../types/userType";
-import { ReviewType, defaultReviewType } from "../../../types/reviewType";
+import { ReviewPropType, defaultReviewType } from "../../../types/reviewType";
 import StarIcon from "../../../assets/svg/StarIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import LikeButton from "../Button/LikeButton";
 import Avatar from "../Avatar/Avatar";
 
-interface ReviewCardProps extends UserType, ReviewType {
-  page?: "concert" | "profile" | "main";
-}
+interface ReviewCardProps extends UserType, ReviewPropType {}
 
 export default function ReviewCard({
-  page = "main",
   // page = "concert",
   // page = "profile",
   // userLink = defaultUserType.userLink,
@@ -28,6 +25,10 @@ export default function ReviewCard({
   starRate = defaultReviewType.starRate,
   likeCount = defaultReviewType.likeCount,
 }: ReviewCardProps) {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const page = pathname.split("/")[1];
+
   return (
     <div className={`${styles.card} card_review page_${page}`}>
       {page === "profile" ? (
@@ -42,7 +43,7 @@ export default function ReviewCard({
             profileImage={profileImage}
             userLink='/임시'
           />
-          {page === "main" && <LikeButton size='sm' likeCount={20} />}
+          {page === "main" && <LikeButton size='sm' likeCount={likeCount} />}
         </div>
       )}
       <Link to={reviewLink}>
@@ -55,7 +56,7 @@ export default function ReviewCard({
                 <div className={styles.wrap_icon}>
                   <span className={styles.icon}>
                     <StarIcon size='14' />
-                    {starRate}
+                    {starRate.toFixed(1)}
                   </span>
                   <span className={styles.icon}>
                     <LikeIcon size='14' />
