@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import { AppDispatch } from "../../app/store";
 import useToggle from "../../hooks/useToggle";
 import { logoutAsync } from "../../slices/authSlice";
 import useUserRedirect from "../../hooks/useUserRedirect";
-import { openModal } from "../../slices/modalSlice";
+import Modal from "../../components/common/Modal/Modal";
+import modalMessages from "../../utils/constants/modalMessages";
+import useModal from "../../hooks/useModal";
 
+import Button from "../../components/common/Button/Button";
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 
@@ -36,66 +39,53 @@ export default function Settings() {
     }
   };
 
-  const handleWithdraw = () => {
-    console.log("탈퇴");
-    dispatch(
-      openModal({
-        title: "설정 변경",
-        description: "설정을 변경하시겠습니까?",
-        buttons: [
-          {
-            label: "확인",
-            onClick: () => {
-              console.log("설정 변경 완료");
-            },
-            color: "default",
-          },
-          {
-            label: "취소",
-            onClick: () => {
-              console.log("설정 변경 취소");
-            },
-            color: "default",
-          },
-        ],
-      })
-    );
-  };
+  // Modal
+  const { isOpen, openModal, closeModal } = useModal();
 
   return (
-    <ul>
-      <ColumnMenuItem
-        label='이메일 알림'
-        buttonRight={
-          <Toggle
-            isActive={isSettingToggleActive}
-            onClick={() => {
-              onSettingToggle();
-            }}
-          />
-        }
-        onClick={() => {
-          onSettingToggle();
-        }}
-      />
-      <ColumnMenuItem
-        label='프로필 변경'
-        onClick={() => {
-          navigate("/settings-profile");
-        }}
-      />
-      <ColumnMenuItem
-        label='비밀번호 변경'
-        onClick={() => {
-          navigate("/settings-password");
-        }}
-      />
-      <ColumnMenuItem label='회원 탈퇴' isFaded onClick={handleWithdraw} />
-      <ColumnMenuItem
-        label='로그아웃'
-        onClick={handleLogout}
-        disabled={isLoggingOut} // 로그아웃 진행 중 버튼 비활성화
-      />
-    </ul>
+    <>
+      <ul>
+        <ColumnMenuItem
+          label='이메일 알림'
+          buttonRight={
+            <Toggle
+              isActive={isSettingToggleActive}
+              onClick={() => {
+                onSettingToggle();
+              }}
+            />
+          }
+          onClick={() => {
+            onSettingToggle();
+          }}
+        />
+        <ColumnMenuItem
+          label='프로필 변경'
+          onClick={() => {
+            navigate("/settings-profile");
+          }}
+        />
+        <ColumnMenuItem
+          label='비밀번호 변경'
+          onClick={() => {
+            navigate("/settings-password");
+          }}
+        />
+        <ColumnMenuItem label='회원 탈퇴' isFaded onClick={openModal} />
+        <ColumnMenuItem
+          label='로그아웃'
+          onClick={handleLogout}
+          disabled={isLoggingOut} // 로그아웃 진행 중 버튼 비활성화
+        />
+      </ul>
+      <Modal
+        isOpen={isOpen}
+        title='회원 탈퇴'
+        description={modalMessages.withdraw}
+        onClose={closeModal}
+      >
+        <Button label='취소' color='default' fullWidth />
+      </Modal>
+    </>
   );
 }

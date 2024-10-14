@@ -1,30 +1,25 @@
-import React from "react";
-import Button, { ButtonProps } from "../Button/Button";
+import React, { ReactNode } from "react";
+
+import Button from "../Button/Button";
 import CloseIcon from "../../../assets/svg/CloseIcon";
 import styles from "./Modal.module.scss";
 
-export interface DialogButtonProps {
-  label: string;
-  color: ButtonProps["color"];
-  onClick: () => void;
-}
-
 interface DialogProps {
   isOpen: boolean;
+  onClose: () => void;
   title: string;
   description?: string;
-  buttons?: DialogButtonProps[];
   color?: "default" | "warning";
-  onClose: () => void; // 모달 닫기
+  children?: ReactNode;
 }
 
 export default function Dialog({
   isOpen,
+  onClose,
   title,
   description,
-  buttons,
   color = "default",
-  onClose,
+  children,
 }: DialogProps) {
   if (!isOpen) return null;
 
@@ -36,19 +31,7 @@ export default function Dialog({
           <Button label='닫기' iconOnly={<CloseIcon />} onClick={onClose} />
         </header>
         {description && <p className={styles.description}>{description}</p>}
-        {buttons && (
-          <div className={styles.wrapper_btn}>
-            {buttons.map((button) => (
-              <Button
-                key={button.label}
-                label={button.label}
-                color={button.color}
-                onClick={button.onClick}
-                fullWidth
-              />
-            ))}
-          </div>
-        )}
+        {children && <div className={styles.wrapper_btn}>{children}</div>}
       </div>
     </div>
   );

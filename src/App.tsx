@@ -6,10 +6,6 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "./slices/modalSlice";
-import { RootState } from "./app/store";
-import Modal from "./components/common/Modal/Modal";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -47,15 +43,6 @@ function App() {
     // getDocs();
   }, []);
 
-  // Modal 팝업
-  const dispatch = useDispatch();
-  const { isOpen, title, description, buttons } = useSelector(
-    (state: RootState) => state.modal
-  );
-  const handleClose = () => {
-    dispatch(closeModal());
-  };
-
   return (
     <>
       <Router>
@@ -77,13 +64,6 @@ function App() {
         </Routes>
       </Router>
       <Toaster />
-      <Modal
-        isOpen={isOpen}
-        title={title}
-        description={description}
-        buttons={buttons}
-        onClose={handleClose}
-      />
     </>
   );
 }

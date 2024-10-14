@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
-export interface ButtonProps {
+interface ButtonProps {
   id?: string;
   label: string;
   size?: "sm" | "md" | "lg" | "xl" | undefined;
