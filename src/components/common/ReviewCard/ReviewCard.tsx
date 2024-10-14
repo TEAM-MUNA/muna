@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./ReviewCard.module.scss";
 import { UserType, defaultUserType } from "../../../types/userType";
-import { ReviewType, defaultReviewType } from "../../../types/reviewType";
+import { ReviewPropType, defaultReviewType } from "../../../types/reviewType";
 import StarIcon from "../../../assets/svg/StarIcon";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import LikeButton from "../Button/LikeButton";
 import Avatar from "../Avatar/Avatar";
 
-interface ReviewCardProps extends UserType, ReviewType {
+interface ReviewCardProps extends UserType, ReviewPropType {
   page?: "concert" | "profile" | "main";
 }
 

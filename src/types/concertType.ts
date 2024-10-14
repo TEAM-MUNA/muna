@@ -11,7 +11,7 @@ export const defaultConcertType = {
   concertLink: "/",
 };
 
-// TODO: 변수명 Props 대신 Type 등으로 변경하는게 좋을 것 같음.
+// Firebase에 올리는 공연 타입
 export interface ConcertType {
   concertId?: string;
   title?: string;
