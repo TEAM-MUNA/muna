@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { bookmarkConcertAsync } from "../../slices/interactionSlice";
@@ -119,29 +119,45 @@ export default function ConcertDetail() {
           <img
             className={styles.poster}
             width={108}
+            height={168}
             src={concertDetail.poster}
             alt='/'
           />
           <div className={styles.info}>
-            <Button
-              className={styles.bookmark}
-              iconOnly={<BookmarkIcon active={isBookmarked} />}
-              label='북마크'
-              onClick={handleBookmark}
-            />
-            <span className={styles.booking_info}>
-              <span>
-                <Tag label={concertDetail.prfstate} color='white' />
+            <div>
+              <Button
+                className={styles.bookmark}
+                iconOnly={<BookmarkIcon active={isBookmarked} />}
+                label='북마크'
+                onClick={handleBookmark}
+              />
+              <span className={styles.booking_info}>
+                <span>
+                  <Tag label={concertDetail.prfstate} color='black_line' />
+                </span>
+                {/* <span>예매율</span> */}
               </span>
-              {/* <span>예매율</span> */}
-            </span>
-            <p className={styles.title}>
-              {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
-            </p>
-            <span className={styles.rating}>
-              <StarScoreOnlyIcon rating={4} />
-              <p className={styles.rating_text}>평점 8.0</p>
-            </span>
+              <p className={styles.title}>{concertDetail.prfnm}</p>
+
+              <span className={styles.rating}>
+                {concert?.averageRating ? (
+                  <>
+                    <StarScoreOnlyIcon rating={concert.averageRating} />
+                    <p className={styles.rating_text}>
+                      평점 {concert.averageRating}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    {/* TODO: 올바른 링크 연결하기 */}
+                    <StarScoreOnlyIcon rating={null} />
+                    <Link to='/review'>
+                      <p className={styles.rating_text_gray}>평점 주기</p>
+                    </Link>
+                  </>
+                )}
+              </span>
+            </div>
 
             <div>
               <p className={styles.concert_info}>
