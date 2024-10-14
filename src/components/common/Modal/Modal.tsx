@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
+import ReactDOM from "react-dom";
 
 import Button from "../Button/Button";
 import CloseIcon from "../../../assets/svg/CloseIcon";
@@ -21,9 +22,22 @@ export default function Dialog({
   color = "default",
   children,
 }: DialogProps) {
+  // 모달이 열려 있을 때 기존 페이지영역 스크롤 비활성화
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <div className='overlay'>
       <div className={`${styles.dialog} ${styles[color]}`}>
         <header>
@@ -33,6 +47,7 @@ export default function Dialog({
         {description && <p className={styles.description}>{description}</p>}
         {children && <div className={styles.wrapper_btn}>{children}</div>}
       </div>
-    </div>
+    </div>,
+    document.getElementById("modal") as HTMLElement
   );
 }
