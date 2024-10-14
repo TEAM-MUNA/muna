@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { bookmarkConcertAsync } from "../../slices/interactionSlice";
@@ -20,12 +20,14 @@ import useGetReviewList from "../../hooks/useGetReviewList";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 import useGetConcert from "../../hooks/useGetConcert";
+import generateRandomId from "../../utils/generateRandomId";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
+  const navigate = useNavigate();
 
   // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
   const {
@@ -103,6 +105,14 @@ export default function ConcertDetail() {
 
   const handleTab = (index: number) => {
     setTabIndex(index);
+  };
+
+  // 후기 작성하기
+  const goToReviewEditPage = () => {
+    const reviewId = generateRandomId();
+    navigate(`/review/edit/${reviewId}`, {
+      state: { concertId },
+    });
   };
 
   if (concertDetail) {
@@ -194,6 +204,7 @@ export default function ConcertDetail() {
             color='primary_line'
             size='sm'
             label='후기 작성하기'
+            onClick={goToReviewEditPage}
           />
         </div>
         {tabIndex === 0 ? (
