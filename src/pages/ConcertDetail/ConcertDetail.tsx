@@ -39,15 +39,19 @@ export default function ConcertDetail() {
     error: concertError,
   } = useGetConcert(concertId); // Firebase
 
-  const isBookmarkedInitialState =
-    concert?.bookmarkedBy?.some(
-      (bookmarkedUserId) => bookmarkedUserId === userId
-    ) || false;
   const {
     reviewList = [],
     isLoading: isReviewListLoading,
     error: reviewListError,
   } = useGetReviewList(concertId);
+
+  const isBookmarkedInitialState =
+    concert?.bookmarkedBy?.some(
+      (bookmarkedUserId) => bookmarkedUserId === userId
+    ) || false;
+  const { isActive: isBookmarked, onToggle: onBookmarkToggle } = useToggle(
+    isBookmarkedInitialState
+  );
 
   const tabList = useMemo<[string, number | null][]>(
     () => [
@@ -56,10 +60,6 @@ export default function ConcertDetail() {
     ],
     [reviewList?.length]
   );
-
-  const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
-    useToggle(false);
-  const { userId } = useCurrentUser();
 
   useEffect(() => {
     if (concertDetailError || concertError) {
