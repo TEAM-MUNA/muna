@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -71,9 +71,7 @@ export default function Signup() {
         signupAsync({ email, password, nickname, profileImage })
       ).unwrap();
       toast.success("회원가입에 성공하였습니다.", { id: loadingToastId });
-      setTimeout(() => {
-        navigate("/");
-      }, 500);
+      navigate("/");
     } catch (error) {
       if (typeof error === "string") {
         if (error.includes("email-already-in-use")) {
@@ -102,7 +100,6 @@ export default function Signup() {
 
   return (
     <article className={styles.signup}>
-      <Toaster />
       <section>
         <h2 className={styles.title}>회원가입</h2>
         <form className={styles.form} onSubmit={handleSignup}>
