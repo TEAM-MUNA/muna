@@ -188,7 +188,7 @@ export default function ConcertDetail() {
                   content={review.contents}
                   likeCount={review.likedBy?.length || 0}
                   date={review.createdAt}
-                  starRate={review.rating?.toString()}
+                  starRate={review.rating}
                 />
               ))}
             {!isReviewListLoading &&
