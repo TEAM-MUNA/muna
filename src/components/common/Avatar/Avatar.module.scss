@@ -45,21 +45,18 @@
 }
 
 .reviewAvatar {
-  width: 171px;
-  height: 52px;
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
   .reviewAvatarText {
-    width: 108px;
-    height: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     .reviewAvatarTextTop {
       display: flex;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .reviewAvatarWatchDay {
-      cursor: pointer;
+      gap: 4px;
+      align-items: flex-end;
     }
   }
   .reviewAvatarImg {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FirebaseError } from "firebase/app";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -51,9 +51,7 @@ export default function Login() {
     try {
       await dispatch(loginAsync({ email, password })).unwrap();
       toast.success("로그인에 성공하였습니다.", { id: loadingToastId });
-      setTimeout(() => {
-        navigate(-1);
-      }, 500);
+      navigate(-1);
     } catch (error) {
       // TODO: 수정하기
       if (error instanceof FirebaseError) {
@@ -68,7 +66,6 @@ export default function Login() {
 
   return (
     <article className={styles.login}>
-      <Toaster />
       <header className={styles.header}>
         <h1>
           <img width={107} src={logo} alt='muna 로고' />
