@@ -48,3 +48,8 @@ export interface ConcertReturnType {
   updatedate: string; // 업데이트 날짜
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }
+
+// 위에 두가지 타입 통합
+// 공연 목록 정렬을 위해서는 각각의 아이템에 비교를 위한 기준이 있어야됨.
+// (averageRating, bookmarkedBy, reviews)
+export type IntergratedConcertType = ConcertType & ConcertReturnType;
