@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
@@ -31,10 +31,13 @@ export default function Profile() {
   const currentUserId = useCurrentUser().userId;
   const { profile, loading } = useProfile(userId);
 
-  const tabList: (string | [string, number | null])[] = [
-    ["북마크한 공연", null],
-    ["나의 후기", 10],
-  ];
+  const tabList = useMemo<[string, number | null][]>(
+    () => [
+      ["북마크한 공연", null],
+      ["나의 후기", 10],
+    ],
+    []
+  );
   const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
   const concertOrderSelectOptions = ["최신순", "북마크순"];
   const reviewOrderSelectOptions = ["최신순", "인기순"];
