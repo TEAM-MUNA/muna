@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -48,9 +48,18 @@ export default function ConcertDetail() {
     isLoading: isReviewListLoading,
     error: reviewListError,
   } = useGetReviewList(concertId);
-  const { isActive: isBookmarked, onToggle: onBookmarkToggle } = useToggle(
-    isBookmarkedInitialState
+
+  const tabList = useMemo<[string, number | null][]>(
+    () => [
+      ["후기", reviewList?.length || 0],
+      ["공연정보", null],
+    ],
+    [reviewList?.length]
   );
+
+  const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
+    useToggle(false);
+  const { userId } = useCurrentUser();
 
   useEffect(() => {
     if (concertDetailError || concertError) {
@@ -163,14 +172,7 @@ export default function ConcertDetail() {
           </span>
         </div>
         <div className={styles.tab_section}>
-          <Tab
-            onTabChanged={handleTab}
-            tabList={[
-              ["후기", reviewList.length],
-              ["공연정보", null],
-            ]}
-            withNumber
-          />
+          <Tab onTabChanged={handleTab} tabList={tabList} withNumber />
           <Button
             className={styles.write_review}
             color='primary_line'
