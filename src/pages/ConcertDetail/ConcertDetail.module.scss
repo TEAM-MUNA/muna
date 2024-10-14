@@ -2,7 +2,7 @@
 @import "../../styles/_mixin";
 
 .concert_detail {
-  line-height: 1.5;
+  line-height: $font-height-lg;
 
   .info_update {
     @include full_width;
