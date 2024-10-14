@@ -42,7 +42,7 @@ export default function ReviewCard({
             profileImage={profileImage}
             userLink='/임시'
           />
-          {page === "main" && <LikeButton size='sm' likeCount={20} />}
+          {page === "main" && <LikeButton size='sm' likeCount={likeCount} />}
         </div>
       )}
       <Link to={reviewLink}>

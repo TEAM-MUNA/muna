@@ -17,6 +17,7 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import ConcertList from "../ConcertList/ConcertList";
 import Tab from "../../components/common/Tab/Tab";
 import useGetReviewList from "../../hooks/useGetReviewList";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 // import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 
 export default function ConcertDetail() {
@@ -150,7 +151,7 @@ export default function ConcertDetail() {
         <div className={styles.tab_section}>
           <Tab
             tabList={[
-              ["후기", 11],
+              ["후기", reviewList?.length || 0],
               ["공연정보", null],
             ]}
             withNumber
@@ -163,11 +164,31 @@ export default function ConcertDetail() {
           />
         </div>
         <section className={styles.reviews}>
-          {reviewList ? (
-            reviewList.map((review) => <>d{review.contents}</>)
-          ) : (
-            <>리뷰가 존재하지 않습니다.</>
+          {isReviewListLoading && <HeartSpinner />}
+          {!isReviewListLoading && reviewListError && (
+            <p>리뷰를 불러오는 중 오류가 발생했습니다.</p>
           )}
+          {!isReviewListLoading &&
+            !reviewListError &&
+            reviewList &&
+            reviewList.length > 0 &&
+            reviewList.map((review) => (
+              <ReviewCard
+                key={review.reviewId}
+                profileImage={review.author.profileImage}
+                nickname={review.author.nickname}
+                userId={review.author.id}
+                title='제목'
+                content={review.contents}
+                likeCount={review.likedBy?.length || 0}
+                date={review.createdAt}
+              />
+            ))}
+          {!isReviewListLoading &&
+            !reviewListError &&
+            (!reviewList || reviewList.length === 0) && (
+              <p>리뷰가 존재하지 않습니다.</p>
+            )}
         </section>
       </section>
     );
