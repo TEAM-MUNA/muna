@@ -1,0 +1,21 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.dialog {
+  @include fixed_bottom;
+  background: $white;
+  border-radius: 20px 20px 0 0;
+  // border: 0;
+  padding: 20px 20px 60px 20px;
+  z-index: $z-dialog;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: $font-xl;
+  }
+}

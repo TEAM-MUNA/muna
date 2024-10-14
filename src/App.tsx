@@ -6,8 +6,10 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-// import { doc, getDoc } from "firebase/firestore";
-// import { db } from "./firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal } from "./slices/modalSlice";
+import { RootState } from "./app/store";
+import Modal from "./components/common/Modal/Modal";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -41,30 +43,21 @@ function AppHeader() {
 
 function App() {
   useUser();
-
-  // firebase 사용 테스트
-  // const getDocs = async () => {
-  //   try {
-  //     const docRef = doc(db, "concert", "concert123");
-  //     const docSnap = await getDoc(docRef);
-
-  //     if (docSnap.exists()) {
-  //       console.log("Document data:", docSnap.data());
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   } catch (e) {
-  //     console.error("에러", e);
-  //   }
-  // };
-
   useEffect(() => {
     // getDocs();
   }, []);
 
+  // Modal 팝업
+  const dispatch = useDispatch();
+  const { isOpen, title, description, buttons } = useSelector(
+    (state: RootState) => state.modal
+  );
+  const handleClose = () => {
+    dispatch(closeModal());
+  };
+
   return (
-    <div>
-      <Toaster />
+    <>
       <Router>
         <AppHeader />
         <Routes>
@@ -83,7 +76,15 @@ function App() {
           <Route path='/component-test' element={<ComponentTest />} />
         </Routes>
       </Router>
-    </div>
+      <Toaster />
+      <Modal
+        isOpen={isOpen}
+        title={title}
+        description={description}
+        buttons={buttons}
+        onClose={handleClose}
+      />
+    </>
   );
 }
 
