@@ -1,0 +1,33 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.dialog {
+  @include fixed_bottom;
+  background: $white;
+  border-radius: 20px 20px 0 0;
+  // border: 0;
+  padding: 20px 20px 60px 20px;
+  z-index: $z-modal;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: $font-xl;
+  }
+}
+
+.description {
+  color: $black-light;
+  margin-top: 10px;
+}
+
+.wrapper_btn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
