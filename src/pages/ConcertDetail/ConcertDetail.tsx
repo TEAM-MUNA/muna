@@ -18,9 +18,12 @@ import ConcertList from "../ConcertList/ConcertList";
 import Tab from "../../components/common/Tab/Tab";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
+import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
+import useGetConcert from "../../hooks/useGetConcert";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
+  const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
 
@@ -31,31 +34,38 @@ export default function ConcertDetail() {
     error: concertDetailError,
   } = useGetConcertDetail(concertId); // kopis
   const {
-    reviewList,
+    concert,
+    isLoading: isConcertLoading,
+    error: concertError,
+  } = useGetConcert(concertId); // Firebase
+
+  const isBookmarkedInitialState =
+    concert?.bookmarkedBy?.some(
+      (bookmarkedUserId) => bookmarkedUserId === userId
+    ) || false;
+  const {
+    reviewList = [],
     isLoading: isReviewListLoading,
     error: reviewListError,
   } = useGetReviewList(concertId);
-  const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
-    useToggle(false);
-  const { userId } = useCurrentUser();
+  const { isActive: isBookmarked, onToggle: onBookmarkToggle } = useToggle(
+    isBookmarkedInitialState
+  );
 
   useEffect(() => {
-    if (concertDetailError) {
-      toast.error("공연 상세 정보를 불러오지 못했습니다.");
+    if (concertDetailError || concertError) {
+      const errorMessage = concertDetailError
+        ? "공연 상세 정보를 불러오지 못했습니다."
+        : "북마크 정보를 불러오지 못했습니다.";
+      toast.error(errorMessage);
     }
-  }, [concertDetailError]);
-
-  useEffect(() => {
-    if (!isReviewListLoading) {
-      console.log(reviewList);
-    }
-  }, [isReviewListLoading]);
+  }, [concertDetailError, concertError]);
 
   if (!concertId) {
     return <ConcertList />;
   }
 
-  if (isConertDetailLoading) {
+  if (isConertDetailLoading || isConcertLoading) {
     return <HeartSpinner />;
   }
 
@@ -120,7 +130,7 @@ export default function ConcertDetail() {
               {concertDetail.genrenm} &lt;{concertDetail.prfnm}&gt;
             </p>
             <span className={styles.rating}>
-              <div className={styles.star_score} />
+              <StarScoreOnlyIcon rating={4} />
               <p className={styles.rating_text}>평점 8.0</p>
             </span>
 
@@ -156,7 +166,7 @@ export default function ConcertDetail() {
           <Tab
             onTabChanged={handleTab}
             tabList={[
-              ["후기", reviewList?.length || 0],
+              ["후기", reviewList.length],
               ["공연정보", null],
             ]}
             withNumber
