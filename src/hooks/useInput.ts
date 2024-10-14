@@ -14,6 +14,7 @@ const useInput = (
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    setValue(newValue);
 
     if (!newValue) {
       setError(null);
