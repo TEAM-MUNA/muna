@@ -1,5 +1,14 @@
 import posterDefault from "../assets/img/test-cat.png";
 
+export const DefaultConcertType = {
+  concertId: "임시 공연 아이디",
+  title: "공연명",
+  poster: posterDefault,
+  averageRating: 999,
+  bookmarkedBy: ["999"],
+  reviews: ["999"],
+};
+
 export const defaultConcertType = {
   concertId: "",
   title: "공연명",
@@ -12,6 +21,7 @@ export const defaultConcertType = {
 };
 
 // TODO: 변수명 Props 대신 Type 등으로 변경하는게 좋을 것 같음.
+// firebase에서 받아오는 공연 타입
 export interface ConcertType {
   concertId?: string;
   title?: string;
@@ -21,7 +31,7 @@ export interface ConcertType {
   reviews?: string[];
 }
 
-// 공연 정보 api로부터 받아오는 값의 타입
+// 공연 정보(kopis)로부터 받아오는 공연 타입
 export interface ConcertReturnType {
   mt20id: string;
   prfnm: string; // 공연 이름
@@ -34,7 +44,7 @@ export interface ConcertReturnType {
   openrun: string;
   prfstate: "공연중" | "공연예정" | "공연완료" | undefined; // 공연 상태
   prfruntime: string; // 공연 시간
-  prfage: string; // 연령
+  prfage: string; // 연령
   updatedate: string; // 업데이트 날짜
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
 }

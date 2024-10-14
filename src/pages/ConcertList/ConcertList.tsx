@@ -3,7 +3,6 @@ import { HeartSpinner } from "react-spinners-kit";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import mapApiDataToConcertType from "../../utils/mapApiDataToConcertType";
 import { fetchConcertList } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
@@ -11,8 +10,11 @@ import { ConcertReturnType } from "../../types/concertType";
 import { genreList, genreMap } from "../../utils/constants/genreData";
 import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
+import "./ConcertList.scss";
 
 export default function ConcertList() {
+  console.log("fpsx");
+  // concertList(from Kopis)
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
   const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
   const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
@@ -122,6 +124,19 @@ export default function ConcertList() {
     setConcertList((prevData) => sortConcertList(prevData, sortOrder));
   }, [sortOrder]);
 
+  // 콘서트 아이템 렌더링 함수
+  const renderConcertItem = (concert: ConcertReturnType) => {
+    if (!concert || !concert.prfnm) {
+      return null;
+    }
+
+    return (
+      <li key={concert.mt20id}>
+        <ConcertCard concert={concert} />
+      </li>
+    );
+  };
+
   return (
     <>
       <Tab tabList={genreList} onTabChanged={handleTabChange} />
@@ -147,17 +162,7 @@ export default function ConcertList() {
         </div>
       )}
       <ul className={isLoading ? styles.faded : ""}>
-        {concertList.map((concert) => {
-          if (!concert || !concert.prfnm) {
-            return null;
-          }
-          const concertProps = mapApiDataToConcertType(concert);
-          return (
-            <li key={concert.mt20id}>
-              <ConcertCard concert={concertProps} />
-            </li>
-          );
-        })}
+        {concertList.map(renderConcertItem)}
       </ul>
     </>
   );
