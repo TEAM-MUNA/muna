@@ -14,7 +14,6 @@ body {
   line-height: 1.2;
   background: #ddd;
   overflow: hidden;
-  min-height: 100vh;
 }
 
 #root {
@@ -26,6 +25,7 @@ body {
   margin: 0 auto;
   border: 1px solid transparent;
   overflow-y: auto;
+  min-height: 100vh;
 }
 
 h1,
