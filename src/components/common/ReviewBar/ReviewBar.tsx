@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import LikeButton from "../Button/LikeButton";
 import styles from "./ReviewBar.module.scss";
-import { ReviewType } from "../../../types/reviewType";
+import { ReviewPropType } from "../../../types/reviewType";
 
 interface ReviewBarProps {
-  review: ReviewType;
+  review: ReviewPropType;
 }
 
 export default function ReviewBar({ review }: ReviewBarProps) {

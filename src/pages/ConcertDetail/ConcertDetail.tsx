@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -15,29 +15,47 @@ import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import useToggle from "../../hooks/useToggle";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import ConcertList from "../ConcertList/ConcertList";
+import Tab from "../../components/common/Tab/Tab";
+import useGetReviewList from "../../hooks/useGetReviewList";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
+  const [tabIndex, setTabIndex] = useState<number>(0);
 
   // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
-  const { concertDetail, isLoading, error } = useGetConcertDetail(concertId); // kopis
-
+  const {
+    concertDetail,
+    isLoading: isConertDetailLoading,
+    error: concertDetailError,
+  } = useGetConcertDetail(concertId); // kopis
+  const {
+    reviewList,
+    isLoading: isReviewListLoading,
+    error: reviewListError,
+  } = useGetReviewList(concertId);
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } =
     useToggle(false);
   const { userId } = useCurrentUser();
 
   useEffect(() => {
-    if (error) {
+    if (concertDetailError) {
       toast.error("공연 상세 정보를 불러오지 못했습니다.");
     }
-  }, [error]);
+  }, [concertDetailError]);
+
+  useEffect(() => {
+    if (!isReviewListLoading) {
+      console.log(reviewList);
+    }
+  }, [isReviewListLoading]);
 
   if (!concertId) {
     return <ConcertList />;
   }
 
-  if (isLoading) {
+  if (isConertDetailLoading) {
     return <HeartSpinner />;
   }
 
@@ -49,16 +67,23 @@ export default function ConcertDetail() {
         await dispatch(
           bookmarkConcertAsync({ userId, concertId, cancel: isBookmarked })
         ).unwrap();
-        toast.success("북마크에 추가되었습니다.");
+
+        toast.success(
+          !isBookmarked ? "북마크에 추가되었습니다." : "북마크를 해제했습니다."
+        );
       } catch (e) {
         console.error(e);
-        onBookmarkToggle();
+        onBookmarkToggle(); // 북마크 해제
         toast.error("북마크에 추가하지 못했습니다.");
       }
     } else {
       // TODO: 로그인 페이지로 이동 등 처리 필요
       toast.error("로그인 후 이용 가능합니다.");
     }
+  };
+
+  const handleTab = (index: number) => {
+    setTabIndex(index);
   };
 
   if (concertDetail) {
@@ -79,7 +104,6 @@ export default function ConcertDetail() {
             alt='/'
           />
           <div className={styles.info}>
-            {/* <div> */}
             <Button
               className={styles.bookmark}
               iconOnly={<BookmarkIcon active={isBookmarked} />}
@@ -128,6 +152,74 @@ export default function ConcertDetail() {
             </p>
           </span>
         </div>
+        <div className={styles.tab_section}>
+          <Tab
+            onTabChanged={handleTab}
+            tabList={[
+              ["후기", reviewList?.length || 0],
+              ["공연정보", null],
+            ]}
+            withNumber
+          />
+          <Button
+            className={styles.write_review}
+            color='primary_line'
+            size='sm'
+            label='후기 작성하기'
+          />
+        </div>
+        {tabIndex === 0 ? (
+          <article className={styles.reviews}>
+            {isReviewListLoading && <HeartSpinner />}
+            {!isReviewListLoading && reviewListError && (
+              <p>리뷰를 불러오는 중 오류가 발생했습니다.</p>
+            )}
+            {!isReviewListLoading &&
+              !reviewListError &&
+              reviewList &&
+              reviewList.length > 0 &&
+              reviewList.map((review) => (
+                <ReviewCard
+                  key={review.reviewId}
+                  profileImage={review.author.profileImage}
+                  nickname={review.author.nickname}
+                  userId={review.author.id}
+                  title='제목'
+                  content={review.contents}
+                  likeCount={review.likedBy?.length || 0}
+                  date={review.createdAt}
+                  starRate={review.rating?.toString()}
+                />
+              ))}
+            {!isReviewListLoading &&
+              !reviewListError &&
+              (!reviewList || reviewList.length === 0) && (
+                <p>리뷰가 존재하지 않습니다.</p>
+              )}
+          </article>
+        ) : (
+          <article className={styles.more_info}>
+            <h3 className='sr_only'>공연 추가 정보</h3>
+            <dl>
+              <dt className={styles.label}>공연시간</dt>
+              <dd className={styles.detail}>{concertDetail.dtguidance}</dd>
+
+              <dt className={styles.label}>출연진</dt>
+              <dd className={styles.detail}>{concertDetail.prfcast}</dd>
+
+              <dt className={styles.label}>제작사</dt>
+              <dd className={styles.detail}>{concertDetail.entrpsnm}</dd>
+
+              <dt className='sr_only'>공연 사진</dt>
+              <dd className={styles.poster}>
+                <img src={concertDetail.poster} alt={concertDetail.prfnm} />
+              </dd>
+
+              <dt className={styles.label}>장소</dt>
+              <dd className={styles.detail}>{concertDetail.fcltynm}</dd>
+            </dl>
+          </article>
+        )}
       </section>
     );
   }

@@ -69,6 +69,12 @@ li {
   list-style: none;
 }
 
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
 .sr_only {
   position: absolute;
   width: 1px;

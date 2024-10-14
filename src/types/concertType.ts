@@ -20,8 +20,7 @@ export const defaultConcertType = {
   concertLink: "/",
 };
 
-// TODO: 변수명 Props 대신 Type 등으로 변경하는게 좋을 것 같음.
-// firebase에서 받아오는 공연 타입
+// Firebase에 올리는 공연 타입
 export interface ConcertType {
   concertId?: string;
   title?: string;
@@ -47,4 +46,7 @@ export interface ConcertReturnType {
   prfage: string; // 연령
   updatedate: string; // 업데이트 날짜
   // [key: string]: any; // 필요에 따라 추가적인 키를 허용
+  prfcast: string; // 출연진(캐스팅)
+  dtguidance: string; // 공연시간
+  entrpsnm: string; // 극단 등
 }

@@ -1,7 +1,24 @@
 import reviewTest from "../assets/img/test-cat.png";
 import reviewTest2 from "../assets/img/test.jpg";
 
+// Firebase에 올리는 리뷰 타입
 export interface ReviewType {
+  concertId: string;
+  reviewId: string;
+  author: {
+    id: string;
+    nickname: string;
+    profileImage?: string;
+  };
+  rating?: number;
+  date: string;
+  createdAt: string;
+  contents: string;
+  images?: string[];
+  likedBy: string[];
+}
+
+export interface ReviewPropType {
   title?: string;
   content?: string;
   date?: string;
@@ -9,7 +26,7 @@ export interface ReviewType {
   likeCount?: number;
   thumbnail?: string;
   images?: string[];
-  reviewLink?: string;
+  reviewLink?: string; // 추후 제거
 }
 
 export const defaultReviewType = {
