@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
@@ -30,11 +30,29 @@ export default function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const currentUserId = useCurrentUser().userId;
   const { profile, loading } = useProfile(userId);
-
-  const tabList: (string | [string, number | null])[] = [
+  const [isMine, setIsMine] = useState<boolean>(false);
+  const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
     ["나의 후기", 10],
-  ];
+  ]);
+
+  useEffect(() => {
+    const isProfileOwner = userId === currentUserId;
+    setIsMine(isProfileOwner);
+
+    const newTabTitle: [string, number | null][] = isProfileOwner
+      ? [
+          ["북마크한 공연", null],
+          ["나의 후기", 10],
+        ]
+      : [[`${profile?.nickname ?? ""}님의 후기`, 10]];
+    setTabTitle(newTabTitle);
+  }, [userId, currentUserId, profile?.nickname]);
+
+  const tabList = useMemo<[string, number | null][]>(
+    () => tabTitle,
+    [tabTitle]
+  );
   const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
   const concertOrderSelectOptions = ["최신순", "북마크순"];
   const reviewOrderSelectOptions = ["최신순", "인기순"];
@@ -42,13 +60,17 @@ export default function Profile() {
   const handleReviewDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [activeView, setActiveView] = useState<number>(0);
+  const [activeView, setActiveView] = useState<string>("list");
   const handleTabChanged = (index: number) => {
-    setActiveTab(index);
+    if (tabTitle.length === 1) {
+      setActiveTab(0);
+    } else {
+      setActiveTab(index);
+    }
   };
   const handleViewButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetId = e.currentTarget.id;
-    setActiveView(targetId === "listView" ? 0 : 1);
+    setActiveView(targetId === "listView" ? "list" : "grid");
   };
 
   if (loading) {
@@ -69,7 +91,7 @@ export default function Profile() {
           profileImage={profile.profileImage || undefined}
           size='lg'
         />
-        {userId === currentUserId && (
+        {isMine && (
           <Link to='/settings'>
             <Button label='프로필 설정' iconOnly={<SettingsIcon />} />
           </Link>
@@ -77,26 +99,30 @@ export default function Profile() {
       </article>
       <nav className={styles.wrapper_tab}>
         <Tab tabList={tabList} withNumber onTabChanged={handleTabChanged} />
-        {activeTab === 1 && (
+        {(activeTab === 1 || !isMine) && (
           <div className={styles.wrapper_btn}>
             <Button
               id='listView'
               label='리스트 보기'
               iconOnly={<QueueListIcon />}
               onClick={handleViewButton}
-              className={activeView === 0 ? "text_black" : "text_black_lighter"}
+              className={
+                activeView === "list" ? "text_black" : "text_black_lighter"
+              }
             />
             <Button
               id='galleryView'
               label='갤러리 보기'
               iconOnly={<GalleryIcon />}
               onClick={handleViewButton}
-              className={activeView === 1 ? "text_black" : "text_black_lighter"}
+              className={
+                activeView === "grid" ? "text_black" : "text_black_lighter"
+              }
             />
           </div>
         )}
       </nav>
-      {activeTab === 0 && (
+      {activeTab === 0 && isMine && (
         <section className={`${styles.tab_content} ${styles.concert_bookmark}`}>
           <div className={styles.wrapper_dropdown}>
             <DropdownSelect
@@ -120,7 +146,7 @@ export default function Profile() {
           </ul>
         </section>
       )}
-      {activeTab === 1 && activeView === 0 && (
+      {(activeTab === 1 || !isMine) && activeView === "list" && (
         <section className={`${styles.tab_content} ${styles.review_list}`}>
           <div className='wrapper_dropdown_noline'>
             <DropdownSelect
@@ -137,7 +163,7 @@ export default function Profile() {
           </ul>
         </section>
       )}
-      {activeTab === 1 && activeView === 1 && (
+      {(activeTab === 1 || !isMine) && activeView === "grid" && (
         <section className={`${styles.tab_content} ${styles.review_gallery}`}>
           <ul>
             <li>

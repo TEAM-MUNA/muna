@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import useCurrentUser from "../../../hooks/useCurrentUser";
 import { UserType } from "../../../types/userType";
 
@@ -54,30 +54,24 @@ function HeaderLeftButton({ buttonLeft, userId }: HeaderProps) {
 
 export default function Header({ buttonLeft }: HeaderProps) {
   const currentUserId = useCurrentUser().userId;
-  const [search, setSearch] = useState(false);
-  const handleSearchButton = () => {
-    setSearch(!search);
-  };
+  const location = useLocation();
+  const isSearchPage = location.pathname.includes("/search");
 
   return (
     <header className={`${styles.header}`}>
       <div className={`${styles.left_btn}`}>
         <HeaderLeftButton buttonLeft={buttonLeft} userId={currentUserId} />
       </div>
-      {search ? (
+      {isSearchPage ? (
         <SearchInput placeholder='검색어를 입력하세요' fullWidth />
       ) : (
         <>
           <Link to='/' className={`${styles.logo}`}>
             <Button label='muna logo' iconOnly={<Logo />} />
           </Link>
-          <div>
-            <Button
-              label='search'
-              iconOnly={<SearchIcon />}
-              onClick={handleSearchButton}
-            />
-          </div>
+          <Link to='/search'>
+            <Button label='search' iconOnly={<SearchIcon />} />
+          </Link>
         </>
       )}
     </header>
