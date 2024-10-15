@@ -4,6 +4,7 @@ import {
   loginToFirebase,
   logoutFromFirebase,
   setUserOnDoc,
+  updateUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
 } from "../api/firebase/authAPI";
@@ -116,18 +117,21 @@ export const updateProfileAsync = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const user = firebaseAuth.currentUser;
     try {
+      const user = firebaseAuth.currentUser;
       if (user) {
-        // nickname(displayName), profileImage(photoURL) 업데이트
         await updateProfileToFirebase(user, nickname, profileImage);
 
-        return {
-          user: {
-            nickname: user.displayName,
-            profileImage: user.photoURL,
-          },
+        // Firestore에 사용자 정보 업데이트
+        await updateUserOnDoc(user, nickname, profileImage);
+
+        // Firebase에서 업데이트된 사용자 정보를 가져와서 리덕스에 저장
+        const updatedUser = {
+          nickname,
+          profileImage: profileImage || user.photoURL || null, // 이미지가 없으면 기존 이미지 사용
         };
+
+        return updatedUser; // 반환값
       }
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -237,10 +241,8 @@ const authSlice = createSlice({
           state,
           action: PayloadAction<
             | {
-                user: {
-                  nickname: string | null;
-                  profileImage: string | null;
-                };
+                nickname: string | null;
+                profileImage: string | null;
               }
             | undefined
           >
@@ -248,17 +250,18 @@ const authSlice = createSlice({
           state.status = "succeeded";
           console.log(action.payload);
 
-          if (action.payload && action.payload.user) {
+          if (action.payload) {
             state.user = {
-              userId: state.user?.userId, // 기존 userId 유지
-              email: state.user?.email, // 기존 email 유지
-              nickname: action.payload.user.nickname ?? state.user?.nickname, // 닉네임 업데이트
+              ...state.user, // 기존의 state.user 속성 유지
+              nickname: action.payload.nickname ?? state.user?.nickname, // 닉네임 업데이트
               profileImage:
-                action.payload.user.profileImage ?? state.user?.profileImage, // 프로필 이미지 업데이트
+                action.payload.profileImage ?? state.user?.profileImage, // 프로필 이미지 업데이트
             };
+            state.status = "succeeded";
+            state.error = null;
+          } else {
+            state.status = "failed";
           }
-
-          state.error = null;
         }
       )
       .addCase(updateProfileAsync.rejected, (state, action) => {

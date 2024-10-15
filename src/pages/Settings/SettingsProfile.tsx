@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useUserRedirect from "../../hooks/useUserRedirect";
-// import useProfile from "../../hooks/useProfile";
-import errorMessages from "../../utils/constants/errorMessages";
-import { AppDispatch } from "../../app/store";
-import { updateProfileAsync } from "../../slices/authSlice";
+import { AppDispatch, RootState } from "../../app/store";
+import { updateProfileAsync, setUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
 
 import styles from "./Settings.module.scss";
 
-// import { errorMessages } from "../../utils/messages";
 import useInput from "../../hooks/useInput";
 import placeholder from "../../utils/constants/placeholder";
 
+import errorMessages from "../../utils/constants/errorMessages";
 import Title from "../../components/common/Title/Title";
 import ImageUploader from "../../components/common/ImageUploader/ImageUploader";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
-// import { updateProfileToFirebase } from "../../api/firebase/authAPI";
 
 export default function SettingsProfile() {
+  const user = useAppSelector((state: RootState) => state.auth.user);
+
   useUserRedirect();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useCurrentUser();
@@ -36,29 +36,26 @@ export default function SettingsProfile() {
   );
 
   const handleProfileImage = async (imageUrl: string) => {
-    try {
-      console.log("기존 프로필 이미지 URL:", currentUser?.profileImage);
-      const profileImageUrl = await dispatch(
-        uploadProfileImage(imageUrl)
-      ).unwrap();
-      console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
-      setProfileImage(profileImageUrl);
-    } catch (error) {
-      console.error(error);
-      throw new Error("이미지 업로드 실패");
-    }
+    const profileImageUrl = await dispatch(
+      uploadProfileImage(imageUrl)
+    ).unwrap();
+    setProfileImage(profileImageUrl);
   };
 
-  const handleChangeProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    // const formData = new FormData(e.currentTarget);
+    // const data = Object.fromEntries(formData.entries());
+    const data = {
+      image: profileImage,
+      nickname,
+    };
     console.log(data);
 
-    const hasEmptyInput = Object.values(data).every((value) => value === "");
-    if (hasEmptyInput) {
-      toast.error(errorMessages.allFieldsRequired);
+    // 닉네임이 비어 있을 경우 오류 메시지
+    if (!nickname) {
+      toast.error(errorMessages.nicknameRequired);
       return;
     }
 
@@ -66,8 +63,10 @@ export default function SettingsProfile() {
 
     try {
       await dispatch(updateProfileAsync({ nickname, profileImage })).unwrap();
+      dispatch(setUser({ nickname, profileImage })); // 상태 업데이트
+
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
-      navigate("/settings");
+      // navigate("/settings");
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error, { id: loadingToastId });
@@ -82,9 +81,10 @@ export default function SettingsProfile() {
   return (
     <div className={styles.container}>
       <Title label='프로필 변경' buttonLeft='back' />
-      <form onSubmit={handleChangeProfile}>
+      <form onSubmit={handleSubmit}>
         <ImageUploader
-          image={profileImage}
+          // image={profileImage}
+          image={user?.profileImage}
           onImageChange={handleProfileImage}
         />
         <div className={styles.wrapper_inner}>

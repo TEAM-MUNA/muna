@@ -28,7 +28,7 @@ export const signupToFirebase = async (email: string, password: string) => {
   return userCredential.user;
 };
 
-// Firebase 회원가입 시 프로필 업데이트 API 호출
+// Firebase 프로필 업데이트 API 호출 - 회원가입, 프로필변경
 export const updateProfileToFirebase = async (
   user: User,
   nickname?: string,
@@ -40,6 +40,19 @@ export const updateProfileToFirebase = async (
   });
 };
 
+// Firebase 비밀번호 변경
+// export const updatePasswordToFirebase = async (user: User) => {
+//   updateProfile(user, {
+//     // photoURL: profileImage,
+//   })
+//     .then(() => {
+//       console.log("프로필 변경 성공");
+//     })
+//     .catch((error) => {
+//       console.error("프로필 변경 실패:", error);
+//     });
+// };
+
 // Firebase 회원가입 시 Firestore에 사용자 정보 등록
 export const setUserOnDoc = async (
   user: User,
@@ -49,6 +62,19 @@ export const setUserOnDoc = async (
   const userRef = doc(db, "users", user.uid);
   await setDoc(userRef, {
     email: user.email,
+    nickname,
+    profileImage,
+  });
+};
+
+// 프로필 업데이트 시 Firestore 사용자 정보 업데이트
+export const updateUserOnDoc = async (
+  user: User,
+  nickname: string,
+  profileImage: string | null
+) => {
+  const userRef = doc(db, "users", user.uid);
+  await updateDoc(userRef, {
     nickname,
     profileImage,
   });
@@ -95,34 +121,3 @@ export const updateUserBookmark = async (
     bookmarkedConcerts: action(concertId),
   });
 };
-
-// Firebase 프로필(닉네임, 이미지) 변경시 프로필 업데이트 API 호출
-// export const updateProfileToFirebase = async (
-//   nickname: string,
-//   profileImage: string | null
-// ) => {
-//   const user = firebaseAuth.currentUser;
-//   if (user) {
-//     updateProfile(user, {
-//       displayName: nickname,
-//       photoURL: profileImage,
-//     })
-//       .then(() => {
-//         console.log("프로필 변경 성공");
-//       })
-//       .catch((error) => {
-//         console.error("프로필 변경 실패:", error);
-//       });
-//   }
-// };
-
-// Firebase 비밀번호 변경시 프로필 업데이트 API 호출
-// export const updatePasswordToFirebase = async (
-//   user: User,
-//   nickname: string,
-// ) => {
-//   await updateProfile(user, {
-//     displayName: nickname,
-//     photoURL: profileImage,
-//   });
-// };
