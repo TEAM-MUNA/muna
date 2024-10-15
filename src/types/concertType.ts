@@ -29,6 +29,7 @@ export interface ConcertType {
   averageRating?: number;
   bookmarkedBy?: string[];
   reviews?: string[];
+  reviewCount?: number;
   bookmarkCount?: number;
 }
 
