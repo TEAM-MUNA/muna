@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Main.module.scss";
 import poster1 from "../../assets/img/temp-poster1.png";
 import poster2 from "../../assets/img/temp-poster2.png";
@@ -6,20 +7,17 @@ import poster3 from "../../assets/img/temp-poster3.png";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
+import { genreMap } from "../../utils/constants/genreData";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
-  // const mainShowingConcertGenre = "뮤지컬";
+  const navigate = useNavigate();
 
-  const genreList = [
-    "뮤지컬",
-    "연극",
-    "콘서트",
-    "클래식",
-    "가족/아동",
-    "오페라",
-    "모든 공연 보기",
-  ];
+  const goToConcertList = (code: string) => {
+    const navigateUrl =
+      code.length === 0 ? `/concert` : `/concert?genre=${code}`;
+    navigate(navigateUrl);
+  };
 
   return (
     <section className={styles.main}>
@@ -64,13 +62,16 @@ export default function Main() {
         </div>
       </div>
       <div className={styles.category_nav}>
-        {genreList.map((genre, index) => (
+        {Object.entries(genreMap).map(([genre, code]) => (
           <Button
-            key={genre}
-            label={genre}
+            key={code}
+            label={genre === "전체" ? "모든 공연 보기" : genre}
             color='default'
             size='md'
-            className={index === genreList.length - 1 ? styles.fullWidth : ""}
+            className={code === "" ? styles.fullWidth : ""}
+            onClick={() => {
+              goToConcertList(code);
+            }}
           />
         ))}
       </div>
