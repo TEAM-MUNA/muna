@@ -25,6 +25,8 @@ function WithdrawMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
+  const { openModal, closeModal, isOpen } = useModal();
+
   const {
     value: password,
     onChange: onPasswordChange,
@@ -32,9 +34,6 @@ function WithdrawMenu() {
   } = useInput("", (value) =>
     passwordRegex.test(value) ? null : errorMessages.invalidPassword
   );
-
-  // Modal
-  const { openModal, closeModal, isOpen } = useModal();
 
   const handleWithdraw = async () => {
     try {
@@ -87,15 +86,12 @@ function WithdrawMenu() {
   );
 }
 
-export default function Settings() {
-  useUserRedirect();
-
-  const dispatch = useDispatch<AppDispatch>();
+function LogoutMenu() {
   const navigate = useNavigate();
-  const [isLogout, setIsLogout] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
-    useToggle(false);
+  const [isLogout, setIsLogout] = useState(false);
+  const { openModal, closeModal, isOpen } = useModal();
 
   const handleLogout = async () => {
     if (isLogout) return; // 이미 로그아웃 중이라면 중복 요청 방지
@@ -111,6 +107,45 @@ export default function Settings() {
       setIsLogout(false); // 완료 후 플래그 초기화
     }
   };
+
+  return (
+    <>
+      <ColumnMenuItem
+        label='로그아웃'
+        onClick={openModal}
+        disabled={isLogout} // 로그아웃 진행 중 버튼 비활성화
+      />
+      <Modal
+        isOpen={isOpen}
+        title='로그아웃'
+        description={modalMessages.logout}
+        onClose={closeModal}
+      >
+        <Button
+          label='로그아웃'
+          color='black'
+          size='md'
+          fullWidth
+          onClick={handleLogout}
+        />
+        <Button
+          label='취소'
+          color='default'
+          size='md'
+          fullWidth
+          onClick={closeModal}
+        />
+      </Modal>
+    </>
+  );
+}
+
+export default function Settings() {
+  useUserRedirect();
+  const navigate = useNavigate();
+
+  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
+    useToggle(false);
 
   return (
     <ul>
@@ -141,11 +176,7 @@ export default function Settings() {
         }}
       />
       <WithdrawMenu />
-      <ColumnMenuItem
-        label='로그아웃'
-        onClick={handleLogout}
-        disabled={isLogout} // 로그아웃 진행 중 버튼 비활성화
-      />
+      <LogoutMenu />
     </ul>
   );
 }
