@@ -61,13 +61,18 @@ export const getConcertsFromFirebase = async (
 export const updateConcertBookmark = async (
   userId: string,
   concertId: string,
+  currentBookmarkCount: number,
   cancel: boolean = false
 ) => {
   const concertsDocRef = doc(db, "concerts", concertId);
   const action = cancel ? arrayRemove : arrayUnion;
+  const bookmarkCount = cancel
+    ? currentBookmarkCount - 1
+    : currentBookmarkCount + 1;
 
   await updateDoc(concertsDocRef, {
     bookmarkedBy: action(userId),
+    bookmarkCount,
   });
 };
 
@@ -80,6 +85,5 @@ export const addConcert = async (concert: ConcertType) => {
   console.log("Document written with ID: ", concert.concertId);
   return concert.concertId;
 };
-
 
 export const a = () => 0;

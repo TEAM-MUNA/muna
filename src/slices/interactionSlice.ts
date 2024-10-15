@@ -39,9 +39,17 @@ export const bookmarkConcertAsync = createAsyncThunk(
       if (!firebaseConcert) {
         await addConcert(concert);
       }
+      const currentBookmarkCount = firebaseConcert
+        ? firebaseConcert.bookmarkCount
+        : 0;
 
       await Promise.all([
-        updateConcertBookmark(userId, concert.concertId!, cancel),
+        updateConcertBookmark(
+          userId,
+          concert.concertId!,
+          currentBookmarkCount,
+          cancel
+        ),
         updateUserBookmark(userId, concert.concertId!, cancel),
       ]);
       return true;

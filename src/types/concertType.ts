@@ -15,6 +15,7 @@ export const defaultConcertType = {
   poster: posterDefault,
   averageRating: 5.0,
   bookmarkedBy: [],
+  bookmarkCount: 0,
   reviews: [],
   // TODO: ..살펴보기
   concertLink: "/",
@@ -28,6 +29,7 @@ export interface ConcertType {
   averageRating?: number;
   bookmarkedBy?: string[];
   reviews?: string[];
+  bookmarkCount?: number;
 }
 
 // 공연 정보(kopis)로부터 받아오는 공연 타입
