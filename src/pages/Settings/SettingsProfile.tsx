@@ -34,16 +34,19 @@ export default function SettingsProfile() {
   const [profileImage, setProfileImage] = useState<string | null>(
     currentUser?.profileImage || null
   );
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 이미지가 업로드 중일 경우에는 제출을 막음
+    if (isUploading) {
+      toast.error("이미지 업로드 중입니다. 잠시 후에 다시 시도해주세요.");
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    // const data = {
-    //   image: profileImage,
-    //   nickname,
-    // };
     console.log(data);
 
     // 닉네임이 비어 있을 경우 오류 메시지
@@ -55,9 +58,15 @@ export default function SettingsProfile() {
     const loadingToastId = toast.loading("프로필 변경 중...");
 
     try {
+      // 닉네임과 프로필 이미지 URL로 업데이트 호출
       await dispatch(updateProfileAsync({ nickname, profileImage })).unwrap();
-      // 업데이트 후 실제 유저 정보로 상태 업데이트
-      dispatch(updateUser({ nickname, profileImage }));
+      // 프로필 정보 업데이트 (세션 초기화 없이)
+      dispatch(
+        updateUser({
+          nickname,
+          profileImage: profileImage || currentUser?.profileImage || null,
+        })
+      );
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
       // navigate("/settings");
@@ -73,10 +82,17 @@ export default function SettingsProfile() {
   };
 
   const handleProfileImage = async (imageUrl: string) => {
-    const profileImageUrl = await dispatch(
-      uploadProfileImage(imageUrl)
-    ).unwrap();
-    setProfileImage(profileImageUrl);
+    setIsUploading(true);
+    try {
+      const profileImageUrl = await dispatch(
+        uploadProfileImage(imageUrl)
+      ).unwrap();
+      setProfileImage(profileImageUrl);
+    } catch (error) {
+      console.error("이미지 업로드 중 오류 발생:", error);
+    } finally {
+      setIsUploading(false); // 업로드 완료 또는 오류 발생 시 업로드 상태 초기화
+    }
   };
 
   return (
