@@ -98,7 +98,7 @@ export default function Main() {
             title={review.concert.title}
             nickname={review.author.nickname}
             profileImage={review.author.profileImage}
-            likeCount={review.likedBy.length}
+            likeCount={review.likeCount}
             userId={review.author.id}
             content={review.contents}
             thumbnail={review.images ? review.images[0] : undefined}

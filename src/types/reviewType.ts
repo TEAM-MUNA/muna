@@ -19,6 +19,7 @@ export interface ReviewType {
   contents: string;
   images?: string[];
   likedBy: string[];
+  likeCount: number;
 }
 
 export interface ReviewPropType {
