@@ -7,6 +7,7 @@ import {
   updateUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
+  withdrawFromFirebase,
 } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
 import { firebaseAuth } from "../firebase";
@@ -143,6 +144,28 @@ export const updateProfileAsync = createAsyncThunk(
   }
 );
 
+// 회원 탈퇴 액션
+export const withdrawAsync = createAsyncThunk(
+  "auth/withdraw",
+  async (_, { rejectWithValue }) => {
+    const user = firebaseAuth.currentUser;
+
+    if (!user) {
+      return rejectWithValue("사용자를 찾을 수 없습니다.");
+    }
+
+    try {
+      await withdrawFromFirebase(user);
+      console.log("탈퇴 성공");
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("탈퇴 중 에러 발생");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -267,6 +290,21 @@ const authSlice = createSlice({
       .addCase(updateProfileAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      });
+
+    // 탈퇴 처리
+    builder
+      .addCase(withdrawAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(withdrawAsync.fulfilled, (state) => {
+        state.status = "idle";
+        state.user = null;
+        state.error = null;
+      })
+      .addCase(withdrawAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "탈퇴 실패했습니다.";
       });
   },
 });

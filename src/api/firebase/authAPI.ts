@@ -3,9 +3,11 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  reauthenticateWithCredential,
   deleteUser,
   updateProfile,
   User,
+  EmailAuthProvider,
 } from "firebase/auth";
 import {
   arrayRemove,
@@ -15,6 +17,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db, firebaseAuth } from "../../firebase";
 
@@ -101,18 +104,37 @@ export const logoutFromFirebase = async () => {
   }
 };
 
-// Firebase 계정 삭제 (탈퇴)
-export const withdrawFromFirebase = async () => {
+// Firebase 재인증 - 탈퇴, 비밀번호 변경 시 확인
+export const ReauthenticateFromFirebase = async (password: string) => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  if (user) {
+  if (user && user.email) {
+    const credential = EmailAuthProvider.credential(user.email, password);
+
     try {
-      await deleteUser(user);
-      console.log("탈퇴 성공");
+      await reauthenticateWithCredential(user, credential);
+      console.log("재인증 성공");
+      return true;
     } catch (error) {
-      console.error("탈퇴 실패:", error);
+      console.error("재인증 실패:", error);
+      return false;
     }
+  }
+
+  console.error("현재 사용자 정보가 없습니다.");
+  return false; // 사용자 정보가 없는 경우 false 반환
+};
+
+// Firebase 계정 삭제 (탈퇴)
+export const withdrawFromFirebase = async (user: User) => {
+  const userRef = doc(db, "users", user.uid);
+  await deleteDoc(userRef);
+  try {
+    await deleteUser(user);
+    console.log("탈퇴 성공");
+  } catch (error) {
+    console.error("탈퇴 실패:", error);
   }
 };
 

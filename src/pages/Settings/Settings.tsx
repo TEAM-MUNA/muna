@@ -4,15 +4,21 @@ import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { AppDispatch } from "../../app/store";
 import useToggle from "../../hooks/useToggle";
-import { logoutAsync } from "../../slices/authSlice";
+import { logoutAsync, withdrawAsync } from "../../slices/authSlice";
 import useUserRedirect from "../../hooks/useUserRedirect";
 import Modal from "../../components/common/Modal/Modal";
 import modalMessages from "../../utils/constants/modalMessages";
 import useModal from "../../hooks/useModal";
+import useInput from "../../hooks/useInput";
+import errorMessages from "../../utils/constants/errorMessages";
+import { passwordRegex } from "../../utils/validations";
+import placeholder from "../../utils/constants/placeholder";
+import { ReauthenticateFromFirebase } from "../../api/firebase/authAPI";
 
 import Button from "../../components/common/Button/Button";
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
+import Input from "../../components/common/Input/Input";
 
 export default function Settings() {
   useUserRedirect();
@@ -40,7 +46,32 @@ export default function Settings() {
   };
 
   // Modal
-  const { isOpen, openModal, closeModal } = useModal();
+  const { openModal, closeModal, isOpen } = useModal();
+
+  const {
+    value: password,
+    onChange: onPasswordChange,
+    error: passwordError,
+  } = useInput("", (value) =>
+    passwordRegex.test(value) ? null : errorMessages.invalidPassword
+  );
+
+  const handleWithdraw = async () => {
+    try {
+      const isReauthenticated = await ReauthenticateFromFirebase(password);
+      if (isReauthenticated) {
+        navigate("/");
+        await dispatch(withdrawAsync()).unwrap();
+        closeModal();
+
+        console.log("계정이 성공적으로 삭제되었습니다.");
+        toast.success("탈퇴 완료되었습니다.");
+      }
+    } catch (error) {
+      toast.error("비밀번호가 올바르지 않습니다.");
+      console.error("탈퇴 중 오류 발생:", error);
+    }
+  };
 
   return (
     <>
@@ -85,7 +116,23 @@ export default function Settings() {
         onClose={closeModal}
         color='warning'
       >
-        <Button label='탈퇴하기' color='underlined' size='md' fullWidth />
+        <Input
+          name='password'
+          value={password}
+          onChange={onPasswordChange}
+          type='password'
+          label='비밀번호'
+          error={!!passwordError}
+          message={passwordError || ""}
+          placeholder={placeholder.password}
+        />
+        <Button
+          label='탈퇴하기'
+          color='underlined'
+          size='md'
+          fullWidth
+          onClick={handleWithdraw}
+        />
       </Modal>
     </>
   );
