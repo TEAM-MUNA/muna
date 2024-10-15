@@ -1,2 +1,17 @@
-@import "../../../styles/_variables";
-@import "../../../styles/_mixin";
+@import "../../styles/_variables";
+@import "../../styles/_mixin";
+
+.category_nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 8px;
+  column-gap: 12px;
+  margin: 24px 0;
+}
+
+.recommends_container {
+  margin-top: 30px;
+  li {
+    margin-bottom: 16px;
+  }
+}
