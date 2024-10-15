@@ -25,15 +25,15 @@ export default function Settings() {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
     useToggle(false);
 
   const handleLogout = async () => {
-    if (isLoggingOut) return; // 이미 로그아웃 중이라면 중복 요청 방지
+    if (isLogout) return; // 이미 로그아웃 중이라면 중복 요청 방지
 
-    setIsLoggingOut(true);
+    setIsLogout(true);
     try {
       navigate("/");
       await dispatch(logoutAsync()).unwrap(); // unwrap()을 사용해 오류 처리
@@ -41,7 +41,7 @@ export default function Settings() {
       // } catch (error) {
       // 에러 메시지는 슬라이스에서 처리
     } finally {
-      setIsLoggingOut(false); // 완료 후 플래그 초기화
+      setIsLogout(false); // 완료 후 플래그 초기화
     }
   };
 
@@ -106,7 +106,7 @@ export default function Settings() {
         <ColumnMenuItem
           label='로그아웃'
           onClick={handleLogout}
-          disabled={isLoggingOut} // 로그아웃 진행 중 버튼 비활성화
+          disabled={isLogout} // 로그아웃 진행 중 버튼 비활성화
         />
       </ul>
       <Modal

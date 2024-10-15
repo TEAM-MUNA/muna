@@ -7,6 +7,7 @@ import {
   updateUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
+  updatePasswordToFirebase,
   withdrawFromFirebase,
 } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
@@ -140,6 +141,32 @@ export const updateProfileAsync = createAsyncThunk(
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("프로필 변경 중 에러 발생"); // 그 외 오류: 기본 메시지
+    }
+  }
+);
+
+// 비밀번호 변경 액션
+export const updatePasswordAsync = createAsyncThunk(
+  "auth/updatePassword",
+  async (
+    {
+      newPassword,
+    }: {
+      newPassword: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const user = firebaseAuth.currentUser;
+
+    try {
+      if (user) {
+        updatePasswordToFirebase(user, newPassword);
+      }
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("비밀번호 변경 중 에러 발생");
     }
   }
 );

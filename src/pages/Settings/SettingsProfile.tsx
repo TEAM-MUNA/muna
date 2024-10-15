@@ -59,7 +59,7 @@ export default function SettingsProfile() {
       return;
     }
 
-    const loadingToastId = toast.loading("프로필 수정 중...");
+    const loadingToastId = toast.loading("프로필 변경 중...");
 
     try {
       await dispatch(updateProfileAsync({ nickname, profileImage })).unwrap();
