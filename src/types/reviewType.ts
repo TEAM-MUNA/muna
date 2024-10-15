@@ -3,7 +3,10 @@ import reviewTest2 from "../assets/img/test.jpg";
 
 // Firebase에 올리는 리뷰 타입
 export interface ReviewType {
-  concertId: string;
+  concert: {
+    id: string;
+    title: string;
+  };
   reviewId: string;
   author: {
     id: string;

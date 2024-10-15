@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import poster1 from "../../assets/img/temp-poster1.png";
 import poster2 from "../../assets/img/temp-poster2.png";
@@ -8,10 +9,16 @@ import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarSco
 import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
+import useGetReviewList from "../../hooks/useGetReviewList";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
   const navigate = useNavigate();
+  const {
+    reviewList: popularReviewList,
+    isLoading: isPopularReviewListLoading,
+    error: popularReviewListError,
+  } = useGetReviewList({ popular: true });
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -80,10 +87,23 @@ export default function Main() {
         <br />
         후기를 공유하고 감동을 나눠보세요!
       </div>
-      <ReviewCard title='랭보' />
-      <ReviewCard title='랭보' />
-      <ReviewCard title='랭보' />
-      <ReviewCard title='랭보' />
+      {isPopularReviewListLoading && <HeartSpinner />}
+      {popularReviewListError && (
+        <p className={styles.error}>리뷰를 불러오는 중 문제가 발생했습니다.</p>
+      )}
+      {popularReviewList &&
+        popularReviewList.map((review) => (
+          <ReviewCard
+            key={review.reviewId}
+            title={review.concert.title}
+            nickname={review.author.nickname}
+            profileImage={review.author.profileImage}
+            likeCount={review.likedBy.length}
+            userId={review.author.id}
+            content={review.contents}
+            thumbnail={review.images ? review.images[0] : undefined}
+          />
+        ))}
     </section>
   );
 }

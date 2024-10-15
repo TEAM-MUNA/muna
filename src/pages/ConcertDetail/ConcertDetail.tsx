@@ -45,7 +45,7 @@ export default function ConcertDetail() {
     reviewList = [],
     isLoading: isReviewListLoading,
     error: reviewListError,
-  } = useGetReviewList(concertId);
+  } = useGetReviewList({ concertId });
 
   const isBookmarkedInitialState =
     concert?.bookmarkedBy?.some(
