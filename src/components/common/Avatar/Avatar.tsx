@@ -25,11 +25,11 @@ export default function Avatar({
     </>
   );
 
-  return userLink !== "" ? (
+  return size === "lg" ? (
+    <div className={`${styles.avatar} ${styles[size]}`}>{avatarContent}</div>
+  ) : (
     <Link to={userLink} className={`${styles.avatar} ${styles[size]}`}>
       {avatarContent}
     </Link>
-  ) : (
-    <div className={`${styles.avatar} ${styles[size]}`}>{avatarContent}</div>
   );
 }
