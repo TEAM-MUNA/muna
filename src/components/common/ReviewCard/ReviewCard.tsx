@@ -27,7 +27,7 @@ export default function ReviewCard({
 }: ReviewCardProps) {
   const location = useLocation();
   const pathname = location.pathname;
-  const page = pathname.split("/")[1];
+  const page = pathname.split("/")[1] || "main";
 
   return (
     <div className={`${styles.card} card_review page_${page}`}>
