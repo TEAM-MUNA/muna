@@ -2,6 +2,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   getDoc,
@@ -57,29 +58,53 @@ export const getConcertsFromFirebase = async (
 추후에 수정할 것을 고려해보겠습니다.
 */
 
-// 해당 공연에 북마크를 추가한 사용자 추가/삭제
-export const updateConcertBookmark = async (
-  userId: string,
-  concertId: string,
-  cancel: boolean = false
-) => {
-  const concertsDocRef = doc(db, "concerts", concertId);
-  const action = cancel ? arrayRemove : arrayUnion;
-
-  await updateDoc(concertsDocRef, {
-    bookmarkedBy: action(userId),
-  });
-};
-
-// Firebase에 concerts 컬렉션에 공연 추가
+// Firebase concerts 컬렉션에 공연 추가
 export const addConcert = async (concert: ConcertType) => {
   const docRef = doc(db, "concerts", concert.concertId!);
   await setDoc(docRef, {
     ...concert,
   });
-  console.log("Document written with ID: ", concert.concertId);
   return concert.concertId;
 };
 
+// Firebase concerts 컬렉션에서 공연 삭제
+export const deleteConcert = async (concertId: string) => {
+  const docRef = doc(db, "concerts", concertId);
+  await deleteDoc(docRef);
+};
+
+// 리뷰나, 북마크가 없는 공연 Firebase db에서 삭제
+export const deleteInactiveConcert = async (concertId: string) => {
+  const concert = await getConcertFromFirebase(concertId);
+
+  if (!concert) {
+    return;
+  }
+
+  if ((concert.bookmarkCount ?? 0) === 0 && (concert.reviewCount ?? 0) === 0) {
+    await deleteConcert(concertId);
+  }
+};
+
+// 해당 공연에 북마크를 추가한 사용자 추가/삭제
+export const updateConcertBookmark = async (
+  userId: string,
+  concertId: string,
+  currentBookmarkCount: number,
+  cancel: boolean = false
+) => {
+  const concertsDocRef = doc(db, "concerts", concertId);
+  const action = cancel ? arrayRemove : arrayUnion;
+  const bookmarkCount = cancel
+    ? currentBookmarkCount - 1
+    : currentBookmarkCount + 1;
+
+  await updateDoc(concertsDocRef, {
+    bookmarkedBy: action(userId),
+    bookmarkCount,
+  }).then(async () => {
+    await deleteInactiveConcert(concertId);
+  });
+};
 
 export const a = () => 0;
