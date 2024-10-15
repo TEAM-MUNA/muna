@@ -18,7 +18,7 @@ export default function Main() {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
-  } = useGetReviewList({ popular: true });
+  } = useGetReviewList({ criteria: "likeCount" });
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
