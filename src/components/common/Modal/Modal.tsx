@@ -12,6 +12,7 @@ interface DialogProps {
   description?: string;
   color?: "default" | "warning";
   children?: ReactNode;
+  innerRow?: boolean;
 }
 
 export default function Dialog({
@@ -21,6 +22,7 @@ export default function Dialog({
   description,
   color = "default",
   children,
+  innerRow = false,
 }: DialogProps) {
   // 모달이 열려 있을 때 기존 페이지영역 스크롤 비활성화
   useEffect(() => {
@@ -45,7 +47,13 @@ export default function Dialog({
           <Button label='닫기' iconOnly={<CloseIcon />} onClick={onClose} />
         </header>
         {description && <p className={styles.description}>{description}</p>}
-        {children && <div className={styles.wrapper_btn}>{children}</div>}
+        {children && (
+          <div
+            className={`${styles.wrapper_btn} ${innerRow ? styles.row : ""}`}
+          >
+            {children}
+          </div>
+        )}
       </div>
     </div>,
     document.getElementById("modal") as HTMLElement

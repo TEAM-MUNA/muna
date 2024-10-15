@@ -120,20 +120,21 @@ function LogoutMenu() {
         title='로그아웃'
         description={modalMessages.logout}
         onClose={closeModal}
+        innerRow
       >
-        <Button
-          label='로그아웃'
-          color='black'
-          size='md'
-          fullWidth
-          onClick={handleLogout}
-        />
         <Button
           label='취소'
           color='default'
           size='md'
           fullWidth
           onClick={closeModal}
+        />
+        <Button
+          label='확인'
+          color='black'
+          size='md'
+          fullWidth
+          onClick={handleLogout}
         />
       </Modal>
     </>
