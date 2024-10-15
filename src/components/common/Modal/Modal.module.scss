@@ -18,6 +18,15 @@
   h2 {
     font-size: $font-xl;
   }
+
+  &.warning {
+    h2 {
+      color: $danger;
+    }
+    .description {
+      color: $black;
+    }
+  }
 }
 
 .description {

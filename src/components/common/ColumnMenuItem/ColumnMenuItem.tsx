@@ -22,7 +22,7 @@ export default function ColumnMenuItem({
       <button
         type='button'
         onClick={onClick}
-        className={`${styles.column_menu_item} ${!buttonRight ? styles.without_icon : ""}`}
+        className={`${styles.column_menu_item} ${!buttonRight ? styles.without_icon : ""} ${isFaded ? "btn_link" : ""}`}
         disabled={disabled}
       >
         {label}
