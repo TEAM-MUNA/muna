@@ -22,7 +22,7 @@ export const defaultConcertType = {
 
 // Firebase에 올리는 공연 타입
 export interface ConcertType {
-  concertId?: string;
+  concertId?: string; // TODO: ?(옵셔널) 빼기
   title?: string;
   poster?: string;
   averageRating?: number;

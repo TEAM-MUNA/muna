@@ -2,19 +2,21 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
-  doc as firebaseDoc,
+  doc,
   DocumentData,
   getDoc,
   getDocs,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { ConcertType } from "../../types/concertType";
 
 // Firebase 공연 정보 하나 불러오는 API
 export const getConcertFromFirebase = async (
   concertId: string
 ): Promise<DocumentData | undefined> => {
-  const docRef = firebaseDoc(db, "concerts", concertId);
+  const docRef = doc(db, "concerts", concertId);
   const docSnap = await getDoc(docRef);
 
   return docSnap.exists() ? docSnap.data() : undefined;
@@ -31,7 +33,7 @@ export const getConcertsFromFirebase = async (
   if (concertIds && concertIds.length > 0) {
     // 특정 concertIds에 해당하는 공연 데이터 가져오기
     const promises = concertIds.map(async (concertId) => {
-      const docRef = firebaseDoc(db, "concerts", concertId);
+      const docRef = doc(db, "concerts", concertId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         concertData[concertId] = docSnap.data();
@@ -42,8 +44,8 @@ export const getConcertsFromFirebase = async (
   } else {
     // 모든 공연 데이터 가져오기
     const querySnapshot = await getDocs(collection(db, "concerts"));
-    querySnapshot.forEach((doc) => {
-      concertData[doc.id] = doc.data();
+    querySnapshot.forEach((fbDoc) => {
+      concertData[fbDoc.id] = fbDoc.data();
     });
   }
 
@@ -61,12 +63,23 @@ export const updateConcertBookmark = async (
   concertId: string,
   cancel: boolean = false
 ) => {
-  const concertsDocRef = firebaseDoc(db, "concerts", concertId);
+  const concertsDocRef = doc(db, "concerts", concertId);
   const action = cancel ? arrayRemove : arrayUnion;
 
   await updateDoc(concertsDocRef, {
     bookmarkedBy: action(userId),
   });
 };
+
+// Firebase에 concerts 컬렉션에 공연 추가
+export const addConcert = async (concert: ConcertType) => {
+  const docRef = doc(db, "concerts", concert.concertId!);
+  await setDoc(docRef, {
+    ...concert,
+  });
+  console.log("Document written with ID: ", concert.concertId);
+  return concert.concertId;
+};
+
 
 export const a = () => 0;
