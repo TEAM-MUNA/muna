@@ -6,7 +6,7 @@ import { useAppSelector } from "../../app/hooks";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useUserRedirect from "../../hooks/useUserRedirect";
 import { AppDispatch, RootState } from "../../app/store";
-import { updateProfileAsync, setUser } from "../../slices/authSlice";
+import { updateProfileAsync, updateUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
 
 import styles from "./Settings.module.scss";
@@ -21,36 +21,29 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 
 export default function SettingsProfile() {
-  const user = useAppSelector((state: RootState) => state.auth.user);
-
   useUserRedirect();
+  const user = useAppSelector((state: RootState) => state.auth.user);
   // const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useCurrentUser();
   const initialNickname = currentUser?.nickname || "";
+
   const { value: nickname, onChange: onNicknameChange } =
     useInput(initialNickname);
   const [profileImage, setProfileImage] = useState<string | null>(
     currentUser?.profileImage || null
   );
 
-  const handleProfileImage = async (imageUrl: string) => {
-    const profileImageUrl = await dispatch(
-      uploadProfileImage(imageUrl)
-    ).unwrap();
-    setProfileImage(profileImageUrl);
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const formData = new FormData(e.currentTarget);
-    // const data = Object.fromEntries(formData.entries());
-    const data = {
-      image: profileImage,
-      nickname,
-    };
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    // const data = {
+    //   image: profileImage,
+    //   nickname,
+    // };
     console.log(data);
 
     // 닉네임이 비어 있을 경우 오류 메시지
@@ -63,7 +56,8 @@ export default function SettingsProfile() {
 
     try {
       await dispatch(updateProfileAsync({ nickname, profileImage })).unwrap();
-      dispatch(setUser({ nickname, profileImage })); // 상태 업데이트
+      // 업데이트 후 실제 유저 정보로 상태 업데이트
+      dispatch(updateUser({ nickname, profileImage }));
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
       // navigate("/settings");
@@ -76,6 +70,13 @@ export default function SettingsProfile() {
         });
       }
     }
+  };
+
+  const handleProfileImage = async (imageUrl: string) => {
+    const profileImageUrl = await dispatch(
+      uploadProfileImage(imageUrl)
+    ).unwrap();
+    setProfileImage(profileImageUrl);
   };
 
   return (

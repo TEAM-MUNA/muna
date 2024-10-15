@@ -203,6 +203,17 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<AuthState["user"]>) => {
       state.user = action.payload;
     },
+    updateUser: (
+      state,
+      action: PayloadAction<{ nickname?: string; profileImage?: string | null }>
+    ) => {
+      if (state.user) {
+        // 기존 유저 정보에서 필요한 필드만 업데이트
+        state.user.nickname = action.payload.nickname ?? state.user.nickname;
+        state.user.profileImage =
+          action.payload.profileImage ?? state.user.profileImage;
+      }
+    },
     // logout은 extraReducers에서 처리
   },
 
@@ -335,5 +346,5 @@ const authSlice = createSlice({
       });
   },
 });
-export const { setUser } = authSlice.actions;
+export const { setUser, updateUser } = authSlice.actions;
 export default authSlice.reducer;
