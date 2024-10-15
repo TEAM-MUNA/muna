@@ -17,7 +17,7 @@ export default function Avatar({
 }: AvatarProps) {
   const avatarContent = (
     <>
-      <img src={profileImage} alt={nickname} />
+      <img src={profileImage || defaultUserType.profileImage} alt={nickname} />
       <div className={styles.text}>
         <p className={styles.nickname}>{nickname}</p>
         <p className={styles.id}>{userId}</p>
