@@ -12,7 +12,6 @@ export const genreList = [
 ];
 
 export const genreMap: { [key: string]: string } = {
-  전체: "", // 전체 장르
   뮤지컬: "GGGA",
   연극: "AAAA",
   국악: "CCCC",
@@ -22,4 +21,5 @@ export const genreMap: { [key: string]: string } = {
   "서커스/마술": "EEEB",
   대중무용: "BBBE",
   기타: "EEEA",
+  전체: "", // 전체 장르
 };
