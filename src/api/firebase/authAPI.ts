@@ -3,6 +3,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
   updateProfile,
   User,
 } from "firebase/auth";
@@ -97,6 +98,21 @@ export const logoutFromFirebase = async () => {
     console.log("로그아웃 성공");
   } catch (error) {
     console.error("로그아웃 실패:", error);
+  }
+};
+
+// Firebase 계정 삭제 (탈퇴)
+export const withdrawFromFirebase = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      await deleteUser(user);
+      console.log("탈퇴 성공");
+    } catch (error) {
+      console.error("탈퇴 실패:", error);
+    }
   }
 };
 
