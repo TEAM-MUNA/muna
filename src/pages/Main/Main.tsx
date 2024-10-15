@@ -3,17 +3,32 @@ import styles from "./Main.module.scss";
 import poster1 from "../../assets/img/temp-poster1.png";
 import poster2 from "../../assets/img/temp-poster2.png";
 import poster3 from "../../assets/img/temp-poster3.png";
+import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
+import Button from "../../components/common/Button/Button";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
-  const mainShowingConcertGenre = "뮤지컬";
+  // const mainShowingConcertGenre = "뮤지컬";
+
+  const genreList = [
+    "뮤지컬",
+    "연극",
+    "콘서트",
+    "클래식",
+    "가족/아동",
+    "오페라",
+    "모든 공연 보기",
+  ];
 
   return (
     <section className={styles.main}>
       <h2 className='sr_only'>메인</h2>
-      <div className={styles.star}>별</div>
+      <div className={styles.star}>
+        <StarScoreOnlyIcon primary rating={5} />
+      </div>
       <p className={styles.main_showing_concert_title}>
-        {mainShowingConcertGenre} &lt;{mainShowingConcertTitle}&gt;
+        {mainShowingConcertTitle}
       </p>
       <figure className={styles.main_showing_concert_posters}>
         <img src={poster1} alt='메인 인기 포스터1' width={182} />
@@ -48,8 +63,26 @@ export default function Main() {
           </cite>
         </div>
       </div>
-      <div className={styles.category_nav}>button</div>
-      
+      <div className={styles.category_nav}>
+        {genreList.map((genre, index) => (
+          <Button
+            key={genre}
+            label={genre}
+            color='default'
+            size='md'
+            className={index === genreList.length - 1 ? styles.fullWidth : ""}
+          />
+        ))}
+      </div>
+      <div className={styles.share_your_experience}>
+        최근 관람한 공연이 있나요?
+        <br />
+        후기를 공유하고 감동을 나눠보세요!
+      </div>
+      <ReviewCard title='랭보' />
+      <ReviewCard title='랭보' />
+      <ReviewCard title='랭보' />
+      <ReviewCard title='랭보' />
     </section>
   );
 }
