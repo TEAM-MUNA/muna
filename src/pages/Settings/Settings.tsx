@@ -29,9 +29,9 @@ export default function Settings() {
 
     setIsLoggingOut(true);
     try {
+      navigate("/");
       await dispatch(logoutAsync()).unwrap(); // unwrap()을 사용해 오류 처리
       toast.success("로그아웃 되었습니다.");
-      navigate("/");
       // } catch (error) {
       // 에러 메시지는 슬라이스에서 처리
     } finally {

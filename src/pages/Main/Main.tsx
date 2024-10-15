@@ -1,19 +1,39 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import poster1 from "../../assets/img/temp-poster1.png";
 import poster2 from "../../assets/img/temp-poster2.png";
 import poster3 from "../../assets/img/temp-poster3.png";
+import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
+import Button from "../../components/common/Button/Button";
+import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
+import { genreMap } from "../../utils/constants/genreData";
+import useGetReviewList from "../../hooks/useGetReviewList";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
-  const mainShowingConcertGenre = "뮤지컬";
+  const navigate = useNavigate();
+  const {
+    reviewList: popularReviewList,
+    isLoading: isPopularReviewListLoading,
+    error: popularReviewListError,
+  } = useGetReviewList({ popular: true });
+
+  const goToConcertList = (code: string) => {
+    const navigateUrl =
+      code.length === 0 ? `/concert` : `/concert?genre=${code}`;
+    navigate(navigateUrl);
+  };
 
   return (
     <section className={styles.main}>
       <h2 className='sr_only'>메인</h2>
-      <div className={styles.star}>별</div>
+      <div className={styles.star}>
+        <StarScoreOnlyIcon primary rating={5} />
+      </div>
       <p className={styles.main_showing_concert_title}>
-        {mainShowingConcertGenre} &lt;{mainShowingConcertTitle}&gt;
+        {mainShowingConcertTitle}
       </p>
       <figure className={styles.main_showing_concert_posters}>
         <img src={poster1} alt='메인 인기 포스터1' width={182} />
@@ -48,8 +68,42 @@ export default function Main() {
           </cite>
         </div>
       </div>
-      <div className={styles.category_nav}>button</div>
-      
+      <div className={styles.category_nav}>
+        {Object.entries(genreMap).map(([genre, code]) => (
+          <Button
+            key={code}
+            label={genre === "전체" ? "모든 공연 보기" : genre}
+            color='default'
+            size='md'
+            className={code === "" ? styles.fullWidth : ""}
+            onClick={() => {
+              goToConcertList(code);
+            }}
+          />
+        ))}
+      </div>
+      <div className={styles.share_your_experience}>
+        최근 관람한 공연이 있나요?
+        <br />
+        후기를 공유하고 감동을 나눠보세요!
+      </div>
+      {isPopularReviewListLoading && <HeartSpinner />}
+      {popularReviewListError && (
+        <p className={styles.error}>리뷰를 불러오는 중 문제가 발생했습니다.</p>
+      )}
+      {popularReviewList &&
+        popularReviewList.map((review) => (
+          <ReviewCard
+            key={review.reviewId}
+            title={review.concert.title}
+            nickname={review.author.nickname}
+            profileImage={review.author.profileImage}
+            likeCount={review.likeCount}
+            userId={review.author.id}
+            content={review.contents}
+            thumbnail={review.images ? review.images[0] : undefined}
+          />
+        ))}
     </section>
   );
 }

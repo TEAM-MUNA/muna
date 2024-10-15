@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { ReviewType } from "../types/reviewType";
 import { getReviewListFromFirebase } from "../api/firebase/reviewAPI";
 
-const useGetReviewList = (mt20id: string | undefined) => {
+const useGetReviewList = ({
+  concertId,
+  popular = false,
+}: {
+  concertId?: string | undefined;
+  popular?: boolean;
+}) => {
   const [reviewList, setReviewList] = useState<ReviewType[] | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -12,13 +18,8 @@ const useGetReviewList = (mt20id: string | undefined) => {
       setIsLoading(true);
       setError(null);
 
-      if (!mt20id) {
-        setError("공연이 존재하지 않습니다.");
-        return;
-      }
-
       try {
-        const reviewData = await getReviewListFromFirebase(mt20id);
+        const reviewData = await getReviewListFromFirebase(concertId, popular);
         setReviewList(reviewData as ReviewType[]);
       } catch (e) {
         console.error(e);
@@ -27,7 +28,7 @@ const useGetReviewList = (mt20id: string | undefined) => {
       }
     };
     getData();
-  }, [mt20id]);
+  }, [concertId]);
 
   return { reviewList, isLoading, error };
 };

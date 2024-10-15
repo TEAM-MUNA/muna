@@ -2,32 +2,39 @@ import {
   collection,
   DocumentData,
   getDocs,
+  limit,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
-// Firebase에서 해당 공연의 리뷰 리스트 불러오기
+// Firebase에서 리뷰 리스트 불러오기
 export const getReviewListFromFirebase = async (
-  concertId: string
+  concertId?: string,
+  popular: boolean = false
 ): Promise<DocumentData | undefined> => {
-  try {
-    const docRef = collection(db, "reviews");
-    const q = query(docRef, where("concertId", "==", concertId));
-    const querySnapshot = await getDocs(q);
+  const docRef = collection(db, "reviews");
+  let q;
 
-    const reviews:
-      | DocumentData
-      | PromiseLike<DocumentData | undefined>
-      | undefined = [];
-    querySnapshot.forEach((doc) => {
-      reviews.push({ reviewId: doc.id, ...doc.data() });
-    });
-    return reviews;
-  } catch (error) {
-    console.error("리뷰 불러오기 실패", error);
-    return [];
+  console.log(concertId, popular);
+
+  if (popular) {
+    // 인기 리뷰 (메인 페이지에서 보여줌)
+    q = query(docRef, orderBy("likeCount", "desc"), limit(10)); // length도 옵션으로 받기
+  } else {
+    // 특정 공연에 해당하는 리뷰
+    q = query(docRef, where("concertId", "==", concertId));
   }
+
+  const querySnapshot = await getDocs(q);
+
+  const reviewList = querySnapshot.docs.map((fbDoc) => ({
+    reviewId: fbDoc.id,
+    ...fbDoc.data(),
+  }));
+  console.log(reviewList);
+  return reviewList;
 };
 
 export const a = () => null;

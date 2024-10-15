@@ -2,7 +2,7 @@
 @import "../../styles/_mixin";
 
 .concert_detail {
-  line-height: 1.5;
+  line-height: $font-height-lg;
 
   .info_update {
     @include full_width;
@@ -52,6 +52,7 @@
         font-size: $font-2xl;
         font-weight: $font-bold;
         margin-top: 10px;
+        margin-bottom: 8px;
       }
 
       .rating {
@@ -68,6 +69,12 @@
         .rating_text {
           font-size: $font-sm;
           font-weight: $font-medium;
+
+          &_gray {
+            font-size: $font-sm;
+            font-weight: $font-medium;
+            color: $black-light;
+          }
         }
       }
       .concert_info {

@@ -15,6 +15,7 @@ export const defaultConcertType = {
   poster: posterDefault,
   averageRating: 5.0,
   bookmarkedBy: [],
+  bookmarkCount: 0,
   reviews: [],
   // TODO: ..살펴보기
   concertLink: "/",
@@ -22,12 +23,14 @@ export const defaultConcertType = {
 
 // Firebase에 올리는 공연 타입
 export interface ConcertType {
-  concertId?: string;
+  concertId?: string; // TODO: ?(옵셔널) 빼기
   title?: string;
   poster?: string;
   averageRating?: number;
   bookmarkedBy?: string[];
   reviews?: string[];
+  reviewCount?: number;
+  bookmarkCount?: number;
 }
 
 // 공연 정보(kopis)로부터 받아오는 공연 타입
@@ -50,3 +53,8 @@ export interface ConcertReturnType {
   dtguidance: string; // 공연시간
   entrpsnm: string; // 극단 등
 }
+
+// 위에 두가지 타입 통합
+// 공연 목록 정렬을 위해서는 각각의 아이템에 비교를 위한 기준이 있어야됨.
+// (averageRating, bookmarkedBy, reviews)
+export type IntergratedConcertType = ConcertType & ConcertReturnType;

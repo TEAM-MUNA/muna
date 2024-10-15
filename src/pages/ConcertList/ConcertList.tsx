@@ -30,16 +30,19 @@ export default function ConcertList() {
         fetchConcertList(genreCode, pfStateCode, regionCode, page)
       )
     );
-    // 모든 데이터를 평평하게 펼쳐서 concertList에 추가
-    const combinedData = dataList.flat();
+    const allConcerts = dataList.flat();
+
+    const sortedList = sortConcertList(allConcerts, sortOrder);
     setConcertList((prevData) =>
-      sortConcertList([...prevData, ...combinedData], sortOrder)
+      page === 1
+        ? sortedList
+        : sortConcertList([...prevData, ...sortedList], sortOrder)
     );
   };
 
   useEffect(() => {
     setConcertList([]); // 필터 값 변경 시 리스트 초기화
-  }, [genreCode, pfStateCode, regionCodeList]);
+  }, [genreCode, pfStateCode, regionCodeList, sortOrder]);
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
@@ -50,7 +53,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [genreCode, pfStateCode, regionCodeList, page]);
+  }, [genreCode, pfStateCode, regionCodeList, page, sortOrder]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -121,6 +124,7 @@ export default function ConcertList() {
 
   // 정렬이 변경될 때마다 concertList 정렬
   useEffect(() => {
+    console.log(sortOrder);
     setConcertList((prevData) => sortConcertList(prevData, sortOrder));
   }, [sortOrder]);
 
