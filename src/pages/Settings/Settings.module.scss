@@ -1,6 +1,25 @@
 @import "../../styles/_variables";
 @import "../../styles/_mixin";
 
+.container {
+  padding: 16px 0;
+
+  form {
+    margin-top: 44px;
+    text-align: center;
+  }
+}
+
+.wrapper_inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+}
+
 .modal_withdraw_inner {
   display: flex;
   flex-direction: column;
