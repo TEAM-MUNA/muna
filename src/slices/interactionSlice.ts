@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { updateUserBookmark } from "../api/firebase/authAPI";
-import { updateConcertBookmark } from "../api/firebase/concertAPI";
+import {
+  addConcert,
+  getConcertFromFirebase,
+  updateConcertBookmark,
+} from "../api/firebase/concertAPI";
 import { UserType } from "../types/userType";
+import { ConcertType } from "../types/concertType";
 
 // 사용자 인터렉션
 
@@ -23,18 +28,26 @@ export const bookmarkConcertAsync = createAsyncThunk(
   async (
     {
       userId,
-      concertId,
+      concert,
       cancel = false,
-    }: { userId: string; concertId: string; cancel?: boolean },
+    }: { userId: string; concert: ConcertType; cancel?: boolean },
     { rejectWithValue }
   ) => {
     try {
+      const firebaseConcert = await getConcertFromFirebase(concert.concertId!);
+
+      if (!firebaseConcert) {
+        await addConcert(concert);
+      }
+
       await Promise.all([
-        updateConcertBookmark(userId, concertId, cancel),
-        updateUserBookmark(userId, concertId, cancel),
+        updateConcertBookmark(userId, concert.concertId!, cancel),
+        updateUserBookmark(userId, concert.concertId!, cancel),
       ]);
       return true;
     } catch (error) {
+      console.log("bookmarkconceertasync", error);
+
       return rejectWithValue(error);
     }
   }

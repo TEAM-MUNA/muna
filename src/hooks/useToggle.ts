@@ -8,7 +8,7 @@ const useToggle = (initialState: boolean = false) => {
   }, [initialState]);
 
   const onToggle = () => {
-    setIsActive(!isActive);
+    setIsActive((prev) => !prev);
   };
 
   return { isActive, onToggle };
