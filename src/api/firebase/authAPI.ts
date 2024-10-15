@@ -31,8 +31,8 @@ export const signupToFirebase = async (email: string, password: string) => {
 // Firebase 회원가입 시 프로필 업데이트 API 호출
 export const updateProfileToFirebase = async (
   user: User,
-  nickname: string,
-  profileImage: string | null
+  nickname?: string,
+  profileImage?: string | null
 ) => {
   await updateProfile(user, {
     displayName: nickname,
@@ -67,7 +67,7 @@ export const loginToFirebase = async (email: string, password: string) => {
 // Firebase 로그아웃 API 호출
 export const logoutFromFirebase = async () => {
   try {
-  await signOut(firebaseAuth);
+    await signOut(firebaseAuth);
     console.log("로그아웃 성공");
   } catch (error) {
     console.error("로그아웃 실패:", error);
@@ -95,3 +95,34 @@ export const updateUserBookmark = async (
     bookmarkedConcerts: action(concertId),
   });
 };
+
+// Firebase 프로필(닉네임, 이미지) 변경시 프로필 업데이트 API 호출
+// export const updateProfileToFirebase = async (
+//   nickname: string,
+//   profileImage: string | null
+// ) => {
+//   const user = firebaseAuth.currentUser;
+//   if (user) {
+//     updateProfile(user, {
+//       displayName: nickname,
+//       photoURL: profileImage,
+//     })
+//       .then(() => {
+//         console.log("프로필 변경 성공");
+//       })
+//       .catch((error) => {
+//         console.error("프로필 변경 실패:", error);
+//       });
+//   }
+// };
+
+// Firebase 비밀번호 변경시 프로필 업데이트 API 호출
+// export const updatePasswordToFirebase = async (
+//   user: User,
+//   nickname: string,
+// ) => {
+//   await updateProfile(user, {
+//     displayName: nickname,
+//     photoURL: profileImage,
+//   });
+// };
