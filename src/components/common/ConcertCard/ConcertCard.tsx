@@ -30,7 +30,10 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
   }, []);
 
   return (
-    <Link to='/임시' className={`${styles.concertCard} card_concert`}>
+    <Link
+      to={`/concert/${concert.mt20id}`}
+      className={`${styles.concertCard} card_concert`}
+    >
       <div className={styles.poster}>
         <img src={concert.poster} alt={concert.prfnm} />
       </div>
