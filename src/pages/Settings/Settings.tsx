@@ -19,6 +19,7 @@ import Button from "../../components/common/Button/Button";
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 import Input from "../../components/common/Input/Input";
+import styles from "./Settings.module.scss";
 
 export default function Settings() {
   useUserRedirect();
@@ -116,23 +117,25 @@ export default function Settings() {
         onClose={closeModal}
         color='warning'
       >
-        <Input
-          name='password'
-          value={password}
-          onChange={onPasswordChange}
-          type='password'
-          label='비밀번호'
-          error={!!passwordError}
-          message={passwordError || ""}
-          placeholder={placeholder.password}
-        />
-        <Button
-          label='탈퇴하기'
-          color='underlined'
-          size='md'
-          fullWidth
-          onClick={handleWithdraw}
-        />
+        <div className={styles.modal_withdraw_inner}>
+          <Input
+            name='password'
+            value={password}
+            onChange={onPasswordChange}
+            type='password'
+            label='비밀번호'
+            error={!!passwordError}
+            message={passwordError || ""}
+            placeholder={placeholder.password}
+          />
+          <Button
+            label='탈퇴하기'
+            color='underlined'
+            size='md'
+            fullWidth
+            onClick={handleWithdraw}
+          />
+        </div>
       </Modal>
     </>
   );
