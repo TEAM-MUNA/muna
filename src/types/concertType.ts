@@ -50,3 +50,8 @@ export interface ConcertReturnType {
   dtguidance: string; // 공연시간
   entrpsnm: string; // 극단 등
 }
+
+// 위에 두가지 타입 통합
+// 공연 목록 정렬을 위해서는 각각의 아이템에 비교를 위한 기준이 있어야됨.
+// (averageRating, bookmarkedBy, reviews)
+export type IntergratedConcertType = ConcertType & ConcertReturnType;

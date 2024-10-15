@@ -1,9 +1,11 @@
 import {
   arrayRemove,
   arrayUnion,
-  doc,
+  collection,
+  doc as firebaseDoc,
   DocumentData,
   getDoc,
+  getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -12,10 +14,40 @@ import { db } from "../../firebase";
 export const getConcertFromFirebase = async (
   concertId: string
 ): Promise<DocumentData | undefined> => {
-  const docRef = doc(db, "concerts", concertId);
+  const docRef = firebaseDoc(db, "concerts", concertId);
   const docSnap = await getDoc(docRef);
 
   return docSnap.exists() ? docSnap.data() : undefined;
+};
+
+// Firebase 공연 여러개의 정보를 불러오기
+// concertIds 배열을 넣으면 해당 공연의 정보들을 불러옴
+// 인자없이 호출 시에는 모든 공연의 정보를 가져옴
+export const getConcertsFromFirebase = async (
+  concertIds?: string[]
+): Promise<{ [key: string]: DocumentData }> => {
+  const concertData: { [key: string]: DocumentData } = {};
+
+  if (concertIds && concertIds.length > 0) {
+    // 특정 concertIds에 해당하는 공연 데이터 가져오기
+    const promises = concertIds.map(async (concertId) => {
+      const docRef = firebaseDoc(db, "concerts", concertId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        concertData[concertId] = docSnap.data();
+      }
+    });
+
+    await Promise.all(promises);
+  } else {
+    // 모든 공연 데이터 가져오기
+    const querySnapshot = await getDocs(collection(db, "concerts"));
+    querySnapshot.forEach((doc) => {
+      concertData[doc.id] = doc.data();
+    });
+  }
+
+  return concertData;
 };
 /*
 처음에는 함수명에 Firebase 명칭 붙여서 구분하기 쉽게 하려고 했지만, 
@@ -29,7 +61,7 @@ export const updateConcertBookmark = async (
   concertId: string,
   cancel: boolean = false
 ) => {
-  const concertsDocRef = doc(db, "concerts", concertId);
+  const concertsDocRef = firebaseDoc(db, "concerts", concertId);
   const action = cancel ? arrayRemove : arrayUnion;
 
   await updateDoc(concertsDocRef, {
