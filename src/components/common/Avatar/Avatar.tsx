@@ -17,7 +17,7 @@ export default function Avatar({
 }: AvatarProps) {
   const avatarContent = (
     <>
-      <img src={profileImage} alt={nickname} />
+      <img src={profileImage || defaultUserType.profileImage} alt={nickname} />
       <div className={styles.text}>
         <p className={styles.nickname}>{nickname}</p>
         <p className={styles.id}>{userId}</p>
@@ -25,11 +25,11 @@ export default function Avatar({
     </>
   );
 
-  return userLink !== "" ? (
+  return size === "lg" ? (
+    <div className={`${styles.avatar} ${styles[size]}`}>{avatarContent}</div>
+  ) : (
     <Link to={userLink} className={`${styles.avatar} ${styles[size]}`}>
       {avatarContent}
     </Link>
-  ) : (
-    <div className={`${styles.avatar} ${styles[size]}`}>{avatarContent}</div>
   );
 }

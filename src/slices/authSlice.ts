@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-
 import {
   loginToFirebase,
   logoutFromFirebase,
   setUserOnDoc,
+  updateUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
 } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
+import { firebaseAuth } from "../firebase";
 
 interface AuthState {
   user: UserType | null;
@@ -103,6 +104,45 @@ export const logoutAsync = createAsyncThunk(
   }
 );
 
+// 프로필 변경하기 액션
+export const updateProfileAsync = createAsyncThunk(
+  "auth/updateProfile",
+  async (
+    {
+      nickname,
+      profileImage,
+    }: {
+      nickname: string;
+      profileImage: string | null;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const user = firebaseAuth.currentUser;
+      if (user) {
+        await updateProfileToFirebase(user, nickname, profileImage);
+
+        // Firestore에 사용자 정보 업데이트
+        await updateUserOnDoc(user, nickname, profileImage);
+
+        // Firebase에서 업데이트된 사용자 정보를 가져와서 리덕스에 저장
+        const updatedUser = {
+          nickname,
+          profileImage: profileImage || user.photoURL || null, // 이미지가 없으면 기존 이미지 사용
+        };
+
+        return updatedUser; // 반환값
+      }
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        console.log("파이어베이스 에러:", error.message);
+        return rejectWithValue(error.message); // firebase 오류일 경우
+      }
+      return rejectWithValue("프로필 변경 중 에러 발생"); // 그 외 오류: 기본 메시지
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -187,6 +227,46 @@ const authSlice = createSlice({
       .addCase(logoutAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "로그아웃에 실패했습니다.";
+      });
+
+    // 프로필 변경 처리
+    builder
+      .addCase(updateProfileAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(
+        updateProfileAsync.fulfilled,
+        (
+          state,
+          action: PayloadAction<
+            | {
+                nickname: string | null;
+                profileImage: string | null;
+              }
+            | undefined
+          >
+        ) => {
+          state.status = "succeeded";
+          console.log(action.payload);
+
+          if (action.payload) {
+            state.user = {
+              ...state.user, // 기존의 state.user 속성 유지
+              nickname: action.payload.nickname ?? state.user?.nickname, // 닉네임 업데이트
+              profileImage:
+                action.payload.profileImage ?? state.user?.profileImage, // 프로필 이미지 업데이트
+            };
+            state.status = "succeeded";
+            state.error = null;
+          } else {
+            state.status = "failed";
+          }
+        }
+      )
+      .addCase(updateProfileAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
   },
 });
