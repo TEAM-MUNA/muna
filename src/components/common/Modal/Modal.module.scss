@@ -18,9 +18,20 @@
   h2 {
     font-size: $font-xl;
   }
+
+  &.warning {
+    h2 {
+      color: $danger;
+    }
+    .description {
+      color: $black;
+    }
+  }
 }
 
 .description {
+  font-size: $font-md;
+  line-height: $font-height-lg;
   color: $black-light;
   margin-top: 10px;
 }

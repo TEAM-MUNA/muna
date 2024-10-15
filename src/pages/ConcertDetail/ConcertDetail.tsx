@@ -45,7 +45,7 @@ export default function ConcertDetail() {
     reviewList = [],
     isLoading: isReviewListLoading,
     error: reviewListError,
-  } = useGetReviewList(concertId);
+  } = useGetReviewList({ concertId });
 
   const isBookmarkedInitialState =
     concert?.bookmarkedBy?.some(
@@ -82,11 +82,20 @@ export default function ConcertDetail() {
 
   // 북마크 토글
   const handleBookmark = async () => {
-    if (userId) {
+    console.log(userId, concert);
+    if (userId && concertDetail) {
       onBookmarkToggle();
       try {
         await dispatch(
-          bookmarkConcertAsync({ userId, concertId, cancel: isBookmarked })
+          bookmarkConcertAsync({
+            userId,
+            concert: {
+              concertId: concertDetail.mt20id,
+              title: concertDetail.prfnm,
+              poster: concertDetail.poster,
+            },
+            cancel: isBookmarked,
+          })
         ).unwrap();
 
         toast.success(
@@ -94,8 +103,8 @@ export default function ConcertDetail() {
         );
       } catch (e) {
         console.error(e);
-        onBookmarkToggle(); // 북마크 해제
         toast.error("북마크에 추가하지 못했습니다.");
+        onBookmarkToggle(); // 북마크 해제
       }
     } else {
       // TODO: 로그인 페이지로 이동 등 처리 필요

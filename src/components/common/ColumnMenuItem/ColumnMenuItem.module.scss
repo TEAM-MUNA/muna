@@ -11,9 +11,6 @@
     padding: 20px;
     .column_menu_item {
       padding: 0;
-      width: auto;
-      color: $black-lighter;
-      text-decoration: underline;
     }
   }
 }
@@ -26,7 +23,6 @@
   background: none;
   align-items: center;
   padding: 20px;
-  line-height: 23px;
   color: $black;
 
   &.without_icon {

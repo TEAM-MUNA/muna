@@ -1,14 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-
 import {
   loginToFirebase,
   logoutFromFirebase,
   setUserOnDoc,
+  updateUserOnDoc,
   signupToFirebase,
   updateProfileToFirebase,
+  updatePasswordToFirebase,
+  withdrawFromFirebase,
 } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
+import { firebaseAuth } from "../firebase";
 
 interface AuthState {
   user: UserType | null;
@@ -103,6 +106,93 @@ export const logoutAsync = createAsyncThunk(
   }
 );
 
+// 프로필 변경하기 액션
+export const updateProfileAsync = createAsyncThunk(
+  "auth/updateProfile",
+  async (
+    {
+      nickname,
+      profileImage,
+    }: {
+      nickname: string;
+      profileImage: string | null;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const user = firebaseAuth.currentUser;
+      if (user) {
+        await updateProfileToFirebase(user, nickname, profileImage);
+
+        // Firestore에 사용자 정보 업데이트
+        await updateUserOnDoc(user, nickname, profileImage);
+
+        // Firebase에서 업데이트된 사용자 정보를 가져와서 리덕스에 저장
+        const updatedUser = {
+          nickname,
+          profileImage: profileImage || user.photoURL || null, // 이미지가 없으면 기존 이미지 사용
+        };
+
+        return updatedUser; // 반환값
+      }
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        console.log("파이어베이스 에러:", error.message);
+        return rejectWithValue(error.message); // firebase 오류일 경우
+      }
+      return rejectWithValue("프로필 변경 중 에러 발생"); // 그 외 오류: 기본 메시지
+    }
+  }
+);
+
+// 비밀번호 변경 액션
+export const updatePasswordAsync = createAsyncThunk(
+  "auth/updatePassword",
+  async (
+    {
+      newPassword,
+    }: {
+      newPassword: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const user = firebaseAuth.currentUser;
+
+    try {
+      if (user) {
+        updatePasswordToFirebase(user, newPassword);
+      }
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("비밀번호 변경 중 에러 발생");
+    }
+  }
+);
+
+// 회원 탈퇴 액션
+export const withdrawAsync = createAsyncThunk(
+  "auth/withdraw",
+  async (_, { rejectWithValue }) => {
+    const user = firebaseAuth.currentUser;
+
+    if (!user) {
+      return rejectWithValue("사용자를 찾을 수 없습니다.");
+    }
+
+    try {
+      await withdrawFromFirebase(user);
+      console.log("탈퇴 성공");
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("탈퇴 중 에러 발생");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -112,6 +202,17 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<AuthState["user"]>) => {
       state.user = action.payload;
+    },
+    updateUser: (
+      state,
+      action: PayloadAction<{ nickname?: string; profileImage?: string | null }>
+    ) => {
+      if (state.user) {
+        // 기존 유저 정보에서 필요한 필드만 업데이트
+        state.user.nickname = action.payload.nickname ?? state.user.nickname;
+        state.user.profileImage =
+          action.payload.profileImage ?? state.user.profileImage;
+      }
     },
     // logout은 extraReducers에서 처리
   },
@@ -188,7 +289,62 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message ?? "로그아웃에 실패했습니다.";
       });
+
+    // 프로필 변경 처리
+    builder
+      .addCase(updateProfileAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(
+        updateProfileAsync.fulfilled,
+        (
+          state,
+          action: PayloadAction<
+            | {
+                nickname: string | null;
+                profileImage: string | null;
+              }
+            | undefined
+          >
+        ) => {
+          state.status = "succeeded";
+          console.log(action.payload);
+
+          if (action.payload) {
+            state.user = {
+              ...state.user, // 기존의 state.user 속성 유지
+              nickname: action.payload.nickname ?? state.user?.nickname, // 닉네임 업데이트
+              profileImage:
+                action.payload.profileImage ?? state.user?.profileImage, // 프로필 이미지 업데이트
+            };
+            state.status = "succeeded";
+            state.error = null;
+          } else {
+            state.status = "failed";
+          }
+        }
+      )
+      .addCase(updateProfileAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
+
+    // 탈퇴 처리
+    builder
+      .addCase(withdrawAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(withdrawAsync.fulfilled, (state) => {
+        state.status = "idle";
+        state.user = null;
+        state.error = null;
+      })
+      .addCase(withdrawAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "탈퇴 실패했습니다.";
+      });
   },
 });
-export const { setUser } = authSlice.actions;
+export const { setUser, updateUser } = authSlice.actions;
 export default authSlice.reducer;

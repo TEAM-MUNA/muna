@@ -21,7 +21,7 @@
     .description {
       font-size: $font-sm;
       color: $black;
-      line-height: 14px;
+      line-height: $font-height-lg;
 
       &_not_selected {
         font-size: $font-sm;

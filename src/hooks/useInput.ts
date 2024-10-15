@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /* eslint-disable default-param-last */
 const useInput = (
@@ -7,6 +7,10 @@ const useInput = (
 ) => {
   const [value, setValue] = useState<string>(initialValue);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

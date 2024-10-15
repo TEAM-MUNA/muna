@@ -11,7 +11,7 @@ body {
 body {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: none;
-  line-height: 1.2;
+  line-height: $font-height-md;
   background: #ddd;
   overflow: hidden;
 }
@@ -106,6 +106,14 @@ dd {
   top: 0;
   background-color: $black-lighter;
   z-index: $z-modal;
+}
+
+button.btn_link,
+a.btn_link {
+  color: $black-lighter;
+  width: auto;
+  padding: 0;
+  text-decoration: underline;
 }
 
 // 카드리스트 공통

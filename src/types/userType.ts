@@ -4,7 +4,7 @@ export interface UserType {
   userId?: string;
   email?: string;
   nickname?: string;
-  profileImage?: string;
+  profileImage?: string | null;
   userLink?: string;
   bookmarkedConcerts?: string[];
   reviews?: string[];
