@@ -12,6 +12,7 @@ interface ButtonProps {
     | "primary_line"
     | "danger"
     | "black"
+    | "underlined"
     | undefined;
   iconRight?: ReactNode | undefined;
   iconOnly?: ReactNode | undefined;
@@ -43,6 +44,7 @@ export default function Button({
       className={`
         ${styles.btn} 
         ${size ? styles[size] : ""} 
+        ${color === "underlined" ? "btn_link" : ""} 
         ${color ? styles[color] : ""} 
         ${fullWidth ? styles.full : ""} 
         ${iconRight ? styles.has_icon_right : ""} 

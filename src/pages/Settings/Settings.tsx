@@ -83,8 +83,9 @@ export default function Settings() {
         title='회원 탈퇴'
         description={modalMessages.withdraw}
         onClose={closeModal}
+        color='warning'
       >
-        <Button label='취소' color='default' fullWidth />
+        <Button label='탈퇴하기' color='underlined' size='md' fullWidth />
       </Modal>
     </>
   );
