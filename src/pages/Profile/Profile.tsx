@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
-import { getUserBookmark } from "../../api/firebase/authAPI";
 import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
@@ -37,17 +36,19 @@ function BookmarkList() {
     { concertId: string; title: string; poster: string }[]
   >([]);
 
+  // 북마크 리스트
+  // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
+  const bookmarkedConcertsId = useCurrentUser().bookmarkedConcerts;
+  console.log(bookmarkedConcertsId);
+
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
         if (userId) {
-          // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
-          const userBookmarkedIds = (await getUserBookmark(userId)) || [];
-
           // 2. 북마크 콘서트의 title과 poster 가져오기
-          if (userBookmarkedIds.length > 0) {
+          if (bookmarkedConcertsId && bookmarkedConcertsId.length > 0) {
             const bookmarkedConcertData =
-              await getConcertsForBookmarkList(userBookmarkedIds);
+              await getConcertsForBookmarkList(bookmarkedConcertsId);
             setBookmarkedConcerts(Object.values(bookmarkedConcertData));
           }
         }

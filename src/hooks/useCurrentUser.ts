@@ -11,7 +11,7 @@ const useCurrentUser = () => {
     email: user?.email,
     nickname: user?.nickname,
     profileImage: user?.profileImage,
-    bookmarkedConcert: userInteraction?.bookmarkedConcerts,
+    bookmarkedConcerts: userInteraction?.bookmarkedConcerts,
     reviews: userInteraction?.reviews,
     likedReviews: userInteraction?.likedReviews,
   };
