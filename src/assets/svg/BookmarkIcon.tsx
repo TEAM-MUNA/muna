@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function BookmarkIcon({
-  size = defaultIconProps.size,
+  size = defaultIconProps.size.md,
   active = defaultIconProps.active,
 }: IconProps) {
   return (

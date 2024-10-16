@@ -4,7 +4,7 @@ import { IconProps, defaultIconProps } from "../../types/iconProps";
 // ellipsis-vertical
 // 점 세개 세로로 있는
 export default function KebabMenuIcon({
-  size = defaultIconProps.size,
+  size = defaultIconProps.size.md,
 }: IconProps) {
   return (
     <svg

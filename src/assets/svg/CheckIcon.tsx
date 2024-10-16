@@ -1,7 +1,9 @@
 import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
-export default function CheckIcon({ size = defaultIconProps.size }: IconProps) {
+export default function CheckIcon({
+  size = defaultIconProps.size.md,
+}: IconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

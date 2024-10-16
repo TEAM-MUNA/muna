@@ -15,14 +15,15 @@ import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
-// 1. 현재 로그인한 사용자의 정보 불러오기 (화)
+// 1. 현재 로그인한 사용자의 정보 불러오기 - 완료
 // * 주소에 따라 해당 유저 프로필이 보여야 함
 // ㄴ 상단 프로필
+// 2. 북마크리스트, 리뷰리스트
 // ㄴ 북마크한 콘서트 - 제목, 이미지
 // ㄴ 리뷰 - 공연제목, 썸네일, 복수 이미지 여부, 내용미리보기, 좋아요, 별점, 관람일
-// 2. 북마크 기능 (-목)
+// 3. 북마크 기능
 // ㄴ 북마크 버튼 누르면 해제 + 토스트 알림 (실행취소 버튼)
-// 3. 필터와 정렬기능 - 여러페이지에서 중복사용됨 (-금)
+// 4. 필터와 정렬기능 - 여러페이지에서 중복사용
 // ㄴ 콘서트 - 공연상태, 지역 필터
 // ㄴ 콘서트, 리뷰 - 순서 정렬
 

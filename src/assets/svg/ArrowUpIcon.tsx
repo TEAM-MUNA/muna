@@ -1,7 +1,9 @@
 import React from "react";
-import { IconProps } from "../../types/iconProps";
+import { IconProps, defaultIconProps } from "../../types/iconProps";
 
-export default function ArrowUpIcon({ size = "20" }: IconProps) {
+export default function ArrowUpIcon({
+  size = defaultIconProps.size.sm,
+}: IconProps) {
   return (
     <svg
       width={size}
