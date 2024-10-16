@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HeartSpinner } from "react-spinners-kit";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
@@ -11,6 +13,7 @@ import { genreList, genreMap } from "../../utils/constants/genreData";
 import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
 import "./ConcertList.scss";
+import MultiSelectTab from "../../components/common/MultiSelectTab/MultiSelectTab";
 
 export default function ConcertList() {
   console.log("fpsx");
@@ -23,11 +26,12 @@ export default function ConcertList() {
   const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("최신순");
+  const keyword = useSelector((state: RootState) => state.search.query);
 
   const getData = async () => {
     const dataList = await Promise.all(
       regionCodeList.map((regionCode) =>
-        fetchConcertList(genreCode, pfStateCode, regionCode, page)
+        fetchConcertList(genreCode, pfStateCode, regionCode, page, keyword)
       )
     );
     const allConcerts = dataList.flat();
@@ -53,7 +57,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [genreCode, pfStateCode, regionCodeList, page, sortOrder]);
+  }, [genreCode, pfStateCode, regionCodeList, page, sortOrder, keyword]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -143,7 +147,11 @@ export default function ConcertList() {
 
   return (
     <>
-      <Tab tabList={genreList} onTabChanged={handleTabChange} />
+      {keyword ? (
+        <Tab tabList={genreList} onTabChanged={handleTabChange} />
+      ) : (
+        <MultiSelectTab />
+      )}
       <div className={styles.flex_container}>
         <div>
           <DropdownSelect

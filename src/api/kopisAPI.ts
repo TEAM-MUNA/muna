@@ -27,19 +27,21 @@ export const fetchConcertList = async (
   genreCode: string,
   pfStateCode: string,
   regionCode: string,
-  page: number
+  page: number,
+  keyword: string
 ): Promise<ConcertReturnType[]> => {
   try {
     const { data } = await axios.get("/", {
       params: {
         service: process.env.REACT_APP_kopisKey,
-        stdate: "20240101",
+        stdate: "20000101",
         eddate: "20251230",
         rows: 15,
         cpage: page,
         shcate: genreCode,
         prfstate: pfStateCode,
         signgucode: regionCode,
+        shprfnm: keyword,
       },
     });
 
