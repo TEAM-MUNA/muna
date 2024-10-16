@@ -4,11 +4,11 @@ import styles from "./PosterCard.module.scss";
 import { ConcertType, defaultConcertType } from "../../../types/concertType";
 import Button from "../Button/Button";
 import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
-import useToggle from "../../../hooks/useToggle";
 
 interface PosterCardProps extends ConcertType {
   isBookmarked?: boolean;
   concertLink?: string;
+  onBookmarkClick?: () => void;
 }
 
 export default function PosterCard({
@@ -16,9 +16,8 @@ export default function PosterCard({
   title = defaultConcertType.title,
   poster = defaultConcertType.poster,
   isBookmarked = false,
+  onBookmarkClick = () => {},
 }: PosterCardProps) {
-  const { isActive, onToggle } = useToggle(isBookmarked);
-
   return (
     <Link to={concertLink} className={`${styles.card} card_poster`}>
       <div className={styles.container}>
@@ -27,9 +26,9 @@ export default function PosterCard({
         <Button
           className={styles.btn_bookmark}
           label='북마크'
-          iconOnly={<BookmarkIcon active={isActive} />}
+          iconOnly={<BookmarkIcon active={isBookmarked} />}
           iconShadow
-          onClick={onToggle}
+          onClick={onBookmarkClick}
         />
       </div>
     </Link>
