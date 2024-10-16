@@ -34,6 +34,7 @@ export default function SearchInput({
   };
 
   const handleClear = () => {
+    setInputValue("");
     dispatch(clearQuery());
   };
 
