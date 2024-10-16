@@ -6,6 +6,7 @@ import useProfile from "../../hooks/useProfile";
 import { getUserBookmark } from "../../api/firebase/authAPI";
 import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import SettingsIcon from "../../assets/svg/SettingsIcon";
@@ -35,7 +36,6 @@ function BookmarkList() {
   const [bookmarkedConcerts, setBookmarkedConcerts] = useState<
     { concertId: string; title: string; poster: string }[]
   >([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -53,18 +53,11 @@ function BookmarkList() {
         }
       } catch (error) {
         console.error("북마크 데이터 가져오기 실패:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
-
     fetchBookmarks();
     console.log(bookmarkedConcerts);
   }, [userId]);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <ul>
@@ -85,7 +78,7 @@ function BookmarkList() {
 export default function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const currentUserId = useCurrentUser().userId;
-  const { profile, loading } = useProfile(userId);
+  const { profile, isLoading } = useProfile(userId);
   const [isMine, setIsMine] = useState<boolean>(false);
   const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
@@ -129,11 +122,11 @@ export default function Profile() {
     setActiveView(targetId === "listView" ? "list" : "grid");
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
   if (!profile) {
-    // 리다이렉트 처리할지?
+    // TODO: 리다이렉트 처리할지?
     return <p>Error: 존재하지 않는 회원</p>;
   }
   return (
