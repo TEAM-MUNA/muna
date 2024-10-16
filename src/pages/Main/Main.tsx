@@ -2,54 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
-import poster1 from "../../assets/img/temp-poster1.png";
-import poster2 from "../../assets/img/temp-poster2.png";
-import poster3 from "../../assets/img/temp-poster3.png";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
-import ImageSlider, {
-  SliderPosterType,
-} from "../../components/common/ImageGallery/ImageSlider";
+import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 
 interface MainReviewType {
   concert: {
     id: string; // 중복 x
     title: string;
     poster: string;
+    // averageRating: number;
   };
-  reviews: { contents: string; nickname: string }[];
+  reviews: { contents: string; nickname: string; rating: number }[];
 }
 
 export default function Main() {
-  const mainShowingConcertTitle = "랭보";
   const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
   } = useGetReviewList({ criteria: "likeCount" });
-
-  // 로딩중인 다른 이미지
-  const defaultImages: SliderPosterType[] = [
-    {
-      id: "1",
-      poster: poster1,
-      title: "포스터 1",
-    },
-    {
-      id: "2",
-      poster: poster2,
-      title: "포스터 2",
-    },
-    {
-      id: "3",
-      poster: poster3,
-      title: "포스터 3",
-    },
-  ];
 
   const {
     reviewList: mainShowingReviewList,
@@ -76,6 +52,7 @@ export default function Main() {
           newReviews[existingReviewId].reviews.push({
             contents: review.contents,
             nickname: review.author.nickname,
+            rating: review.rating || 0,
           });
         } else {
           // 새로운 공연
@@ -89,6 +66,7 @@ export default function Main() {
               {
                 contents: review.contents,
                 nickname: review.author.nickname,
+                rating: review.rating || 0,
               },
             ],
           });
@@ -112,27 +90,37 @@ export default function Main() {
   return (
     <section className={styles.main}>
       <h2 className='sr_only'>메인</h2>
-      <div className={styles.star}>
-        <StarScoreOnlyIcon primary rating={5} />
-      </div>
-      <p className={styles.main_showing_concert_title}>
-        {mainReviews &&
-          mainReviews.length > 0 &&
-          mainReviews[currentPosterIndex] &&
-          mainReviews[currentPosterIndex].concert.title}
-      </p>
+
+      {mainReviews &&
+        mainReviews.length > 0 &&
+        mainReviews[currentPosterIndex] && (
+          <>
+            <div className={styles.star}>
+              {/* 평균 평점 */}
+              <StarScoreOnlyIcon
+                primary
+                rating={
+                  mainReviews[currentPosterIndex].reviews.length > 0
+                    ? mainReviews[currentPosterIndex].reviews.reduce(
+                        (acc, cur) => acc + cur.rating,
+                        0
+                      ) / mainReviews[currentPosterIndex].reviews.length
+                    : 0
+                }
+              />
+            </div>
+            <p className={styles.main_showing_concert_title}>
+              {mainReviews[currentPosterIndex].concert.title}
+            </p>
+          </>
+        )}
       {isMainShowingReviewListLoading ? (
         <div className={styles.loading_imageSlider}>
           <HeartSpinner size={40} color='#c9a8ff' />
         </div>
       ) : (
         <ImageSlider
-          images={
-            // isMainShowingReviewListLoading
-            //   ? defaultImages
-            //   :
-            mainReviews.map((reviews) => reviews.concert)
-          }
+          images={mainReviews.map((reviews) => reviews.concert)}
           setCurrentPosterIndex={setCurrentPosterIndex}
         />
       )}
