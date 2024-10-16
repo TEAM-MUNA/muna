@@ -59,19 +59,25 @@ function BookmarkList() {
     console.log(bookmarkedConcerts);
   }, [userId, bookmarkedConcertsId]);
 
+  if (bookmarkedConcerts.length > 0) {
+    return (
+      <ul>
+        {bookmarkedConcerts.map((i) => (
+          <li key={i.concertId}>
+            <PosterCard
+              concertId={i.concertId}
+              title={i.title}
+              poster={i.poster}
+              bookmarkInteractive
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  }
   return (
-    <ul>
-      {bookmarkedConcerts.map((i) => (
-        <li key={i.concertId}>
-          <PosterCard
-            concertId={i.concertId}
-            title={i.title}
-            poster={i.poster}
-            bookmarkInteractive
-          />
-        </li>
-      ))}
-    </ul>
+    // TODO: 비어있을때 UI
+    <div>북마크한 공연이 없습니다</div>
   );
 }
 

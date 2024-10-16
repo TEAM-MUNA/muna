@@ -74,29 +74,25 @@ export default function BookmarkToggle({
     }
   };
 
-  const bookmarkButton = (toggle: boolean) => {
-    if (toggle) {
-      return (
-        <Button
-          className={styles.btn_bookmark}
-          label='북마크'
-          iconOnly={<BookmarkIcon active={isBookmarked} />}
-          iconShadow
-          onClick={handleBookmark}
-        />
-      );
-    }
-    if (isBookmarked) {
-      return (
-        <Button
-          className={styles.btn_bookmark}
-          label='북마크'
-          iconOnly={<BookmarkIcon active />}
-        />
-      );
-    }
-    return null;
-  };
-
-  return bookmarkButton(interactive);
+  if (interactive) {
+    return (
+      <Button
+        className={styles.btn_bookmark}
+        label='북마크'
+        iconOnly={<BookmarkIcon active={isBookmarked} />}
+        iconShadow
+        onClick={handleBookmark}
+      />
+    );
+  }
+  if (isBookmarked) {
+    return (
+      <Button
+        className={styles.btn_bookmark}
+        label='북마크'
+        iconOnly={<BookmarkIcon active />}
+      />
+    );
+  }
+  return null;
 }
