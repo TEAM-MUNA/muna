@@ -1,6 +1,11 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import useCurrentUser from "../../hooks/useCurrentUser";
+import styles from "./ReviewEdit.module.scss"
+import Title from "../../components/common/Title/Title";
+import CalendarInput from "../../components/common/CalendarInput/CalendarInput";
+import StarForm from "../../components/common/StarForm/StarForm";
+
 
 export default function ReviewEdit() {
   const location = useLocation();
