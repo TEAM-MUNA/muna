@@ -123,7 +123,7 @@ export default function SettingsProfile() {
           <Button
             type='submit'
             label='변경하기'
-            size='lg'
+            size='xl'
             color='black'
             fullWidth
           />
