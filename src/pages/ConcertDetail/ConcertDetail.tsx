@@ -21,6 +21,7 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 import useGetConcert from "../../hooks/useGetConcert";
 import generateRandomId from "../../utils/generateRandomId";
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
@@ -219,7 +220,7 @@ export default function ConcertDetail() {
         </div>
         {tabIndex === 0 ? (
           <article className={styles.reviews}>
-            {isReviewListLoading && <HeartSpinner />}
+            {isReviewListLoading && <LoadingSpinner />}
             {!isReviewListLoading && reviewListError && (
               <p>리뷰를 불러오는 중 오류가 발생했습니다.</p>
             )}
