@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function GalleryIcon({
-  size = defaultIconProps.size,
+  size = defaultIconProps.size.md,
 }: IconProps) {
   return (
     <svg

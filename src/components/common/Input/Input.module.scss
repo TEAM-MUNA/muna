@@ -6,6 +6,7 @@
   flex-direction: column;
   line-height: $font-height-sm;
   text-align: left;
+  width: 100%;
 
   .label {
     color: $black;
@@ -19,7 +20,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    font-size: $font-md;
+    font-size: $font-lg;
     line-height: $font-height-sm;
 
     &::placeholder {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState }, { useEffect, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
@@ -13,6 +13,7 @@ import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider, {
   ImageType,
 } from "../../components/common/ImageGallery/ImageSlider";
+import useCurrentUser from "../../hooks/useCurrentUser";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";

@@ -1,7 +1,9 @@
 import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
-export default function UserIcon({ size = defaultIconProps.size }: IconProps) {
+export default function UserIcon({
+  size = defaultIconProps.size.md,
+}: IconProps) {
   return (
     <svg
       width={size}

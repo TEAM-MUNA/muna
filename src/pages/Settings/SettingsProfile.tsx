@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useUserRedirect from "../../hooks/useUserRedirect";
@@ -23,7 +23,7 @@ import Button from "../../components/common/Button/Button";
 export default function SettingsProfile() {
   useUserRedirect();
   const user = useAppSelector((state: RootState) => state.auth.user);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useCurrentUser();
@@ -69,7 +69,7 @@ export default function SettingsProfile() {
       );
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
-      // navigate("/settings");
+      navigate("/settings");
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error, { id: loadingToastId });
@@ -123,7 +123,7 @@ export default function SettingsProfile() {
           <Button
             type='submit'
             label='변경하기'
-            size='lg'
+            size='xl'
             color='black'
             fullWidth
           />
