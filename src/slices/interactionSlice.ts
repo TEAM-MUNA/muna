@@ -1,29 +1,43 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { updateUserBookmark } from "../api/firebase/authAPI";
+import {
+  getUserFromFirebase,
+  updateUserBookmark,
+} from "../api/firebase/authAPI";
 import {
   addConcert,
   getConcertFromFirebase,
   updateConcertBookmark,
 } from "../api/firebase/concertAPI";
-import { UserType } from "../types/userType";
+import { UserInteractionType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
 
 // 사용자 인터렉션
 
 interface InteractionState {
-  user: UserType | null;
+  userInteraction: UserInteractionType | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: InteractionState = {
-  user: null,
+  userInteraction: {
+    bookmarkedConcerts: [],
+    likedReviews: [],
+    reviews: [],
+  },
   status: "idle",
   error: null,
 };
 
 // 북마크
-export const bookmarkConcertAsync = createAsyncThunk(
+export const bookmarkConcertAsync = createAsyncThunk<
+  string[] | undefined, // 업데이트된 북마크 목록 반환
+  {
+    userId: string;
+    concert: ConcertType;
+    cancel?: boolean;
+  }
+>(
   "interaction/bookmark",
   async (
     {
@@ -52,7 +66,11 @@ export const bookmarkConcertAsync = createAsyncThunk(
         ),
         updateUserBookmark(userId, concert.concertId!, cancel),
       ]);
-      return true;
+      const updatedUser = await getUserFromFirebase(userId);
+      console.log("updated", updatedUser);
+
+      // 업데이트된 북마크 목록 반환
+      return updatedUser?.bookmarkedConcerts;
     } catch (error) {
       console.log("bookmarkconceertasync", error);
 
@@ -70,8 +88,11 @@ const interactionSlice = createSlice({
         state.status = "loading";
         state.error = null;
       })
-      .addCase(bookmarkConcertAsync.fulfilled, (state) => {
+      .addCase(bookmarkConcertAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
+        if (state.userInteraction) {
+          state.userInteraction.bookmarkedConcerts = action.payload;
+        }
         state.error = null;
       })
       .addCase(bookmarkConcertAsync.rejected, (state, action) => {

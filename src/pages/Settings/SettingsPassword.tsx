@@ -127,7 +127,7 @@ export default function SettingsPassword() {
         <div className={styles.wrapper_inner}>
           <Button
             label='변경하기'
-            size='lg'
+            size='xl'
             color='black'
             fullWidth
             type='submit'

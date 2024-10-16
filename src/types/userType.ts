@@ -11,6 +11,12 @@ export interface UserType {
   likedReviews?: string[];
 }
 
+export interface UserInteractionType {
+  bookmarkedConcerts?: string[];
+  reviews?: string[];
+  likedReviews?: string[];
+}
+
 export const defaultUserType = {
   userId: "userId",
   email: "userEmail",
