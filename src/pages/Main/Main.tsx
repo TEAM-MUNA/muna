@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
@@ -10,7 +10,18 @@ import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
-import useCurrentUser from "../../hooks/useCurrentUser";
+import ImageSlider, {
+  SliderPosterType,
+} from "../../components/common/ImageGallery/ImageSlider";
+
+interface MainReviewType {
+  concert: {
+    id: string; // 중복 x
+    title: string;
+    poster: string;
+  };
+  reviews: { contents: string; nickname: string }[];
+}
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
@@ -19,7 +30,78 @@ export default function Main() {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
-  } = useGetReviewList({ popular: true });
+  } = useGetReviewList({ criteria: "likeCount" });
+
+  // 로딩중인 다른 이미지
+  const defaultImages: SliderPosterType[] = [
+    {
+      id: "1",
+      poster: poster1,
+      title: "포스터 1",
+    },
+    {
+      id: "2",
+      poster: poster2,
+      title: "포스터 2",
+    },
+    {
+      id: "3",
+      poster: poster3,
+      title: "포스터 3",
+    },
+  ];
+
+  const {
+    reviewList: mainShowingReviewList,
+    isLoading: isMainShowingReviewListLoading,
+    error: mainShowingReviewListError,
+  } = useGetReviewList({ criteria: "rating" });
+
+  const [mainReviews, setMainReviews] = useState<MainReviewType[]>([]);
+  const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isMainShowingReviewListLoading && mainShowingReviewList) {
+      const newReviews: MainReviewType[] = [];
+
+      mainShowingReviewList.forEach((review) => {
+        const concertId = review.concert.id;
+        const existingReviewId = newReviews.findIndex(
+          (r) => r.concert.id === concertId
+        );
+
+        if (existingReviewId !== -1) {
+          // 이미 존재하는 공연일 경우
+          // 그 인덱스에 추가
+          newReviews[existingReviewId].reviews.push({
+            contents: review.contents,
+            nickname: review.author.nickname,
+          });
+        } else {
+          // 새로운 공연
+          newReviews.push({
+            concert: {
+              id: concertId,
+              title: review.concert.title,
+              poster: review.concert.poster,
+            },
+            reviews: [
+              {
+                contents: review.contents,
+                nickname: review.author.nickname,
+              },
+            ],
+          });
+        }
+      });
+
+      setMainReviews(newReviews);
+    }
+  }, [isMainShowingReviewListLoading, mainShowingReviewList]);
+
+  useEffect(() => {
+    console.log("currentPosterIndex", currentPosterIndex, mainReviews);
+  }, [currentPosterIndex]);
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -34,40 +116,47 @@ export default function Main() {
         <StarScoreOnlyIcon primary rating={5} />
       </div>
       <p className={styles.main_showing_concert_title}>
-        {mainShowingConcertTitle}
+        {mainReviews &&
+          mainReviews.length > 0 &&
+          mainReviews[currentPosterIndex] &&
+          mainReviews[currentPosterIndex].concert.title}
       </p>
-      <figure className={styles.main_showing_concert_posters}>
-        <img src={poster1} alt='메인 인기 포스터1' width={182} />
-        <img src={poster2} alt='메인 인기 포스터2' width={215} />
-        <img src={poster3} alt='메인 인기 포스터3' width={182} />
-      </figure>
+      {isMainShowingReviewListLoading ? (
+        <div className={styles.loading_imageSlider}>
+          <HeartSpinner size={65} color='#7926ff' />
+        </div>
+      ) : (
+        <ImageSlider
+          images={
+            // isMainShowingReviewListLoading
+            //   ? defaultImages
+            //   :
+            mainReviews.map((reviews) => reviews.concert)
+          }
+          setCurrentPosterIndex={setCurrentPosterIndex}
+        />
+      )}
+
       <div className={styles.main_showing_concert_reviews}>
         {/* TODO: 반복문 사용 */}
-        <div>
-          <blockquote id='review1' className={styles.review}>
-            기대한것만큼 재밌습니다
-          </blockquote>
-          <cite
-            id='nickname1'
-            className={styles.nickname}
-            aria-labelledby='review1'
-          >
-            abdc123
-          </cite>
-        </div>
-        <div>
-          <blockquote id='review2' className={styles.review}>
-            시들이 하나하나 너무 아름답고 멜로디도 서정적이어서 아주 감명
-            깊었습니다.
-          </blockquote>
-          <cite
-            id='nickname2'
-            className={styles.nickname}
-            aria-labelledby='review2'
-          >
-            abdc123
-          </cite>
-        </div>
+        {mainReviews &&
+        mainReviews.length > 0 &&
+        mainReviews[currentPosterIndex]
+          ? mainReviews[currentPosterIndex].reviews.map((review) => (
+              <div key={review.contents}>
+                <blockquote id='review1' className={styles.review}>
+                  {review.contents}
+                </blockquote>
+                <cite
+                  id='nickname1'
+                  className={styles.nickname}
+                  aria-labelledby='review1'
+                >
+                  {review.nickname}
+                </cite>
+              </div>
+            ))
+          : null}
       </div>
       <div className={styles.category_nav}>
         {Object.entries(genreMap).map(([genre, code]) => (

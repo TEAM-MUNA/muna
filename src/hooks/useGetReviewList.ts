@@ -4,10 +4,10 @@ import { getReviewListFromFirebase } from "../api/firebase/reviewAPI";
 
 const useGetReviewList = ({
   concertId,
-  popular = false,
+  criteria,
 }: {
   concertId?: string | undefined;
-  popular?: boolean;
+  criteria?: "likeCount" | "rating" | "createdAt" | "date";
 }) => {
   const [reviewList, setReviewList] = useState<ReviewType[] | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const useGetReviewList = ({
       setError(null);
 
       try {
-        const reviewData = await getReviewListFromFirebase(concertId, popular);
+        const reviewData = await getReviewListFromFirebase(concertId, criteria);
         setReviewList(reviewData as ReviewType[]);
       } catch (e) {
         console.error(e);
