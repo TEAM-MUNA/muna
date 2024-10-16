@@ -86,7 +86,7 @@ export default function ConcertDetail() {
     if (userId && concertDetail) {
       onBookmarkToggle();
       try {
-        await dispatch(
+        const updatedBookmarks = await dispatch(
           bookmarkConcertAsync({
             userId,
             concert: {
@@ -97,6 +97,7 @@ export default function ConcertDetail() {
             cancel: isBookmarked,
           })
         ).unwrap();
+        console.log(updatedBookmarks);
 
         toast.success(
           !isBookmarked ? "북마크에 추가되었습니다." : "북마크를 해제했습니다."
