@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FirebaseError } from "firebase/app";
 import {
   getUserFromFirebase,
   updateUserBookmark,
@@ -28,6 +29,32 @@ const initialState: InteractionState = {
   status: "idle",
   error: null,
 };
+
+// 유저 인터랙션 초기화하기 위해 fetch
+// initializeUserInteraction
+export const fetchUserInteraction = createAsyncThunk<
+  UserInteractionType | null,
+  string,
+  { rejectValue: string }
+>(
+  "interaction/fetchUserInteraction",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const user = await getUserFromFirebase(userId);
+      return {
+        bookmarkedConcerts: user?.bookmarkedConcerts || [],
+        likedReviews: user?.likedReviews || [],
+        reviews: user?.reviews || [],
+      };
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        console.log("파이어베이스 에러:", error.message);
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("사용자 데이터를 불러오는 데 실패했습니다.");
+    }
+  }
+);
 
 // 북마크
 export const bookmarkConcertAsync = createAsyncThunk<
@@ -81,8 +108,31 @@ export const bookmarkConcertAsync = createAsyncThunk<
 const interactionSlice = createSlice({
   name: "interaction",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserInteraction: (
+      state,
+      action: PayloadAction<InteractionState["userInteraction"]>
+    ) => {
+      state.userInteraction = action.payload;
+    },
+  },
   extraReducers: (builder) => {
+    // 초기화
+    builder
+      .addCase(fetchUserInteraction.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchUserInteraction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.userInteraction = action.payload; // user interaction 정보 초기화
+      })
+      .addCase(fetchUserInteraction.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
+
+    // 북마크
     builder
       .addCase(bookmarkConcertAsync.pending, (state) => {
         state.status = "loading";
@@ -101,5 +151,5 @@ const interactionSlice = createSlice({
       });
   },
 });
-
+export const { setUserInteraction } = interactionSlice.actions;
 export default interactionSlice.reducer;
