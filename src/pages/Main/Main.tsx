@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
@@ -10,6 +10,9 @@ import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
+import ImageSlider, {
+  ImageType,
+} from "../../components/common/ImageGallery/ImageSlider";
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
@@ -19,6 +22,28 @@ export default function Main() {
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
   } = useGetReviewList({ criteria: "likeCount" });
+  // const posters = [poster1, poster2, poster3];
+
+  const images: ImageType[] = [
+    {
+      src: poster1,
+      alt: "포스터 1",
+    },
+    {
+      src: poster2,
+      alt: "포스터 2",
+    },
+    {
+      src: poster3,
+      alt: "포스터 3",
+    },
+  ];
+
+  const {
+    reviewList: mainShowingReviewList,
+    isLoading: isMainShowingReviewListLoading,
+    error: mainShowingReviewListError,
+  } = useGetReviewList({ criteria: "rating" });
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -35,11 +60,8 @@ export default function Main() {
       <p className={styles.main_showing_concert_title}>
         {mainShowingConcertTitle}
       </p>
-      <figure className={styles.main_showing_concert_posters}>
-        <img src={poster1} alt='메인 인기 포스터1' width={182} />
-        <img src={poster2} alt='메인 인기 포스터2' width={215} />
-        <img src={poster3} alt='메인 인기 포스터3' width={182} />
-      </figure>
+      <ImageSlider images={images} />
+
       <div className={styles.main_showing_concert_reviews}>
         {/* TODO: 반복문 사용 */}
         <div>
