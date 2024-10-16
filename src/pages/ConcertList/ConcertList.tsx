@@ -147,7 +147,7 @@ export default function ConcertList() {
 
   return (
     <>
-      {keyword ? (
+      {!keyword ? (
         <Tab tabList={genreList} onTabChanged={handleTabChange} />
       ) : (
         <MultiSelectTab />

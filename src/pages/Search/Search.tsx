@@ -81,7 +81,11 @@ export default function Search() {
             <ul className={styles.recommends_container}>
               {recommends?.map((item) => (
                 <li key={item.concertId}>
-                  <PosterCard title={item.title} poster={item.poster} />
+                  <PosterCard
+                    title={item.title}
+                    poster={item.poster}
+                    concertLink={`/concert/${item.concertId}`}
+                  />
                 </li>
               ))}
             </ul>

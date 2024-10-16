@@ -17,7 +17,7 @@ export default function SearchResult() {
             textAlign: "center",
             fontSize: "20px",
             fontWeight: "500",
-            margin: "36px 0 24px",
+            margin: "36px 0 36px",
           }}
         >
           &quot;{query}&quot; 검색 결과
