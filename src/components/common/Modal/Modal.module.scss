@@ -38,7 +38,9 @@
 
 .wrapper_btn {
   display: flex;
-  flex-direction: column;
   gap: 10px;
   margin-top: 24px;
+  &:not(.row) {
+    flex-direction: column;
+  }
 }
