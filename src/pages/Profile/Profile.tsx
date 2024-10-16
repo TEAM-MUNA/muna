@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
+import { getUserBookmark } from "../../api/firebase/authAPI";
+import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
@@ -10,7 +12,7 @@ import SettingsIcon from "../../assets/svg/SettingsIcon";
 import QueueListIcon from "../../assets/svg/QueueListIcon";
 import GalleryIcon from "../../assets/svg/GalleryIcon";
 import Tab from "../../components/common/Tab/Tab";
-import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
+// import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
@@ -26,6 +28,59 @@ import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewG
 // 4. 필터와 정렬기능 - 여러페이지에서 중복사용
 // ㄴ 콘서트 - 공연상태, 지역 필터
 // ㄴ 콘서트, 리뷰 - 순서 정렬
+
+function BookmarkList() {
+  const { userId } = useParams<{ userId: string }>();
+
+  const [bookmarkedConcerts, setBookmarkedConcerts] = useState<
+    { concertId: string; title: string; poster: string }[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        if (userId) {
+          // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
+          const userBookmarkedIds = (await getUserBookmark(userId)) || [];
+
+          // 2. 북마크 콘서트의 title과 poster 가져오기
+          if (userBookmarkedIds.length > 0) {
+            const bookmarkedConcertData =
+              await getConcertsForBookmarkList(userBookmarkedIds);
+            setBookmarkedConcerts(Object.values(bookmarkedConcertData));
+          }
+        }
+      } catch (error) {
+        console.error("북마크 데이터 가져오기 실패:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookmarks();
+    console.log(bookmarkedConcerts);
+  }, [userId]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <ul>
+      {bookmarkedConcerts.map((i) => (
+        <li key={i.concertId}>
+          <PosterCard
+            concertLink={`concert/${i.concertId}`}
+            title={i.title}
+            poster={i.poster}
+            isBookmarked
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function Profile() {
   const { userId } = useParams<{ userId: string }>();
@@ -54,11 +109,11 @@ export default function Profile() {
     () => tabTitle,
     [tabTitle]
   );
-  const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
-  const concertOrderSelectOptions = ["최신순", "북마크순"];
-  const reviewOrderSelectOptions = ["최신순", "인기순"];
-  const handleConcertDropdownSelect = () => {};
-  const handleReviewDropdownSelect = () => {};
+  // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
+  // const concertOrderSelectOptions = ["최신순", "북마크순"];
+  // const reviewOrderSelectOptions = ["최신순", "인기순"];
+  // const handleConcertDropdownSelect = () => {};
+  // const handleReviewDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeView, setActiveView] = useState<string>("list");
@@ -75,10 +130,11 @@ export default function Profile() {
   };
 
   if (loading) {
-    return <p>로딩중</p>;
+    return <p>Loading...</p>;
   }
   if (!profile) {
-    return <p>존재하지 않는 회원</p>;
+    // 리다이렉트 처리할지?
+    return <p>Error: 존재하지 않는 회원</p>;
   }
   return (
     <div>
@@ -125,7 +181,7 @@ export default function Profile() {
       </nav>
       {activeTab === 0 && isMine && (
         <section className={`${styles.tab_content} ${styles.concert_bookmark}`}>
-          <div className={styles.wrapper_dropdown}>
+          {/* <div className={styles.wrapper_dropdown}>
             <DropdownSelect
               onSelect={handleConcertDropdownSelect}
               options={concertStateSelectOptions}
@@ -139,24 +195,20 @@ export default function Profile() {
               options={concertOrderSelectOptions}
               position='right'
             />
-          </div>
-          <ul>
-            <li>
-              <PosterCard concertLink='#' isBookmarked />
-            </li>
-          </ul>
+          </div> */}
+          <BookmarkList />
         </section>
       )}
       {(activeTab === 1 || !isMine) && activeView === "list" && (
         <section className={`${styles.tab_content} ${styles.review_list}`}>
-          <div className='wrapper_dropdown_noline'>
+          {/* <div className='wrapper_dropdown_noline'>
             <DropdownSelect
               onSelect={handleReviewDropdownSelect}
               options={reviewOrderSelectOptions}
               outline={false}
               position='right'
             />
-          </div>
+          </div> */}
           <ul>
             <li>
               <ReviewCard reviewLink='#' />
