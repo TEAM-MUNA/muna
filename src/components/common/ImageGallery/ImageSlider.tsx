@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -17,27 +17,22 @@ export default function ImageSlider({
   images: SliderPosterType[];
   setCurrentPosterIndex: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const [initialSlideIndex, setInitialSlideIndex] = useState<number>(0);
   const sliderRef = useRef<Slider | null>(null);
-
-  useEffect(() => {
-    if (images.length > 0) {
-      setInitialSlideIndex(0);
-    }
-  }, [images]);
-
-  useEffect(() => {
-    console.log("?");
+  const goToSlide = () => {
     if (sliderRef.current) {
-      sliderRef.current.slickGoTo(initialSlideIndex);
+      console.log("go to slide");
+      sliderRef.current.slickGoTo(0);
     }
-  }, [initialSlideIndex]);
+  };
+  useEffect(() => {
+    goToSlide();
+  }, [images]);
 
   return (
     <div className='slider-container'>
       <Slider
         ref={sliderRef}
-        initialSlide={initialSlideIndex}
+        // initialSlide={} 작동안됨
         arrows
         slidesToScroll={1}
         slidesToShow={1}

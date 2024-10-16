@@ -57,13 +57,8 @@ export default function Main() {
     error: mainShowingReviewListError,
   } = useGetReviewList({ criteria: "rating" });
 
-  const [posters, setPosters] = useState<SliderPosterType[]>([]);
   const [mainReviews, setMainReviews] = useState<MainReviewType[]>([]);
   const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
-  // const [currentPosterReviews, setCurrentPosterReviews] = useState<string[]>();
-  const [posterReviews, setPosterReviews] = useState<
-    { contents: string; nickname: string }[]
-  >([]);
 
   useEffect(() => {
     if (!isMainShowingReviewListLoading && mainShowingReviewList) {
@@ -121,21 +116,29 @@ export default function Main() {
         <StarScoreOnlyIcon primary rating={5} />
       </div>
       <p className={styles.main_showing_concert_title}>
-        {mainShowingConcertTitle}
+        {mainReviews &&
+          mainReviews.length > 0 &&
+          mainReviews[currentPosterIndex] &&
+          mainReviews[currentPosterIndex].concert.title}
       </p>
-
-      <ImageSlider
-        images={
-          isMainShowingReviewListLoading
-            ? defaultImages
-            : mainReviews.map((reviews) => reviews.concert)
-        }
-        setCurrentPosterIndex={setCurrentPosterIndex}
-      />
+      {isMainShowingReviewListLoading ? (
+        <div className={styles.loading_imageSlider}>
+          <HeartSpinner size={65} color='#7926ff' />
+        </div>
+      ) : (
+        <ImageSlider
+          images={
+            // isMainShowingReviewListLoading
+            //   ? defaultImages
+            //   :
+            mainReviews.map((reviews) => reviews.concert)
+          }
+          setCurrentPosterIndex={setCurrentPosterIndex}
+        />
+      )}
 
       <div className={styles.main_showing_concert_reviews}>
         {/* TODO: 반복문 사용 */}
-        {/* 이 부분에서 에러가 나는거 같어 */}
         {mainReviews &&
         mainReviews.length > 0 &&
         mainReviews[currentPosterIndex]

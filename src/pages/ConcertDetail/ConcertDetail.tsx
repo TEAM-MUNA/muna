@@ -77,7 +77,7 @@ export default function ConcertDetail() {
   }
 
   if (isConertDetailLoading || isConcertLoading) {
-    return <HeartSpinner />;
+    return <HeartSpinner size={65} color='#7926ff' />;
   }
 
   // 북마크 토글
