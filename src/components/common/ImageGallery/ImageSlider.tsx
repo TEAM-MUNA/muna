@@ -32,7 +32,6 @@ export default function ImageSlider({
     <div className='slider-container'>
       <Slider
         ref={sliderRef}
-        // initialSlide={} 작동안됨
         arrows
         slidesToScroll={1}
         slidesToShow={1}
@@ -41,6 +40,7 @@ export default function ImageSlider({
         infinite
         centerPadding='125px'
         speed={500}
+        autoplay
         beforeChange={(current: number, next: number) => {
           if (next === -1) {
             setCurrentPosterIndex(0);
