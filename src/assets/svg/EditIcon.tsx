@@ -1,7 +1,9 @@
 import React from "react";
-import { IconProps } from "../../types/iconProps";
+import { IconProps, defaultIconProps } from "../../types/iconProps";
 
-export default function EditIcon({ size = "20" }: IconProps) {
+export default function EditIcon({
+  size = defaultIconProps.size.sm,
+}: IconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

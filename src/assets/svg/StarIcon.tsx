@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function StarIcon({
-  size = "20",
+  size = defaultIconProps.size.sm,
   active = defaultIconProps.active,
 }: IconProps) {
   const strokeWidth = (iconSize: string) => {

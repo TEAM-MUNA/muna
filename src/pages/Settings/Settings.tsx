@@ -19,33 +19,12 @@ import Button from "../../components/common/Button/Button";
 import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 import Input from "../../components/common/Input/Input";
+import styles from "./Settings.module.scss";
 
-export default function Settings() {
-  useUserRedirect();
-
-  const dispatch = useDispatch<AppDispatch>();
+function WithdrawMenu() {
   const navigate = useNavigate();
-  const [isLogout, setIsLogout] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
-    useToggle(false);
-
-  const handleLogout = async () => {
-    if (isLogout) return; // 이미 로그아웃 중이라면 중복 요청 방지
-
-    setIsLogout(true);
-    try {
-      navigate("/");
-      await dispatch(logoutAsync()).unwrap(); // unwrap()을 사용해 오류 처리
-      toast.success("로그아웃 되었습니다.");
-      // } catch (error) {
-      // 에러 메시지는 슬라이스에서 처리
-    } finally {
-      setIsLogout(false); // 완료 후 플래그 초기화
-    }
-  };
-
-  // Modal
   const { openModal, closeModal, isOpen } = useModal();
 
   const {
@@ -75,40 +54,7 @@ export default function Settings() {
 
   return (
     <>
-      <ul>
-        <ColumnMenuItem
-          label='이메일 알림'
-          buttonRight={
-            <Toggle
-              isActive={isSettingToggleActive}
-              onClick={() => {
-                onSettingToggle();
-              }}
-            />
-          }
-          onClick={() => {
-            onSettingToggle();
-          }}
-        />
-        <ColumnMenuItem
-          label='프로필 변경'
-          onClick={() => {
-            navigate("/settings-profile");
-          }}
-        />
-        <ColumnMenuItem
-          label='비밀번호 변경'
-          onClick={() => {
-            navigate("/settings-password");
-          }}
-        />
-        <ColumnMenuItem label='회원 탈퇴' isFaded onClick={openModal} />
-        <ColumnMenuItem
-          label='로그아웃'
-          onClick={handleLogout}
-          disabled={isLogout} // 로그아웃 진행 중 버튼 비활성화
-        />
-      </ul>
+      <ColumnMenuItem label='회원 탈퇴' isFaded onClick={openModal} />
       <Modal
         isOpen={isOpen}
         title='회원 탈퇴'
@@ -116,24 +62,122 @@ export default function Settings() {
         onClose={closeModal}
         color='warning'
       >
-        <Input
-          name='password'
-          value={password}
-          onChange={onPasswordChange}
-          type='password'
-          label='비밀번호'
-          error={!!passwordError}
-          message={passwordError || ""}
-          placeholder={placeholder.password}
-        />
+        <div className={styles.modal_withdraw_inner}>
+          <Input
+            name='password'
+            value={password}
+            onChange={onPasswordChange}
+            type='password'
+            label='비밀번호'
+            error={!!passwordError}
+            message={passwordError || ""}
+            placeholder={placeholder.password}
+          />
+          <Button
+            label='탈퇴하기'
+            color='underlined'
+            size='md'
+            fullWidth
+            onClick={handleWithdraw}
+          />
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+function LogoutMenu() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [isLogout, setIsLogout] = useState(false);
+  const { openModal, closeModal, isOpen } = useModal();
+
+  const handleLogout = async () => {
+    if (isLogout) return; // 이미 로그아웃 중이라면 중복 요청 방지
+
+    setIsLogout(true);
+    try {
+      navigate("/");
+      await dispatch(logoutAsync()).unwrap(); // unwrap()을 사용해 오류 처리
+      toast.success("로그아웃 되었습니다.");
+      // } catch (error) {
+      // 에러 메시지는 슬라이스에서 처리
+    } finally {
+      setIsLogout(false); // 완료 후 플래그 초기화
+    }
+  };
+
+  return (
+    <>
+      <ColumnMenuItem
+        label='로그아웃'
+        onClick={openModal}
+        disabled={isLogout} // 로그아웃 진행 중 버튼 비활성화
+      />
+      <Modal
+        isOpen={isOpen}
+        title='로그아웃'
+        description={modalMessages.logout}
+        onClose={closeModal}
+        innerRow
+      >
         <Button
-          label='탈퇴하기'
-          color='underlined'
+          label='취소'
+          color='default'
           size='md'
           fullWidth
-          onClick={handleWithdraw}
+          onClick={closeModal}
+        />
+        <Button
+          label='확인'
+          color='black'
+          size='md'
+          fullWidth
+          onClick={handleLogout}
         />
       </Modal>
     </>
+  );
+}
+
+export default function Settings() {
+  useUserRedirect();
+  const navigate = useNavigate();
+
+  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
+    useToggle(false);
+
+  return (
+    <ul>
+      <ColumnMenuItem
+        label='이메일 알림'
+        buttonRight={
+          <Toggle
+            isActive={isSettingToggleActive}
+            onClick={() => {
+              onSettingToggle();
+            }}
+          />
+        }
+        onClick={() => {
+          onSettingToggle();
+        }}
+      />
+      <ColumnMenuItem
+        label='프로필 변경'
+        onClick={() => {
+          navigate("/settings-profile");
+        }}
+      />
+      <ColumnMenuItem
+        label='비밀번호 변경'
+        onClick={() => {
+          navigate("/settings-password");
+        }}
+      />
+      <WithdrawMenu />
+      <LogoutMenu />
+    </ul>
   );
 }

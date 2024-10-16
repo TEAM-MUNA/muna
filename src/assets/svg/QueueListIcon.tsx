@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps, defaultIconProps } from "../../types/iconProps";
 
 export default function QueueListIcon({
-  size = defaultIconProps.size,
+  size = defaultIconProps.size.md,
 }: IconProps) {
   return (
     <svg

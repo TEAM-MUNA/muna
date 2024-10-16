@@ -1,6 +1,6 @@
 import React from "react";
 import toast from "react-hot-toast";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import useUserRedirect from "../../hooks/useUserRedirect";
 import { AppDispatch } from "../../app/store";
@@ -23,7 +23,7 @@ export default function SettingsPassword() {
 
   const dispatch = useDispatch<AppDispatch>();
   useUserRedirect();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     value: password,
@@ -75,7 +75,7 @@ export default function SettingsPassword() {
         await dispatch(updatePasswordAsync({ newPassword })).unwrap();
 
         toast.success("비밀번호가 변경되었습니다.", { id: loadingToastId });
-        // navigate("/settings");
+        navigate("/settings");
       }
     } catch (error) {
       if (typeof error === "string") {
