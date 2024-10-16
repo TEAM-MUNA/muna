@@ -123,7 +123,7 @@ export default function Main() {
       </p>
       {isMainShowingReviewListLoading ? (
         <div className={styles.loading_imageSlider}>
-          <HeartSpinner size={65} color='#7926ff' />
+          <HeartSpinner size={40} color='#c9a8ff' />
         </div>
       ) : (
         <ImageSlider
