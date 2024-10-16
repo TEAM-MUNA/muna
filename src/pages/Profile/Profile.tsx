@@ -65,10 +65,10 @@ function BookmarkList() {
       {bookmarkedConcerts.map((i) => (
         <li key={i.concertId}>
           <PosterCard
-            concertLink={`concert/${i.concertId}`}
+            concertId={i.concertId}
             title={i.title}
             poster={i.poster}
-            isBookmarked
+            bookmarkInteractive
           />
         </li>
       ))}
