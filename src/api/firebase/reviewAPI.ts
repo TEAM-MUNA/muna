@@ -31,7 +31,6 @@ export const getReviewListFromFirebase = async (
     reviewId: fbDoc.id,
     ...fbDoc.data(),
   }));
-  console.log(reviewList);
   return reviewList;
 };
 

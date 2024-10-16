@@ -1,35 +1,66 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import "./ImageSlider.css";
 
-export interface ImageType {
-  alt: string;
-  src: string;
+export interface SliderPosterType {
+  id: string;
+  title: string;
+  poster: string;
 }
 
-export default function ImageSlider({ images }: { images: ImageType[] }) {
+export default function ImageSlider({
+  images,
+  setCurrentPosterIndex,
+}: {
+  images: SliderPosterType[];
+  setCurrentPosterIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
+  const [initialSlideIndex, setInitialSlideIndex] = useState<number>(0);
+  const sliderRef = useRef<Slider | null>(null);
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setInitialSlideIndex(0);
+    }
+  }, [images]);
+
+  useEffect(() => {
+    console.log("?");
+    if (sliderRef.current) {
+      sliderRef.current.slickGoTo(initialSlideIndex);
+    }
+  }, [initialSlideIndex]);
+
   return (
     <div className='slider-container'>
       <Slider
+        ref={sliderRef}
+        initialSlide={initialSlideIndex}
         arrows
         slidesToScroll={1}
         slidesToShow={1}
-        // autoplay
         className='center'
         centerMode
         infinite
-        centerPadding='100px'
+        centerPadding='125px'
         speed={500}
+        beforeChange={(current: number, next: number) => {
+          if (next === -1) {
+            setCurrentPosterIndex(0);
+            return;
+          }
+          setCurrentPosterIndex(next);
+        }}
       >
-        {/* // 182.1 x 285.48 */}
         {images.map((image) => (
           <img
             className='image'
-            src={image.src}
-            key={image.src}
-            alt={image.alt}
+            src={image.poster}
+            key={image.id}
+            alt={image.title}
+            height={300}
           />
         ))}
       </Slider>

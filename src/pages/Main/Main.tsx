@@ -1,4 +1,4 @@
-import React, { useState }, { useEffect, useId } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
@@ -11,9 +11,17 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider, {
-  ImageType,
+  SliderPosterType,
 } from "../../components/common/ImageGallery/ImageSlider";
-import useCurrentUser from "../../hooks/useCurrentUser";
+
+interface MainReviewType {
+  concert: {
+    id: string; // 중복 x
+    title: string;
+    poster: string;
+  };
+  reviews: { contents: string; nickname: string }[];
+}
 
 export default function Main() {
   const mainShowingConcertTitle = "랭보";
@@ -23,20 +31,23 @@ export default function Main() {
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
   } = useGetReviewList({ criteria: "likeCount" });
-  // const posters = [poster1, poster2, poster3];
 
-  const images: ImageType[] = [
+  // 로딩중인 다른 이미지
+  const defaultImages: SliderPosterType[] = [
     {
-      src: poster1,
-      alt: "포스터 1",
+      id: "1",
+      poster: poster1,
+      title: "포스터 1",
     },
     {
-      src: poster2,
-      alt: "포스터 2",
+      id: "2",
+      poster: poster2,
+      title: "포스터 2",
     },
     {
-      src: poster3,
-      alt: "포스터 3",
+      id: "3",
+      poster: poster3,
+      title: "포스터 3",
     },
   ];
 
@@ -45,6 +56,57 @@ export default function Main() {
     isLoading: isMainShowingReviewListLoading,
     error: mainShowingReviewListError,
   } = useGetReviewList({ criteria: "rating" });
+
+  const [posters, setPosters] = useState<SliderPosterType[]>([]);
+  const [mainReviews, setMainReviews] = useState<MainReviewType[]>([]);
+  const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
+  // const [currentPosterReviews, setCurrentPosterReviews] = useState<string[]>();
+  const [posterReviews, setPosterReviews] = useState<
+    { contents: string; nickname: string }[]
+  >([]);
+
+  useEffect(() => {
+    if (!isMainShowingReviewListLoading && mainShowingReviewList) {
+      const newReviews: MainReviewType[] = [];
+
+      mainShowingReviewList.forEach((review) => {
+        const concertId = review.concert.id;
+        const existingReviewId = newReviews.findIndex(
+          (r) => r.concert.id === concertId
+        );
+
+        if (existingReviewId !== -1) {
+          // 이미 존재하는 공연일 경우
+          // 그 인덱스에 추가
+          newReviews[existingReviewId].reviews.push({
+            contents: review.contents,
+            nickname: review.author.nickname,
+          });
+        } else {
+          // 새로운 공연
+          newReviews.push({
+            concert: {
+              id: concertId,
+              title: review.concert.title,
+              poster: review.concert.poster,
+            },
+            reviews: [
+              {
+                contents: review.contents,
+                nickname: review.author.nickname,
+              },
+            ],
+          });
+        }
+      });
+
+      setMainReviews(newReviews);
+    }
+  }, [isMainShowingReviewListLoading, mainShowingReviewList]);
+
+  useEffect(() => {
+    console.log("currentPosterIndex", currentPosterIndex, mainReviews);
+  }, [currentPosterIndex]);
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -61,35 +123,37 @@ export default function Main() {
       <p className={styles.main_showing_concert_title}>
         {mainShowingConcertTitle}
       </p>
-      <ImageSlider images={images} />
+
+      <ImageSlider
+        images={
+          isMainShowingReviewListLoading
+            ? defaultImages
+            : mainReviews.map((reviews) => reviews.concert)
+        }
+        setCurrentPosterIndex={setCurrentPosterIndex}
+      />
 
       <div className={styles.main_showing_concert_reviews}>
         {/* TODO: 반복문 사용 */}
-        <div>
-          <blockquote id='review1' className={styles.review}>
-            기대한것만큼 재밌습니다
-          </blockquote>
-          <cite
-            id='nickname1'
-            className={styles.nickname}
-            aria-labelledby='review1'
-          >
-            abdc123
-          </cite>
-        </div>
-        <div>
-          <blockquote id='review2' className={styles.review}>
-            시들이 하나하나 너무 아름답고 멜로디도 서정적이어서 아주 감명
-            깊었습니다.
-          </blockquote>
-          <cite
-            id='nickname2'
-            className={styles.nickname}
-            aria-labelledby='review2'
-          >
-            abdc123
-          </cite>
-        </div>
+        {/* 이 부분에서 에러가 나는거 같어 */}
+        {mainReviews &&
+        mainReviews.length > 0 &&
+        mainReviews[currentPosterIndex]
+          ? mainReviews[currentPosterIndex].reviews.map((review) => (
+              <div key={review.contents}>
+                <blockquote id='review1' className={styles.review}>
+                  {review.contents}
+                </blockquote>
+                <cite
+                  id='nickname1'
+                  className={styles.nickname}
+                  aria-labelledby='review1'
+                >
+                  {review.nickname}
+                </cite>
+              </div>
+            ))
+          : null}
       </div>
       <div className={styles.category_nav}>
         {Object.entries(genreMap).map(([genre, code]) => (

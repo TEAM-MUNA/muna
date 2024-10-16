@@ -6,6 +6,7 @@ export interface ReviewType {
   concert: {
     id: string;
     title: string;
+    poster: string;
   };
   reviewId: string;
   author: {
