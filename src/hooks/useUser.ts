@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { firebaseAuth } from "../firebase";
-import { setUser } from "../slices/authSlice";
 import { getUserFromFirebase } from "../api/firebase/authAPI";
+import { firebaseAuth } from "../firebase";
+import { AppDispatch } from "../app/store";
+import { setUser } from "../slices/authSlice";
+import {
+  fetchUserInteraction,
+  setUserInteraction,
+} from "../slices/interactionSlice";
 
 const useUser = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
@@ -20,8 +25,10 @@ const useUser = () => {
             profileImage: userInfo?.profileImage,
           })
         );
+        dispatch(fetchUserInteraction(currentUser.uid));
       } else {
         dispatch(setUser(null)); // 로그아웃 -> null
+        dispatch(setUserInteraction(null)); // 로그아웃 -> null
       }
     });
 
