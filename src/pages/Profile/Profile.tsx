@@ -36,7 +36,6 @@ function BookmarkList() {
     { concertId: string; title: string; poster: string }[]
   >([]);
 
-  // 북마크 리스트
   // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
   const bookmarkedConcertsId = useCurrentUser().bookmarkedConcerts;
   console.log(bookmarkedConcertsId);
@@ -58,7 +57,7 @@ function BookmarkList() {
     };
     fetchBookmarks();
     console.log(bookmarkedConcerts);
-  }, [userId]);
+  }, [userId, bookmarkedConcertsId]);
 
   return (
     <ul>
