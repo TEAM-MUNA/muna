@@ -12,6 +12,8 @@ const useCurrentUser = () => {
     nickname: user?.nickname,
     profileImage: user?.profileImage,
     bookmarkedConcert: userInteraction?.bookmarkedConcerts,
+    reviews: userInteraction?.reviews,
+    likedReviews: userInteraction?.likedReviews,
   };
 };
 
