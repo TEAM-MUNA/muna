@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import styles from "./Profile.module.scss";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
 import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
+import emptyMessages from "../../utils/constants/emptyMessages";
+import styles from "./Profile.module.scss";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -30,6 +31,7 @@ import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewG
 // ㄴ 콘서트, 리뷰 - 순서 정렬
 
 function BookmarkList() {
+  const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
 
   const [bookmarkedConcerts, setBookmarkedConcerts] = useState<
@@ -77,7 +79,17 @@ function BookmarkList() {
   }
   return (
     // TODO: 비어있을때 UI
-    <div>북마크한 공연이 없습니다</div>
+    <div className='empty'>
+      <p>{emptyMessages.profileMyBookmark}</p>
+      <div className='wrapper_btn'>
+        <Button
+          label='모든 공연 보기'
+          size='md'
+          color='default'
+          onClick={() => navigate("/concerts")}
+        />
+      </div>
+    </div>
   );
 }
 
