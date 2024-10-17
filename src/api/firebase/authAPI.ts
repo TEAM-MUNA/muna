@@ -138,3 +138,21 @@ export const updateUserBookmark = async (
     bookmarkedConcerts: action(concertId),
   });
 };
+
+// (모든)유저 아이디 입력 -> 작성한 리뷰 아이디 배열 출력
+// export const getUserReviewIds = async (
+//   userId: string
+// ): Promise<string[] | undefined> => {
+//   try {
+//     const userDocRef = doc(db, "reviews", userId);
+//     const userDocSnapshot = await getDoc(userDocRef);
+
+//     if (userDocSnapshot.exists()) {
+//       const userData = userDocSnapshot.data();
+//       return userData.bookmarkedConcerts || [];
+//     }
+//   } catch (error) {
+//     console.error("유저의 북마크 리스트 가져오기 실패:", error);
+//   }
+//   return undefined;
+// };
