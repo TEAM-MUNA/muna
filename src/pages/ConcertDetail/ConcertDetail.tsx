@@ -29,6 +29,12 @@ export default function ConcertDetail() {
   const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
+
+  const {
+    isOpen: isReservationLinkModalOpen,
+    openModal: openReservationModal,
+    closeModal: closeReservationModal,
+  } = useModal();
   const {
     isOpen: isBookmarkModalOpen,
     openModal: openBookmarkModalOpen,
@@ -66,6 +72,12 @@ export default function ConcertDetail() {
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } = useToggle(
     isBookmarkedInitialState
   );
+
+  useEffect(() => {
+    if (concertDetail) {
+      console.log(concertDetail);
+    }
+  }, [concertDetail]);
 
   const tabList = useMemo<[string, number | null][]>(
     () => [
@@ -197,6 +209,18 @@ export default function ConcertDetail() {
             />
           </Dialog>
         ) : null}
+        {isReservationLinkModalOpen ? (
+          <Dialog isOpen onClose={closeReservationModal} title='예매하러 가기'>
+            {concertDetail.relates.relate.map((relate) => (
+              <Button
+                key={relate.relateurl}
+                label={relate.relatenm}
+                color='default'
+                onClick={() => window.open(relate.relateurl)}
+              />
+            ))}
+          </Dialog>
+        ) : null}
         <Toaster />
         <h2 className='sr_only'>공연 상세</h2>
         <small className={styles.info_update}>
@@ -258,6 +282,7 @@ export default function ConcertDetail() {
                 size='sm'
                 color='default'
                 label='예매하러 가기'
+                onClick={openReservationModal}
               />
             </div>
           </div>
