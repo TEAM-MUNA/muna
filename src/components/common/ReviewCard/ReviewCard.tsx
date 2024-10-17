@@ -11,8 +11,6 @@ import Avatar from "../Avatar/Avatar";
 interface ReviewCardProps extends UserType, ReviewPropType {}
 
 export default function ReviewCard({
-  // page = "concert",
-  // page = "profile",
   // userLink = defaultUserType.userLink,
   reviewLink = defaultReviewType.reviewLink,
   profileImage = defaultUserType.profileImage,
@@ -41,7 +39,6 @@ export default function ReviewCard({
             nickname={nickname}
             userId={userId}
             profileImage={profileImage}
-            userLink='/임시'
           />
           {page === "main" && <LikeButton size='sm' likeCount={likeCount} />}
         </div>

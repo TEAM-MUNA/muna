@@ -31,7 +31,7 @@ export interface ReviewPropType {
   likeCount?: number;
   thumbnail?: string;
   images?: string[];
-  reviewLink?: string; // 추후 제거
+  reviewLink?: string;
 }
 
 export const defaultReviewType = {
