@@ -36,6 +36,8 @@ export default function ReviewEdit() {
     console.log("저장완료");
   };
 
+
+
   return (
     <section className={styles.reviewEdit_form}>
       <h2 className="sr_only">리뷰생성 및 수정</h2>
@@ -51,8 +53,8 @@ export default function ReviewEdit() {
           </div>
           <div className={styles.concert_inner}>
             <p>
-              <h3>{testConcertType.title}</h3>
-              <span>{testConcertType.title}</span>
+              <h3 className={styles.concert_title}>{testConcertType.title}</h3>
+              <span className={styles.concert_genre}>{testConcertType.title}</span>
             </p>
             <CalendarInput/>
           </div>
@@ -60,8 +62,8 @@ export default function ReviewEdit() {
         <div className={styles.star_form}>
           <StarForm initialRating={0}/>
         </div>
-        <div>
-
+        <div className={styles.image_bar}>
+          <div className={styles.image_plus}></div>
         </div>
     </section>
 );

@@ -32,6 +32,20 @@
             justify-content: space-between;
             width: 80%;
             height: auto;
+            p{
+                position: relative;
+                width: 100%;
+                .concert_title{
+                    font-size: $font-lg;
+                    font-weight: $font-bold;
+                    color: $black;
+                }
+                .concert_genre{
+                    font-size: $font-sm;
+                    font-weight: $font-regular;
+                    color: $black-lighter;
+                }
+            }
         }
     }
     .star_form{
