@@ -12,7 +12,6 @@ import { ConcertReturnType } from "../../types/concertType";
 import { genreList, genreMap } from "../../utils/constants/genreData";
 import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
-import "./ConcertList.scss";
 import MultiSelectTab from "../../components/common/MultiSelectTab/MultiSelectTab";
 import { clearQuery } from "../../slices/searchSlice";
 
