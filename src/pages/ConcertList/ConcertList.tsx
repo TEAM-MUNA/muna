@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
@@ -15,13 +15,29 @@ import sortConcertList from "./sortConcertList";
 import "./ConcertList.scss";
 import MultiSelectTab from "../../components/common/MultiSelectTab/MultiSelectTab";
 
+const pfStateCodeMap: { [key: string]: string } = {
+  공연중: "02",
+  공연예정: "01",
+  공연완료: "03",
+  공연전체: "",
+};
+
+const regionCodeMap: { [key: string]: string[] } = {
+  "서울/경기/인천": ["11", "41", "28"],
+  "충청/대전/세종": ["43", "44", "30", "36"],
+  "경상/부산/대구/울산": ["47", "48", "26", "27", "31"],
+  "전라/광주": ["45", "46", "29"],
+  강원: ["51"],
+  제주: ["50"],
+  지역전체: [],
+};
+
 export default function ConcertList() {
-  console.log("fpsx");
   // concertList(from Kopis)
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
-  const [genreCode, setGenreCode] = useState<string>(""); // 전체장르(default)
-  const [pfStateCode, setPfStateCode] = useState<string>("02"); // 공연중
-  const [regionCodeList, setRegionCodeList] = useState<string[]>([""]); // 선택된 지역코드 리스트
+  const [genreCode, setGenreCode] = useState<string>("");
+  const [pfStateCode, setPfStateCode] = useState<string>("02");
+  const [regionCodeList, setRegionCodeList] = useState<string[]>([]); // 선택된 지역코드 리스트
   const [page, setPage] = useState(1);
   const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +46,7 @@ export default function ConcertList() {
 
   const getData = async () => {
     const dataList = await Promise.all(
-      regionCodeList.map((regionCode) =>
+      (regionCodeList.length ? regionCodeList : [""]).map((regionCode) =>
         fetchConcertList(genreCode, pfStateCode, regionCode, page, keyword)
       )
     );
@@ -46,7 +62,8 @@ export default function ConcertList() {
 
   useEffect(() => {
     setConcertList([]); // 필터 값 변경 시 리스트 초기화
-  }, [genreCode, pfStateCode, regionCodeList, sortOrder]);
+    setPage(1); // 페이지를 1로 리셋
+  }, [genreCode, pfStateCode, regionCodeList, sortOrder, keyword]);
 
   // 공연 목록 정보 조회 요청
   useEffect(() => {
@@ -64,71 +81,32 @@ export default function ConcertList() {
     if (isEnd) {
       setPage((prevPage) => prevPage + 1);
     }
-    console.log(page);
   }, [isEnd]);
 
   // onTabChanged 함수 정의
-  const handleTabChange = (index: number) => {
+  const handleTabChange = useCallback((index: number) => {
     const selectedGenre = genreList[index];
     const code = genreMap[selectedGenre];
     setGenreCode(code);
-  };
+  }, []);
 
   // 공연 상태 onSelect 함수 정의
-  const handlePfStateChange = (selected: string) => {
-    let code = "";
-    switch (selected) {
-      case "공연중":
-        code = "02";
-        break;
-      case "공연예정":
-        code = "01";
-        break;
-      case "공연완료":
-        code = "03";
-        break;
-      default:
-        code = "";
-    }
-    setPfStateCode(code);
-  };
+  const handlePfStateChange = useCallback((selected: string) => {
+    setPfStateCode(pfStateCodeMap[selected]);
+  }, []);
 
-  // 공연 상태 onSelect 함수 정의
-  const handleRegionStateChange = (selected: string) => {
-    let codes = [""];
-    switch (selected) {
-      case "서울/경기/인천":
-        codes = ["11", "41", "28"];
-        break;
-      case "충청/대전/세종":
-        codes = ["43", "44", "30", "36"];
-        break;
-      case "경상/부산/대구/울산":
-        codes = ["47", "48", "26", "27", "31"];
-        break;
-      case "전라/광주":
-        codes = ["45", "46", "29"];
-        break;
-      case "강원":
-        codes = ["51"];
-        break;
-      case "제주":
-        codes = ["50"];
-        break;
-      default:
-        codes = [""];
-    }
-    setRegionCodeList(codes);
-  };
+  // 지역 상태 onSelect 함수 정의
+  const handleRegionStateChange = useCallback((selected: string) => {
+    setRegionCodeList(regionCodeMap[selected]);
+  }, []);
 
   // 공연목록 정렬 기준 변경
-  const handleSortChange = (selected: string) => {
+  const handleSortChange = useCallback((selected: string) => {
     setSortOrder(selected);
-  };
+  }, []);
 
   // 정렬이 변경될 때마다 concertList 정렬
   useEffect(() => {
-    console.log(sortOrder);
     setConcertList((prevData) => sortConcertList(prevData, sortOrder));
   }, [sortOrder]);
 
