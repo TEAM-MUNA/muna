@@ -73,6 +73,13 @@
           margin-top: 6px;
           background-color: aliceblue;
         }
+
+        .review_link {
+          display: flex;
+          align-items: center;
+          gap: 6.8px;
+        }
+
         .rating_text {
           font-size: $font-sm;
           font-weight: $font-medium;

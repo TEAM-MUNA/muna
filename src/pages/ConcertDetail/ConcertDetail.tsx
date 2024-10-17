@@ -261,12 +261,10 @@ export default function ConcertDetail() {
                     </p>
                   </>
                 ) : (
-                  <>
+                  <Link to='/review' className={styles.review_link}>
                     <StarScoreOnlyIcon rating={null} />
-                    <Link to='/review'>
-                      <p className={styles.rating_text_gray}>평점 주기</p>
-                    </Link>
-                  </>
+                    <p className={styles.rating_text_gray}>평점 주기</p>
+                  </Link>
                 )}
               </span>
             </div>
