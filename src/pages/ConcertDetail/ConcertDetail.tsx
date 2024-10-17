@@ -286,13 +286,13 @@ export default function ConcertDetail() {
         <div className={styles.date_location}>
           <span className={styles.icon_text_container}>
             <CalendarIcon size='16' />
-            <p>
+            <p aria-label='공연 기간'>
               {concertDetail.prfpdfrom} ~ {concertDetail.prfpdto}
             </p>
           </span>
           <span className={styles.icon_text_container}>
             <LocationIcon size='16' />
-            <p>
+            <p aria-label='공연장'>
               {concertDetail.area} | {concertDetail.fcltynm}
             </p>
           </span>
@@ -332,7 +332,20 @@ export default function ConcertDetail() {
             {!isReviewListLoading &&
               !reviewListError &&
               (!reviewList || reviewList.length === 0) && (
-                <p>리뷰가 존재하지 않습니다.</p>
+                <div className={styles.no_review}>
+                  <p aria-label='작성된 후기가 없습니다.'>
+                    작성된 후기가 없습니다.
+                    <br />
+                    공연을 보셨다면 소중한 후기를 남겨주세요!
+                  </p>
+                  <Button
+                    className={styles.review_button}
+                    label='후기 작성하기'
+                    color='primary'
+                    size='md'
+                    onClick={goToReviewEditPage}
+                  />
+                </div>
               )}
           </article>
         ) : (

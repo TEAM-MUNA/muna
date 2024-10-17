@@ -111,7 +111,6 @@
   .icon_text_container {
     display: flex;
     align-items: center;
-
     gap: 4px;
     margin-bottom: 6px;
   }
@@ -124,6 +123,17 @@
     }
     div {
       z-index: 0;
+    }
+  }
+
+  .no_review {
+    font-weight: $font-medium;
+    color: $black-light;
+    text-align: center;
+    margin-top: 60px;
+
+    .review_button {
+      margin: 24px auto 0;
     }
   }
 
