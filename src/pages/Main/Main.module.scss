@@ -1,6 +1,17 @@
 @import "../../styles/_variables";
 @import "../../styles/_mixin";
 
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .main {
   text-align: center;
 
@@ -52,7 +63,17 @@
     }
   }
   .loading_imageSlider {
-    height: 485px;
+    height: 493px;
+
+    @media (max-width: 420px) {
+      height: 440px;
+    }
+    @media (max-width: 350px) {
+      height: 400px;
+    }
+    @media (max-width: 300px) {
+      height: 360px;
+    }
     display: flex;
     justify-content: center;
     padding-top: 50%;
@@ -72,11 +93,14 @@
     padding-top: 15px;
     letter-spacing: -0.02em;
 
-    div {
+    .reviews {
+      animation: slideUp 0.5s ease-out;
+
       .review {
         @include text_ellipsis(1);
         font-size: $font-md;
         margin: 0;
+        color: $white;
       }
       .nickname {
         color: $white-lighter;

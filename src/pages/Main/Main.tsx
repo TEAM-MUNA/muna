@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
@@ -11,12 +11,11 @@ import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 
 interface MainReviewType {
   concert: {
-    id: string; // 중복 x
+    id: string;
     title: string;
     poster: string;
-    // averageRating: number;
   };
-  reviews: { contents: string; nickname: string; rating: number }[];
+  reviews: { id: string; contents: string; nickname: string; rating: number }[];
 }
 
 export default function Main() {
@@ -37,7 +36,11 @@ export default function Main() {
   const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
 
   useEffect(() => {
-    if (!isMainShowingReviewListLoading && mainShowingReviewList) {
+    if (
+      !mainShowingReviewListError &&
+      !isMainShowingReviewListLoading &&
+      mainShowingReviewList
+    ) {
       const newReviews: MainReviewType[] = [];
 
       mainShowingReviewList.forEach((review) => {
@@ -50,6 +53,7 @@ export default function Main() {
           // 이미 존재하는 공연일 경우
           // 그 인덱스에 추가
           newReviews[existingReviewId].reviews.push({
+            id: review.reviewId,
             contents: review.contents,
             nickname: review.author.nickname,
             rating: review.rating || 0,
@@ -64,6 +68,7 @@ export default function Main() {
             },
             reviews: [
               {
+                id: review.reviewId,
                 contents: review.contents,
                 nickname: review.author.nickname,
                 rating: review.rating || 0,
@@ -76,10 +81,6 @@ export default function Main() {
       setMainReviews(newReviews);
     }
   }, [isMainShowingReviewListLoading, mainShowingReviewList]);
-
-  useEffect(() => {
-    console.log("currentPosterIndex", currentPosterIndex, mainReviews);
-  }, [currentPosterIndex]);
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -126,23 +127,29 @@ export default function Main() {
       )}
 
       <div className={styles.main_showing_concert_reviews}>
-        {/* TODO: 반복문 사용 */}
         {mainReviews &&
         mainReviews.length > 0 &&
         mainReviews[currentPosterIndex]
           ? mainReviews[currentPosterIndex].reviews.map((review) => (
-              <div key={review.contents}>
-                <blockquote id='review1' className={styles.review}>
+              <Link
+                to={`/review/${review.id}`}
+                key={review.contents}
+                className={styles.reviews}
+              >
+                <blockquote
+                  id={`review-${review.id}`}
+                  className={styles.review}
+                >
                   {review.contents}
                 </blockquote>
                 <cite
-                  id='nickname1'
+                  id={`review-author-${review.id}`}
                   className={styles.nickname}
-                  aria-labelledby='review1'
+                  aria-labelledby={`review-${review.id} review-author-${review.id}`}
                 >
                   {review.nickname}
                 </cite>
-              </div>
+              </Link>
             ))
           : null}
       </div>
@@ -180,6 +187,7 @@ export default function Main() {
             userId={review.author.id}
             content={review.contents}
             thumbnail={review.images ? review.images[0] : undefined}
+            reviewLink={`/review/${review.reviewId}`}
           />
         ))}
     </section>
