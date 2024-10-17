@@ -227,7 +227,6 @@ export default function ConcertDetail() {
           본 정보는 주최 측의 사정에 따라 변경될 수 있음. 최종 업데이트{" "}
           {concertDetail.updatedate}
         </small>
-
         <div className={styles.details}>
           <img
             className={styles.poster}
@@ -298,8 +297,7 @@ export default function ConcertDetail() {
             </p>
           </span>
         </div>
-        <div className={styles.tab_section}>
-          <Tab onTabChanged={handleTab} tabList={tabList} withNumber />
+        <Tab onTabChanged={handleTab} tabList={tabList} withNumber>
           <Button
             className={styles.write_review}
             color='primary_line'
@@ -307,7 +305,7 @@ export default function ConcertDetail() {
             label='후기 작성하기'
             onClick={goToReviewEditPage}
           />
-        </div>
+        </Tab>
         {tabIndex === 0 ? (
           <article className={styles.reviews}>
             {isReviewListLoading && <LoadingSpinner />}

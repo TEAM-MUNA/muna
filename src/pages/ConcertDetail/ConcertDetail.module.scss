@@ -119,19 +119,14 @@
     position: relative;
     margin-top: 20px;
     .write_review {
-      position: absolute;
-      right: 0;
-      z-index: 10;
-      top: 6px;
+      display: block;
+      box-sizing: border-box;
     }
     div {
       z-index: 0;
     }
   }
-  .reviews {
-    // background-color: yellow;
-    // position: relative; /* 부모 요소가 필요하면 relative 설정 */
-  }
+
   .more_info {
     dl {
       font-size: $font-md;
