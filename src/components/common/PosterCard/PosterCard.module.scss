@@ -19,8 +19,7 @@
 
   img {
     width: 100%;
-    aspect-ratio: 170 / 230;
-    object-fit: cover;
+    @include poster_ratio;
   }
 
   .wrapper_bookmark {

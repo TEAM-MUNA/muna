@@ -34,9 +34,7 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
       to={`/concert/${concert.mt20id}`}
       className={`${styles.concertCard} card_concert`}
     >
-      <div className={styles.poster}>
-        <img src={concert.poster} alt={concert.prfnm} />
-      </div>
+      <img className={styles.poster} src={concert.poster} alt={concert.prfnm} />
       <div className={styles.info}>
         <Tag label={concert.prfstate} color='white' />
         <h3 className={styles.title}>{concert.prfnm}</h3>
@@ -69,7 +67,6 @@ export default function ConcertCard({ concert }: ConcertCardProps) {
           <p>
             {concert.prfpdfrom} ~ {concert.prfpdto}
           </p>
-          <p>전체 관람가</p> {/* 수정 혹은 삭제 요망 */}
         </div>
       </div>
     </Link>

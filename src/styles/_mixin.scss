@@ -50,3 +50,9 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+@mixin poster_ratio {
+  // 이 속성을 사용할때는 width나 height 중 하나만 설정해주세요. (나머지 하나는 auto)
+  aspect-ratio: 42 / 60;
+  object-fit: cover;
+}
