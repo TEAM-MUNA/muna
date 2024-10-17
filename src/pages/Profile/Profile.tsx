@@ -18,18 +18,6 @@ import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
-// 1. 현재 로그인한 사용자의 정보 불러오기 - 완료
-// * 주소에 따라 해당 유저 프로필이 보여야 함
-// ㄴ 상단 프로필
-// 2. 북마크리스트, 리뷰리스트
-// ㄴ 북마크한 콘서트 - 제목, 이미지
-// ㄴ 리뷰 - 공연제목, 썸네일, 복수 이미지 여부, 내용미리보기, 좋아요, 별점, 관람일
-// 3. 북마크 기능
-// ㄴ 북마크 버튼 누르면 해제 + 토스트 알림 (실행취소 버튼)
-// 4. 필터와 정렬기능 - 여러페이지에서 중복사용
-// ㄴ 콘서트 - 공연상태, 지역 필터
-// ㄴ 콘서트, 리뷰 - 순서 정렬
-
 function BookmarkList() {
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
@@ -61,20 +49,41 @@ function BookmarkList() {
     console.log(bookmarkedConcerts);
   }, [userId, bookmarkedConcertsId]);
 
+  // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
+  // const concertOrderSelectOptions = ["최신순", "북마크순"];
+  // const handleConcertDropdownSelect = () => {};
+
   if (bookmarkedConcerts.length > 0) {
     return (
-      <ul>
-        {bookmarkedConcerts.reverse().map((i) => (
-          <li key={i.concertId}>
-            <PosterCard
-              concertId={i.concertId}
-              title={i.title}
-              poster={i.poster}
-              bookmarkInteractive
+      <>
+        {/* <div className={styles.wrapper_dropdown}>
+            <DropdownSelect
+              onSelect={handleConcertDropdownSelect}
+              options={concertStateSelectOptions}
             />
-          </li>
-        ))}
-      </ul>
+            <DropdownSelect
+              onSelect={handleConcertDropdownSelect}
+              options={concertOrderSelectOptions}
+            />
+            <DropdownSelect
+              onSelect={handleConcertDropdownSelect}
+              options={concertOrderSelectOptions}
+              position='right'
+            />
+          </div> */}
+        <ul>
+          {bookmarkedConcerts.reverse().map((i) => (
+            <li key={i.concertId}>
+              <PosterCard
+                concertId={i.concertId}
+                title={i.title}
+                poster={i.poster}
+                bookmarkInteractive
+              />
+            </li>
+          ))}
+        </ul>
+      </>
     );
   }
   return (
@@ -86,10 +95,47 @@ function BookmarkList() {
           label='모든 공연 보기'
           size='md'
           color='default'
-          onClick={() => navigate("/concerts")}
+          onClick={() => navigate("/concert")}
         />
       </div>
     </div>
+  );
+}
+
+function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
+  // getUserReviewIds;
+
+  // const reviewOrderSelectOptions = ["최신순", "인기순"];
+  // const handleReviewDropdownSelect = () => {};
+
+  if (activeView === "list") {
+    return (
+      <section className={`${styles.tab_content} ${styles.review_list}`}>
+        {/* <div className='wrapper_dropdown_noline'>
+            <DropdownSelect
+              onSelect={handleReviewDropdownSelect}
+              options={reviewOrderSelectOptions}
+              outline={false}
+              position='right'
+            />
+          </div> */}
+        <ul>
+          <li>
+            <ReviewCard reviewLink='#' />
+          </li>
+        </ul>
+      </section>
+    );
+  }
+
+  return (
+    <section className={`${styles.tab_content} ${styles.review_gallery}`}>
+      <ul>
+        <li>
+          <ReviewGalleryCard reviewLink='#' hasMultiImages />
+        </li>
+      </ul>
+    </section>
   );
 }
 
@@ -120,14 +166,9 @@ export default function Profile() {
     () => tabTitle,
     [tabTitle]
   );
-  // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
-  // const concertOrderSelectOptions = ["최신순", "북마크순"];
-  // const reviewOrderSelectOptions = ["최신순", "인기순"];
-  // const handleConcertDropdownSelect = () => {};
-  // const handleReviewDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [activeView, setActiveView] = useState<string>("list");
+  const [activeView, setActiveView] = useState<"list" | "grid">("list");
   const handleTabChanged = (index: number) => {
     if (tabTitle.length === 1) {
       setActiveTab(0);
@@ -192,50 +233,10 @@ export default function Profile() {
       </nav>
       {activeTab === 0 && isMine && (
         <section className={`${styles.tab_content} ${styles.concert_bookmark}`}>
-          {/* <div className={styles.wrapper_dropdown}>
-            <DropdownSelect
-              onSelect={handleConcertDropdownSelect}
-              options={concertStateSelectOptions}
-            />
-            <DropdownSelect
-              onSelect={handleConcertDropdownSelect}
-              options={concertOrderSelectOptions}
-            />
-            <DropdownSelect
-              onSelect={handleConcertDropdownSelect}
-              options={concertOrderSelectOptions}
-              position='right'
-            />
-          </div> */}
           <BookmarkList />
         </section>
       )}
-      {(activeTab === 1 || !isMine) && activeView === "list" && (
-        <section className={`${styles.tab_content} ${styles.review_list}`}>
-          {/* <div className='wrapper_dropdown_noline'>
-            <DropdownSelect
-              onSelect={handleReviewDropdownSelect}
-              options={reviewOrderSelectOptions}
-              outline={false}
-              position='right'
-            />
-          </div> */}
-          <ul>
-            <li>
-              <ReviewCard reviewLink='#' />
-            </li>
-          </ul>
-        </section>
-      )}
-      {(activeTab === 1 || !isMine) && activeView === "grid" && (
-        <section className={`${styles.tab_content} ${styles.review_gallery}`}>
-          <ul>
-            <li>
-              <ReviewGalleryCard reviewLink='#' hasMultiImages />
-            </li>
-          </ul>
-        </section>
-      )}
+      {(activeTab === 1 || !isMine) && <ReviewList activeView={activeView} />}
     </div>
   );
 }
