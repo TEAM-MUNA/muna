@@ -145,12 +145,13 @@ export default function Settings() {
   useUserRedirect();
   const navigate = useNavigate();
 
-  const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
-    useToggle(false);
+  // const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
+  //   useToggle(false);
 
   return (
     <ul>
-      <ColumnMenuItem
+      {/* DEBT: 이메일 알림은 후기댓글 기능 생기면 추가 */}
+      {/* <ColumnMenuItem
         label='이메일 알림'
         buttonRight={
           <Toggle
@@ -163,7 +164,7 @@ export default function Settings() {
         onClick={() => {
           onSettingToggle();
         }}
-      />
+      /> */}
       <ColumnMenuItem
         label='프로필 변경'
         onClick={() => {
