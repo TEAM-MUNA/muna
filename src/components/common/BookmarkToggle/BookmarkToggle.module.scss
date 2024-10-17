@@ -3,4 +3,7 @@
 
 .btn_bookmark {
   color: $white;
+  &.primary {
+    color: $primary;
+  }
 }
