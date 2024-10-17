@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import styles from "./Profile.module.scss";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
 import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 import emptyMessages from "../../utils/constants/emptyMessages";
-import { useNavigate } from "react-router-dom";
+import styles from "./Profile.module.scss";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
