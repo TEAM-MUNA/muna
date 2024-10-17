@@ -32,7 +32,7 @@ export default function ConcertDetail() {
   // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
   const {
     concertDetail,
-    isLoading: isConertDetailLoading,
+    isLoading: isConcertDetailLoading,
     error: concertDetailError,
   } = useGetConcertDetail(concertId); // kopis
   const {
@@ -76,7 +76,7 @@ export default function ConcertDetail() {
     return <ConcertList />;
   }
 
-  if (isConertDetailLoading || isConcertLoading) {
+  if (isConcertDetailLoading || isConcertLoading) {
     return <LoadingSpinner />;
   }
 
