@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
@@ -15,7 +15,7 @@ interface MainReviewType {
     title: string;
     poster: string;
   };
-  reviews: { contents: string; nickname: string; rating: number }[];
+  reviews: { id: string; contents: string; nickname: string; rating: number }[];
 }
 
 export default function Main() {
@@ -53,6 +53,7 @@ export default function Main() {
           // 이미 존재하는 공연일 경우
           // 그 인덱스에 추가
           newReviews[existingReviewId].reviews.push({
+            id: review.reviewId,
             contents: review.contents,
             nickname: review.author.nickname,
             rating: review.rating || 0,
@@ -67,6 +68,7 @@ export default function Main() {
             },
             reviews: [
               {
+                id: review.reviewId,
                 contents: review.contents,
                 nickname: review.author.nickname,
                 rating: review.rating || 0,
@@ -129,18 +131,25 @@ export default function Main() {
         mainReviews.length > 0 &&
         mainReviews[currentPosterIndex]
           ? mainReviews[currentPosterIndex].reviews.map((review) => (
-              <div key={review.contents}>
-                <blockquote id='review1' className={styles.review}>
+              <Link
+                to={`/review/${review.id}`}
+                key={review.contents}
+                className={styles.reviews}
+              >
+                <blockquote
+                  id={`review-${review.id}`}
+                  className={styles.review}
+                >
                   {review.contents}
                 </blockquote>
                 <cite
-                  id='nickname1'
+                  id={`review-author-${review.id}`}
                   className={styles.nickname}
-                  aria-labelledby='review1'
+                  aria-labelledby={`review-${review.id} review-author-${review.id}`}
                 >
                   {review.nickname}
                 </cite>
-              </div>
+              </Link>
             ))
           : null}
       </div>
