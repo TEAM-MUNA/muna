@@ -52,7 +52,17 @@
     }
   }
   .loading_imageSlider {
-    height: 485px;
+    height: 493px;
+
+    @media (max-width: 420px) {
+      height: 440px;
+    }
+    @media (max-width: 350px) {
+      height: 400px;
+    }
+    @media (max-width: 300px) {
+      height: 360px;
+    }
     display: flex;
     justify-content: center;
     padding-top: 50%;
