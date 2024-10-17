@@ -55,7 +55,8 @@
         padding: 0;
       }
       .title {
-        font-size: $font-2xl;
+        @include text_ellipsis(2);
+        font-size: $font-xl;
         font-weight: $font-bold;
         margin-top: 10px;
         margin-bottom: 8px;
@@ -102,6 +103,7 @@
 
   .icon_text_container {
     display: flex;
+    align-items: center;
 
     gap: 4px;
     margin-bottom: 6px;

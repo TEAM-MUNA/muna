@@ -288,13 +288,13 @@ export default function ConcertDetail() {
         </div>
         <div className={styles.date_location}>
           <span className={styles.icon_text_container}>
-            <CalendarIcon width={16} />
+            <CalendarIcon size='16' />
             <p>
               {concertDetail.prfpdfrom} ~ {concertDetail.prfpdto}
             </p>
           </span>
           <span className={styles.icon_text_container}>
-            <LocationIcon width={16} />
+            <LocationIcon size='16' />
             <p>
               {concertDetail.area} | {concertDetail.fcltynm}
             </p>
