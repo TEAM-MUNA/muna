@@ -61,6 +61,7 @@ export interface ConcertReturnType {
   styurls: {
     styurl: string[]; // 공연 관련 상세 사진
   };
+  sty: string; // 공연 설명
 }
 
 // 위에 두가지 타입 통합

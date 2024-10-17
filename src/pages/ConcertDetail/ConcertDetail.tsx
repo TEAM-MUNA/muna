@@ -234,7 +234,7 @@ export default function ConcertDetail() {
             width={108}
             height={168}
             src={concertDetail.poster}
-            alt='/'
+            alt={concertDetail.prfnm}
           />
           <div className={styles.info}>
             <div>
@@ -262,7 +262,6 @@ export default function ConcertDetail() {
                   </>
                 ) : (
                   <>
-                    {/* TODO: 올바른 링크 연결하기 */}
                     <StarScoreOnlyIcon rating={null} />
                     <Link to='/review'>
                       <p className={styles.rating_text_gray}>평점 주기</p>
@@ -344,47 +343,75 @@ export default function ConcertDetail() {
           <article className={styles.more_info}>
             <h3 className='sr_only'>공연 추가 정보</h3>
             <dl>
-              <dt className={styles.label}>공연시간</dt>
-              <dd className={styles.detail}>{concertDetail.dtguidance}</dd>
+              {concertDetail.dtguidance ? (
+                <>
+                  <dt className={styles.label}>공연시간</dt>
+                  <dd className={styles.detail}>{concertDetail.dtguidance}</dd>
+                </>
+              ) : null}
 
-              <dt className={styles.label}>출연진</dt>
-              <dd className={styles.detail}>{concertDetail.prfcast}</dd>
+              {concertDetail.prfcast ? (
+                <>
+                  <dt className={styles.label}>출연진</dt>
+                  <dd className={styles.detail}>{concertDetail.prfcast}</dd>
+                </>
+              ) : null}
 
-              <dt className={styles.label}>제작사</dt>
-              <dd className={styles.detail}>{concertDetail.entrpsnm}</dd>
+              {concertDetail.entrpsnm ? (
+                <>
+                  <dt className={styles.label}>제작사</dt>
+                  <dd className={styles.detail}>{concertDetail.entrpsnm}</dd>
+                </>
+              ) : null}
 
-              <dt className='sr_only'>공연 사진</dt>
-              <dd className={styles.poster}>
-                {(() => {
-                  if (!concertDetail.styurls || !concertDetail.styurls.styurl)
-                    return null;
+              {concertDetail.fcltynm ? (
+                <>
+                  <dt className={styles.label}>장소</dt>
+                  <dd className={styles.detail}>{concertDetail.fcltynm}</dd>
+                </>
+              ) : null}
+              {concertDetail.sty ? (
+                <>
+                  <br />
+                  <dt className='sr_only'>공연 설명</dt>
+                  <dd
+                    className={styles.description}
+                    dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
+                  />
+                </>
+              ) : null}
 
-                  const styurls = concertDetail.styurls.styurl;
+              {(() => {
+                if (!concertDetail.styurls || !concertDetail.styurls.styurl)
+                  return null;
 
-                  if (Array.isArray(styurls)) {
-                    return styurls.map((url) => (
-                      <img
-                        key={url}
-                        className={styles.image}
-                        src={url}
-                        alt={concertDetail.prfnm}
-                      />
-                    ));
-                  }
+                const styurls = concertDetail.styurls.styurl;
 
-                  return (
-                    <img
-                      key={styurls}
-                      className={styles.image}
-                      src={styurls}
-                      alt={concertDetail.prfnm}
-                    />
-                  );
-                })()}
-              </dd>
-
-              <dt className={styles.label}>장소</dt>
-              <dd className={styles.detail}>{concertDetail.fcltynm}</dd>
+                return (
+                  <>
+                    <dt className='sr_only'>공연 사진</dt>
+                    <dd className={styles.poster}>
+                      {Array.isArray(styurls) ? (
+                        styurls.map((url) => (
+                          <img
+                            key={url}
+                            className={styles.image}
+                            src={url}
+                            alt={concertDetail.prfnm}
+                          />
+                        ))
+                      ) : (
+                        <img
+                          key={styurls}
+                          className={styles.image}
+                          src={styurls}
+                          alt={concertDetail.prfnm}
+                        />
+                      )}
+                    </dd>
+                  </>
+                );
+              })()}
             </dl>
           </article>
         )}

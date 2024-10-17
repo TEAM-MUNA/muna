@@ -1,6 +1,12 @@
 @import "../../styles/_variables";
 @import "../../styles/_mixin";
 
+@mixin full_width_column {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+}
+
 .concert_detail {
   line-height: $font-height-lg;
 
@@ -129,14 +135,17 @@
       white-space: normal;
     }
     .poster {
-      grid-column: 1 / -1;
-      margin: 0;
-      padding: 0;
+      @include full_width_column;
       margin: 12px 0;
 
       .image {
         width: 100%;
       }
+    }
+
+    .description {
+      @include full_width_column;
+      white-space: pre-wrap;
     }
 
     .label {
