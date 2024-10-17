@@ -59,6 +59,7 @@ export default function ImageSlider({
         slidesToShow={1}
         className='center'
         centerMode
+        autoplay
         infinite
         centerPadding={centerPadding}
         speed={500}
