@@ -62,9 +62,6 @@ export default function ReviewEdit() {
         <div className={styles.star_form}>
           <StarForm initialRating={0}/>
         </div>
-        <div className={styles.image_bar}>
-          <div className={styles.image_plus}></div>
-        </div>
     </section>
 );
 }
