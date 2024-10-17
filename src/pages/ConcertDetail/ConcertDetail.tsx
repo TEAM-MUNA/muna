@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -22,18 +21,36 @@ import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarSco
 import useGetConcert from "../../hooks/useGetConcert";
 import generateRandomId from "../../utils/generateRandomId";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
+import Dialog from "../../components/common/Modal/Modal";
+import useModal from "../../hooks/useModal";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
+
+  const {
+    isOpen: isReservationLinkModalOpen,
+    openModal: openReservationModal,
+    closeModal: closeReservationModal,
+  } = useModal();
+  const {
+    isOpen: isBookmarkModalOpen,
+    openModal: openBookmarkModalOpen,
+    closeModal: closeBookmarkModal,
+  } = useModal();
+
+  const {
+    isOpen: isReviewModalOpen,
+    openModal: openReviewModalOpen,
+    closeModal: closeReviewModal,
+  } = useModal();
   const navigate = useNavigate();
 
-  // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
   const {
     concertDetail,
-    isLoading: isConertDetailLoading,
+    isLoading: isConcertDetailLoading,
     error: concertDetailError,
   } = useGetConcertDetail(concertId); // kopis
   const {
@@ -56,6 +73,12 @@ export default function ConcertDetail() {
     isBookmarkedInitialState
   );
 
+  useEffect(() => {
+    if (concertDetail) {
+      console.log(concertDetail);
+    }
+  }, [concertDetail]);
+
   const tabList = useMemo<[string, number | null][]>(
     () => [
       ["후기", reviewList?.length || 0],
@@ -77,13 +100,16 @@ export default function ConcertDetail() {
     return <ConcertList />;
   }
 
-  if (isConertDetailLoading || isConcertLoading) {
-    return <HeartSpinner size={65} color='#7926ff' />;
+  if (isConcertDetailLoading || isConcertLoading) {
+    return <LoadingSpinner />;
   }
 
   // 북마크 토글
   const handleBookmark = async () => {
-    console.log(userId, concert);
+    if (!userId) {
+      openBookmarkModalOpen();
+      return;
+    }
     if (userId && concertDetail) {
       onBookmarkToggle();
       try {
@@ -120,6 +146,10 @@ export default function ConcertDetail() {
 
   // 후기 작성하기
   const goToReviewEditPage = () => {
+    if (!userId) {
+      openReviewModalOpen();
+      return;
+    }
     const reviewId = generateRandomId();
     navigate(`/review/edit/${reviewId}`, {
       state: { concertId },
@@ -129,20 +159,81 @@ export default function ConcertDetail() {
   if (concertDetail) {
     return (
       <section className={styles.concert_detail}>
+        {isBookmarkModalOpen ? (
+          <Dialog
+            isOpen
+            onClose={closeBookmarkModal}
+            title='로그인 후 이용 가능'
+            description={
+              <>
+                북마크를 추가하시려면 로그인이 필요합니다.
+                <br />
+                로그인 후, 마음에 드는 공연을 북마크하여 쉽게 찾아보세요.
+              </>
+            }
+          >
+            <Button
+              label='로그인'
+              color='primary'
+              onClick={() => navigate("/login")}
+            />
+            <Button
+              label='회원가입'
+              color='default'
+              onClick={() => navigate("/signup")}
+            />
+          </Dialog>
+        ) : null}
+        {isReviewModalOpen ? (
+          <Dialog
+            isOpen
+            onClose={closeReviewModal}
+            title='로그인 후 이용 가능'
+            description={
+              <>
+                후기를 작성하시려면 로그인이 필요합니다.
+                <br />
+                로그인 후, 공연에 대한 소중한 의견을 남기고 공유해보세요.
+              </>
+            }
+          >
+            <Button
+              label='로그인'
+              color='primary'
+              onClick={() => navigate("/login")}
+            />
+            <Button
+              label='회원가입'
+              color='default'
+              onClick={() => navigate("/signup")}
+            />
+          </Dialog>
+        ) : null}
+        {isReservationLinkModalOpen ? (
+          <Dialog isOpen onClose={closeReservationModal} title='예매하러 가기'>
+            {concertDetail.relates.relate.map((relate) => (
+              <Button
+                key={relate.relateurl}
+                label={relate.relatenm}
+                color='default'
+                onClick={() => window.open(relate.relateurl)}
+              />
+            ))}
+          </Dialog>
+        ) : null}
         <Toaster />
         <h2 className='sr_only'>공연 상세</h2>
         <small className={styles.info_update}>
           본 정보는 주최 측의 사정에 따라 변경될 수 있음. 최종 업데이트{" "}
           {concertDetail.updatedate}
         </small>
-
         <div className={styles.details}>
           <img
             className={styles.poster}
             width={108}
             height={168}
             src={concertDetail.poster}
-            alt='/'
+            alt={concertDetail.prfnm}
           />
           <div className={styles.info}>
             <div>
@@ -169,13 +260,10 @@ export default function ConcertDetail() {
                     </p>
                   </>
                 ) : (
-                  <>
-                    {/* TODO: 올바른 링크 연결하기 */}
+                  <Link to='/review' className={styles.review_link}>
                     <StarScoreOnlyIcon rating={null} />
-                    <Link to='/review'>
-                      <p className={styles.rating_text_gray}>평점 주기</p>
-                    </Link>
-                  </>
+                    <p className={styles.rating_text_gray}>평점 주기</p>
+                  </Link>
                 )}
               </span>
             </div>
@@ -190,26 +278,26 @@ export default function ConcertDetail() {
                 size='sm'
                 color='default'
                 label='예매하러 가기'
+                onClick={openReservationModal}
               />
             </div>
           </div>
         </div>
         <div className={styles.date_location}>
           <span className={styles.icon_text_container}>
-            <CalendarIcon width={16} />
-            <p>
+            <CalendarIcon size='16' />
+            <p aria-label='공연 기간'>
               {concertDetail.prfpdfrom} ~ {concertDetail.prfpdto}
             </p>
           </span>
           <span className={styles.icon_text_container}>
-            <LocationIcon width={16} />
-            <p>
+            <LocationIcon size='16' />
+            <p aria-label='공연장'>
               {concertDetail.area} | {concertDetail.fcltynm}
             </p>
           </span>
         </div>
-        <div className={styles.tab_section}>
-          <Tab onTabChanged={handleTab} tabList={tabList} withNumber />
+        <Tab onTabChanged={handleTab} tabList={tabList} withNumber>
           <Button
             className={styles.write_review}
             color='primary_line'
@@ -217,7 +305,7 @@ export default function ConcertDetail() {
             label='후기 작성하기'
             onClick={goToReviewEditPage}
           />
-        </div>
+        </Tab>
         {tabIndex === 0 ? (
           <article className={styles.reviews}>
             {isReviewListLoading && <LoadingSpinner />}
@@ -244,29 +332,95 @@ export default function ConcertDetail() {
             {!isReviewListLoading &&
               !reviewListError &&
               (!reviewList || reviewList.length === 0) && (
-                <p>리뷰가 존재하지 않습니다.</p>
+                <div className={styles.no_review}>
+                  <p aria-label='작성된 후기가 없습니다.'>
+                    작성된 후기가 없습니다.
+                    <br />
+                    공연을 보셨다면 소중한 후기를 남겨주세요!
+                  </p>
+                  <Button
+                    className={styles.review_button}
+                    label='후기 작성하기'
+                    color='primary'
+                    size='md'
+                    onClick={goToReviewEditPage}
+                  />
+                </div>
               )}
           </article>
         ) : (
           <article className={styles.more_info}>
             <h3 className='sr_only'>공연 추가 정보</h3>
             <dl>
-              <dt className={styles.label}>공연시간</dt>
-              <dd className={styles.detail}>{concertDetail.dtguidance}</dd>
+              {concertDetail.dtguidance ? (
+                <>
+                  <dt className={styles.label}>공연시간</dt>
+                  <dd className={styles.detail}>{concertDetail.dtguidance}</dd>
+                </>
+              ) : null}
 
-              <dt className={styles.label}>출연진</dt>
-              <dd className={styles.detail}>{concertDetail.prfcast}</dd>
+              {concertDetail.prfcast ? (
+                <>
+                  <dt className={styles.label}>출연진</dt>
+                  <dd className={styles.detail}>{concertDetail.prfcast}</dd>
+                </>
+              ) : null}
 
-              <dt className={styles.label}>제작사</dt>
-              <dd className={styles.detail}>{concertDetail.entrpsnm}</dd>
+              {concertDetail.entrpsnm ? (
+                <>
+                  <dt className={styles.label}>제작사</dt>
+                  <dd className={styles.detail}>{concertDetail.entrpsnm}</dd>
+                </>
+              ) : null}
 
-              <dt className='sr_only'>공연 사진</dt>
-              <dd className={styles.poster}>
-                <img src={concertDetail.poster} alt={concertDetail.prfnm} />
-              </dd>
+              {concertDetail.fcltynm ? (
+                <>
+                  <dt className={styles.label}>장소</dt>
+                  <dd className={styles.detail}>{concertDetail.fcltynm}</dd>
+                </>
+              ) : null}
+              {concertDetail.sty ? (
+                <>
+                  <br />
+                  <dt className='sr_only'>공연 설명</dt>
+                  <dd
+                    className={styles.description}
+                    dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
+                  />
+                </>
+              ) : null}
 
-              <dt className={styles.label}>장소</dt>
-              <dd className={styles.detail}>{concertDetail.fcltynm}</dd>
+              {(() => {
+                if (!concertDetail.styurls || !concertDetail.styurls.styurl)
+                  return null;
+
+                const styurls = concertDetail.styurls.styurl;
+
+                return (
+                  <>
+                    <dt className='sr_only'>공연 사진</dt>
+                    <dd className={styles.poster}>
+                      {Array.isArray(styurls) ? (
+                        styurls.map((url) => (
+                          <img
+                            key={url}
+                            className={styles.image}
+                            src={url}
+                            alt={concertDetail.prfnm}
+                          />
+                        ))
+                      ) : (
+                        <img
+                          key={styurls}
+                          className={styles.image}
+                          src={styurls}
+                          alt={concertDetail.prfnm}
+                        />
+                      )}
+                    </dd>
+                  </>
+                );
+              })()}
             </dl>
           </article>
         )}

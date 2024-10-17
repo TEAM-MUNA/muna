@@ -1,6 +1,12 @@
 @import "../../styles/_variables";
 @import "../../styles/_mixin";
 
+@mixin full_width_column {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+}
+
 .concert_detail {
   line-height: $font-height-lg;
 
@@ -49,7 +55,8 @@
         padding: 0;
       }
       .title {
-        font-size: $font-2xl;
+        @include text_ellipsis(2);
+        font-size: $font-xl;
         font-weight: $font-bold;
         margin-top: 10px;
         margin-bottom: 8px;
@@ -66,6 +73,13 @@
           margin-top: 6px;
           background-color: aliceblue;
         }
+
+        .review_link {
+          display: flex;
+          align-items: center;
+          gap: 6.8px;
+        }
+
         .rating_text {
           font-size: $font-sm;
           font-weight: $font-medium;
@@ -96,7 +110,7 @@
 
   .icon_text_container {
     display: flex;
-
+    align-items: center;
     gap: 4px;
     margin-bottom: 6px;
   }
@@ -104,19 +118,25 @@
     position: relative;
     margin-top: 20px;
     .write_review {
-      position: absolute;
-      right: 0;
-      z-index: 10;
-      top: 6px;
+      display: block;
+      box-sizing: border-box;
     }
     div {
       z-index: 0;
     }
   }
-  .reviews {
-    // background-color: yellow;
-    // position: relative; /* 부모 요소가 필요하면 relative 설정 */
+
+  .no_review {
+    font-weight: $font-medium;
+    color: $black-light;
+    text-align: center;
+    margin-top: 60px;
+
+    .review_button {
+      margin: 24px auto 0;
+    }
   }
+
   .more_info {
     dl {
       font-size: $font-md;
@@ -129,10 +149,17 @@
       white-space: normal;
     }
     .poster {
-      grid-column: 1 / -1;
-      margin: 0;
-      padding: 0;
+      @include full_width_column;
       margin: 12px 0;
+
+      .image {
+        width: 100%;
+      }
+    }
+
+    .description {
+      @include full_width_column;
+      white-space: pre-wrap;
     }
 
     .label {
