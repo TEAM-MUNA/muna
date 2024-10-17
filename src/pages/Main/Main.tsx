@@ -11,10 +11,9 @@ import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 
 interface MainReviewType {
   concert: {
-    id: string; // 중복 x
+    id: string;
     title: string;
     poster: string;
-    // averageRating: number;
   };
   reviews: { contents: string; nickname: string; rating: number }[];
 }
@@ -37,7 +36,11 @@ export default function Main() {
   const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
 
   useEffect(() => {
-    if (!isMainShowingReviewListLoading && mainShowingReviewList) {
+    if (
+      !mainShowingReviewListError &&
+      !isMainShowingReviewListLoading &&
+      mainShowingReviewList
+    ) {
       const newReviews: MainReviewType[] = [];
 
       mainShowingReviewList.forEach((review) => {
@@ -76,10 +79,6 @@ export default function Main() {
       setMainReviews(newReviews);
     }
   }, [isMainShowingReviewListLoading, mainShowingReviewList]);
-
-  useEffect(() => {
-    console.log("currentPosterIndex", currentPosterIndex, mainReviews);
-  }, [currentPosterIndex]);
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -126,7 +125,6 @@ export default function Main() {
       )}
 
       <div className={styles.main_showing_concert_reviews}>
-        {/* TODO: 반복문 사용 */}
         {mainReviews &&
         mainReviews.length > 0 &&
         mainReviews[currentPosterIndex]
@@ -180,6 +178,7 @@ export default function Main() {
             userId={review.author.id}
             content={review.contents}
             thumbnail={review.images ? review.images[0] : undefined}
+            reviewLink={`/review/${review.reviewId}`}
           />
         ))}
     </section>
