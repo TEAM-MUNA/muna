@@ -6,6 +6,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import RequestProvider from "./context/RequestContext";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -43,7 +44,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <RequestProvider>
       <Router>
         <AppHeader />
         <Routes>
@@ -62,7 +63,7 @@ function App() {
         </Routes>
       </Router>
       <Toaster />
-    </>
+    </RequestProvider>
   );
 }
 

@@ -4,8 +4,9 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
 import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 import emptyMessages from "../../utils/constants/emptyMessages";
-import styles from "./Profile.module.scss";
+import { useRequestContext } from "../../context/RequestContext";
 
+import styles from "./Profile.module.scss";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
@@ -19,6 +20,8 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
 
 function BookmarkList() {
+  const { incrementRequestCount } = useRequestContext();
+
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
 
@@ -32,6 +35,9 @@ function BookmarkList() {
 
   useEffect(() => {
     const fetchBookmarks = async () => {
+      // API 요청을 보낼 때마다 요청 수 추적
+      incrementRequestCount("Profile fetchBookmarks");
+
       try {
         if (userId) {
           // 2. 북마크 콘서트의 title과 poster 가져오기
