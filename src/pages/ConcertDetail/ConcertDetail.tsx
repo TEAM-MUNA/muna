@@ -21,15 +21,27 @@ import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarSco
 import useGetConcert from "../../hooks/useGetConcert";
 import generateRandomId from "../../utils/generateRandomId";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
+import Dialog from "../../components/common/Modal/Modal";
+import useModal from "../../hooks/useModal";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
+  const {
+    isOpen: isBookmarkModalOpen,
+    openModal: openBookmarkModalOpen,
+    closeModal: closeBookmarkModal,
+  } = useModal();
+
+  const {
+    isOpen: isReviewModalOpen,
+    openModal: openReviewModalOpen,
+    closeModal: closeReviewModal,
+  } = useModal();
   const navigate = useNavigate();
 
-  // TODO: 애초에 불러올 때 북마크 여부 판단해야됨
   const {
     concertDetail,
     isLoading: isConcertDetailLoading,
@@ -82,7 +94,10 @@ export default function ConcertDetail() {
 
   // 북마크 토글
   const handleBookmark = async () => {
-    console.log(userId, concert);
+    if (!userId) {
+      openBookmarkModalOpen();
+      return;
+    }
     if (userId && concertDetail) {
       onBookmarkToggle();
       try {
@@ -119,6 +134,10 @@ export default function ConcertDetail() {
 
   // 후기 작성하기
   const goToReviewEditPage = () => {
+    if (!userId) {
+      openReviewModalOpen();
+      return;
+    }
     const reviewId = generateRandomId();
     navigate(`/review/edit/${reviewId}`, {
       state: { concertId },
@@ -128,6 +147,56 @@ export default function ConcertDetail() {
   if (concertDetail) {
     return (
       <section className={styles.concert_detail}>
+        {isBookmarkModalOpen ? (
+          <Dialog
+            isOpen
+            onClose={closeBookmarkModal}
+            title='로그인 후 이용 가능'
+            description={
+              <>
+                북마크를 추가하시려면 로그인이 필요합니다.
+                <br />
+                로그인 후, 마음에 드는 공연을 북마크하여 쉽게 찾아보세요.
+              </>
+            }
+          >
+            <Button
+              label='로그인'
+              color='primary'
+              onClick={() => navigate("/login")}
+            />
+            <Button
+              label='회원가입'
+              color='default'
+              onClick={() => navigate("/signup")}
+            />
+          </Dialog>
+        ) : null}
+        {isReviewModalOpen ? (
+          <Dialog
+            isOpen
+            onClose={closeReviewModal}
+            title='로그인 후 이용 가능'
+            description={
+              <>
+                후기를 작성하시려면 로그인이 필요합니다.
+                <br />
+                로그인 후, 공연에 대한 소중한 의견을 남기고 공유해보세요.
+              </>
+            }
+          >
+            <Button
+              label='로그인'
+              color='primary'
+              onClick={() => navigate("/login")}
+            />
+            <Button
+              label='회원가입'
+              color='default'
+              onClick={() => navigate("/signup")}
+            />
+          </Dialog>
+        ) : null}
         <Toaster />
         <h2 className='sr_only'>공연 상세</h2>
         <small className={styles.info_update}>
