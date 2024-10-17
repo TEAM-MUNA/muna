@@ -14,11 +14,13 @@ import BookmarkIcon from "../../../assets/svg/BookmarkIcon";
 interface BookmarkToggleProps {
   concertId?: string;
   interactive?: boolean;
+  color?: "white" | "primary";
 }
 
 export default function BookmarkToggle({
   concertId,
   interactive = false,
+  color = "white",
 }: BookmarkToggleProps) {
   const dispatch = useAppDispatch();
   const userId = useCurrentUser().userId;
@@ -74,25 +76,16 @@ export default function BookmarkToggle({
     }
   };
 
-  if (interactive) {
-    return (
-      <Button
-        className={styles.btn_bookmark}
-        label='북마크'
-        iconOnly={<BookmarkIcon active={isBookmarked} />}
-        iconShadow
-        onClick={handleBookmark}
-      />
-    );
+  if (!interactive && !isBookmarked) {
+    return null;
   }
-  if (isBookmarked) {
-    return (
-      <Button
-        className={styles.btn_bookmark}
-        label='북마크'
-        iconOnly={<BookmarkIcon active />}
-      />
-    );
-  }
-  return null;
+  return (
+    <Button
+      className={`${styles.btn_bookmark} ${styles[color]}`}
+      label='북마크'
+      iconOnly={<BookmarkIcon active={isBookmarked} />}
+      iconShadow={interactive && color === "white"}
+      onClick={handleBookmark}
+    />
+  );
 }
