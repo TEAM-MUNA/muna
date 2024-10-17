@@ -62,7 +62,7 @@ function BookmarkList() {
   if (bookmarkedConcerts.length > 0) {
     return (
       <ul>
-        {bookmarkedConcerts.map((i) => (
+        {bookmarkedConcerts.reverse().map((i) => (
           <li key={i.concertId}>
             <PosterCard
               concertId={i.concertId}
