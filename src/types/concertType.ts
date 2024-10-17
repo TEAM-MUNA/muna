@@ -58,6 +58,9 @@ export interface ConcertReturnType {
       relateurl: string; // 예매처 링크
     }[];
   };
+  styurls: {
+    styurl: string[]; // 공연 관련 상세 사진
+  };
 }
 
 // 위에 두가지 타입 통합

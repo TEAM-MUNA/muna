@@ -355,7 +355,32 @@ export default function ConcertDetail() {
 
               <dt className='sr_only'>공연 사진</dt>
               <dd className={styles.poster}>
-                <img src={concertDetail.poster} alt={concertDetail.prfnm} />
+                {(() => {
+                  if (!concertDetail.styurls || !concertDetail.styurls.styurl)
+                    return null;
+
+                  const styurls = concertDetail.styurls.styurl;
+
+                  if (Array.isArray(styurls)) {
+                    return styurls.map((url) => (
+                      <img
+                        key={url}
+                        className={styles.image}
+                        src={url}
+                        alt={concertDetail.prfnm}
+                      />
+                    ));
+                  }
+
+                  return (
+                    <img
+                      key={styurls}
+                      className={styles.image}
+                      src={styurls}
+                      alt={concertDetail.prfnm}
+                    />
+                  );
+                })()}
               </dd>
 
               <dt className={styles.label}>장소</dt>
