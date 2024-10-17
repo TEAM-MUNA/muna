@@ -8,12 +8,8 @@
   display: flex;
 
   .poster {
-    width: 110px;
-    height: 170px;
-    img {
-      width: 110px;
-      aspect-ratio: 110 / 170;
-    }
+    width: 120px;
+    @include poster_ratio;
   }
 
   .info {
