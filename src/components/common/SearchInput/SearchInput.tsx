@@ -22,7 +22,12 @@ export default function SearchInput({
   // 디바운싱 적용
   const debouncedSetQuery = useCallback(
     debounce((value: string) => {
-      dispatch(setQuery(value));
+      const trimmedValue = value.trim();
+      if (trimmedValue !== "") {
+        dispatch(setQuery(trimmedValue));
+      } else {
+        dispatch(clearQuery());
+      }
     }, 700), // 700ms 지연
     [dispatch]
   );
@@ -34,6 +39,7 @@ export default function SearchInput({
   };
 
   const handleClear = () => {
+    setInputValue("");
     dispatch(clearQuery());
   };
 
