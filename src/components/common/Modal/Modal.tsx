@@ -9,13 +9,13 @@ interface DialogProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  description?: string;
+  description?: ReactNode;
   color?: "default" | "warning";
   children?: ReactNode;
   innerRow?: boolean;
 }
 
-export default function Dialog({
+export default function Modal({
   isOpen,
   onClose,
   title,

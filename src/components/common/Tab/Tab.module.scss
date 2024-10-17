@@ -9,6 +9,14 @@
   margin: 0 -20px;
   background: $white;
   z-index: $z-tab;
+  overflow: visible;
+
+  .tab_inner_container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    align-items: center;
+  }
 }
 
 .tab {
@@ -16,7 +24,6 @@
   font-size: $font-lg;
   gap: 22px;
 
-  padding: 0 20px;
   position: relative;
 
   overflow-x: auto; // 콘텐츠 넘칠 때만 스크롤바 표시

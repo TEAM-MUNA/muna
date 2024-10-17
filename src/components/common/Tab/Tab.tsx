@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Tab.module.scss";
 import Tag from "../Tag/Tag";
 
@@ -6,12 +6,14 @@ interface TabProps {
   tabList?: (string | [string, number | null])[];
   withNumber?: boolean;
   onTabChanged?: (index: number) => void;
+  children?: ReactNode;
 }
 
 export default function Tab({
   tabList = [],
   withNumber = false,
   onTabChanged,
+  children,
 }: TabProps) {
   const [activeList, setActiveList] = useState<boolean[]>([]);
   const [tabTitleList, setTabTitleList] = useState<[string, number | null][]>(
@@ -47,22 +49,25 @@ export default function Tab({
 
   return (
     <div className={styles.tab_container}>
-      <ul className={styles.tab}>
-        {tabTitleList.map(([title, number], index) => (
-          <li key={title}>
-            <button
-              type='button'
-              className={activeList[index] ? styles.active : ""}
-              onClick={() => onClick(index)}
-            >
-              {title}
-              {number !== null && (
-                <Tag color='default' label={number.toString()} />
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className={styles.tab_inner_container}>
+        <ul className={styles.tab}>
+          {tabTitleList.map(([title, number], index) => (
+            <li key={title}>
+              <button
+                type='button'
+                className={activeList[index] ? styles.active : ""}
+                onClick={() => onClick(index)}
+              >
+                {title}
+                {number !== null && (
+                  <Tag color='default' label={number.toString()} />
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {children}
+      </div>
     </div>
   );
 }

@@ -52,6 +52,16 @@ export interface ConcertReturnType {
   prfcast: string; // 출연진(캐스팅)
   dtguidance: string; // 공연시간
   entrpsnm: string; // 극단 등
+  relates: {
+    relate: {
+      relatenm: string; // 예매처 ex) 인터파크
+      relateurl: string; // 예매처 링크
+    }[];
+  };
+  styurls: {
+    styurl: string[]; // 공연 관련 상세 사진
+  };
+  sty: string; // 공연 설명
 }
 
 // 위에 두가지 타입 통합
