@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { HeartSpinner } from "react-spinners-kit";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -78,7 +77,7 @@ export default function ConcertDetail() {
   }
 
   if (isConertDetailLoading || isConcertLoading) {
-    return <HeartSpinner size={65} color='#7926ff' />;
+    return <LoadingSpinner />;
   }
 
   // 북마크 토글
