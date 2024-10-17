@@ -138,3 +138,21 @@ export const updateUserBookmark = async (
     bookmarkedConcerts: action(concertId),
   });
 };
+
+// 유저 아이디로 북마크한 콘서트 아이디 배열 가져오기
+export const getUserBookmark = async (
+  userId: string
+): Promise<string[] | undefined> => {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    if (userDocSnapshot.exists()) {
+      const userData = userDocSnapshot.data();
+      return userData.bookmarkedConcerts || [];
+    }
+  } catch (error) {
+    console.error("유저의 북마크 리스트 가져오기 실패:", error);
+  }
+  return undefined;
+};

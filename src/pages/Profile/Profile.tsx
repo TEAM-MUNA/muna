@@ -3,14 +3,16 @@ import { Link, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import useProfile from "../../hooks/useProfile";
+import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import SettingsIcon from "../../assets/svg/SettingsIcon";
 import QueueListIcon from "../../assets/svg/QueueListIcon";
 import GalleryIcon from "../../assets/svg/GalleryIcon";
 import Tab from "../../components/common/Tab/Tab";
-import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
+// import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewGalleryCard";
@@ -27,10 +29,62 @@ import ReviewGalleryCard from "../../components/common/ReviewGalleryCard/ReviewG
 // ㄴ 콘서트 - 공연상태, 지역 필터
 // ㄴ 콘서트, 리뷰 - 순서 정렬
 
+function BookmarkList() {
+  const { userId } = useParams<{ userId: string }>();
+
+  const [bookmarkedConcerts, setBookmarkedConcerts] = useState<
+    { concertId: string; title: string; poster: string }[]
+  >([]);
+
+  // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
+  const bookmarkedConcertsId = useCurrentUser().bookmarkedConcerts;
+  console.log(bookmarkedConcertsId);
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        if (userId) {
+          // 2. 북마크 콘서트의 title과 poster 가져오기
+          if (bookmarkedConcertsId && bookmarkedConcertsId.length > 0) {
+            const bookmarkedConcertData =
+              await getConcertsForBookmarkList(bookmarkedConcertsId);
+            setBookmarkedConcerts(Object.values(bookmarkedConcertData));
+          }
+        }
+      } catch (error) {
+        console.error("북마크 데이터 가져오기 실패:", error);
+      }
+    };
+    fetchBookmarks();
+    console.log(bookmarkedConcerts);
+  }, [userId, bookmarkedConcertsId]);
+
+  if (bookmarkedConcerts.length > 0) {
+    return (
+      <ul>
+        {bookmarkedConcerts.map((i) => (
+          <li key={i.concertId}>
+            <PosterCard
+              concertId={i.concertId}
+              title={i.title}
+              poster={i.poster}
+              bookmarkInteractive
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return (
+    // TODO: 비어있을때 UI
+    <div>북마크한 공연이 없습니다</div>
+  );
+}
+
 export default function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const currentUserId = useCurrentUser().userId;
-  const { profile, loading } = useProfile(userId);
+  const { profile, isLoading } = useProfile(userId);
   const [isMine, setIsMine] = useState<boolean>(false);
   const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
@@ -54,11 +108,11 @@ export default function Profile() {
     () => tabTitle,
     [tabTitle]
   );
-  const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
-  const concertOrderSelectOptions = ["최신순", "북마크순"];
-  const reviewOrderSelectOptions = ["최신순", "인기순"];
-  const handleConcertDropdownSelect = () => {};
-  const handleReviewDropdownSelect = () => {};
+  // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
+  // const concertOrderSelectOptions = ["최신순", "북마크순"];
+  // const reviewOrderSelectOptions = ["최신순", "인기순"];
+  // const handleConcertDropdownSelect = () => {};
+  // const handleReviewDropdownSelect = () => {};
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeView, setActiveView] = useState<string>("list");
@@ -74,11 +128,12 @@ export default function Profile() {
     setActiveView(targetId === "listView" ? "list" : "grid");
   };
 
-  if (loading) {
-    return <p>로딩중</p>;
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
   if (!profile) {
-    return <p>존재하지 않는 회원</p>;
+    // TODO: 리다이렉트 처리할지?
+    return <p>Error: 존재하지 않는 회원</p>;
   }
   return (
     <div>
@@ -125,7 +180,7 @@ export default function Profile() {
       </nav>
       {activeTab === 0 && isMine && (
         <section className={`${styles.tab_content} ${styles.concert_bookmark}`}>
-          <div className={styles.wrapper_dropdown}>
+          {/* <div className={styles.wrapper_dropdown}>
             <DropdownSelect
               onSelect={handleConcertDropdownSelect}
               options={concertStateSelectOptions}
@@ -139,24 +194,20 @@ export default function Profile() {
               options={concertOrderSelectOptions}
               position='right'
             />
-          </div>
-          <ul>
-            <li>
-              <PosterCard concertLink='#' isBookmarked />
-            </li>
-          </ul>
+          </div> */}
+          <BookmarkList />
         </section>
       )}
       {(activeTab === 1 || !isMine) && activeView === "list" && (
         <section className={`${styles.tab_content} ${styles.review_list}`}>
-          <div className='wrapper_dropdown_noline'>
+          {/* <div className='wrapper_dropdown_noline'>
             <DropdownSelect
               onSelect={handleReviewDropdownSelect}
               options={reviewOrderSelectOptions}
               outline={false}
               position='right'
             />
-          </div>
+          </div> */}
           <ul>
             <li>
               <ReviewCard reviewLink='#' />

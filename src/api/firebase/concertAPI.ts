@@ -108,3 +108,38 @@ export const updateConcertBookmark = async (
 };
 
 export const a = () => 0;
+
+// 콘서트 아이디 배열로 콘서트의 title과 poster 정보만 가져오기
+export const getConcertsForBookmarkList = async (
+  concertIds?: string[]
+): Promise<{
+  [key: string]: { concertId: string; title: string; poster: string };
+}> => {
+  try {
+    // 기존 함수 호출, 콘서트 데이터 가져오기
+    const allConcertData = await getConcertsFromFirebase(concertIds);
+
+    // 필요한 정보만 추출, 새로운 객체로 변환
+    const concertInfo = Object.keys(allConcertData).reduce(
+      (acc, key) => {
+        const concert = allConcertData[key];
+        if (concert.title && concert.poster) {
+          acc[key] = {
+            concertId: concert.concertId,
+            title: concert.title,
+            poster: concert.poster,
+          };
+        }
+        return acc;
+      },
+      {} as {
+        [key: string]: { concertId: string; title: string; poster: string };
+      }
+    );
+
+    return concertInfo;
+  } catch (error) {
+    console.error("콘서트 타이틀, 포스터 정보를 가져오는데 실패함:", error);
+    return {};
+  }
+};

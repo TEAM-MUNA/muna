@@ -23,10 +23,10 @@
     object-fit: cover;
   }
 
-  .btn_bookmark {
+  .wrapper_bookmark {
     position: absolute;
     top: 0;
     right: 0;
-    color: $white;
+    z-index: $z-medium;
   }
 }

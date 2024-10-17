@@ -1,25 +1,85 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
-import poster1 from "../../assets/img/temp-poster1.png";
-import poster2 from "../../assets/img/temp-poster2.png";
-import poster3 from "../../assets/img/temp-poster3.png";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 import Button from "../../components/common/Button/Button";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
-import useCurrentUser from "../../hooks/useCurrentUser";
+import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
+
+interface MainReviewType {
+  concert: {
+    id: string; // 중복 x
+    title: string;
+    poster: string;
+    // averageRating: number;
+  };
+  reviews: { contents: string; nickname: string; rating: number }[];
+}
 
 export default function Main() {
-  const mainShowingConcertTitle = "랭보";
   const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
-  } = useGetReviewList({ popular: true });
+  } = useGetReviewList({ criteria: "likeCount" });
+
+  const {
+    reviewList: mainShowingReviewList,
+    isLoading: isMainShowingReviewListLoading,
+    error: mainShowingReviewListError,
+  } = useGetReviewList({ criteria: "rating" });
+
+  const [mainReviews, setMainReviews] = useState<MainReviewType[]>([]);
+  const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isMainShowingReviewListLoading && mainShowingReviewList) {
+      const newReviews: MainReviewType[] = [];
+
+      mainShowingReviewList.forEach((review) => {
+        const concertId = review.concert.id;
+        const existingReviewId = newReviews.findIndex(
+          (r) => r.concert.id === concertId
+        );
+
+        if (existingReviewId !== -1) {
+          // 이미 존재하는 공연일 경우
+          // 그 인덱스에 추가
+          newReviews[existingReviewId].reviews.push({
+            contents: review.contents,
+            nickname: review.author.nickname,
+            rating: review.rating || 0,
+          });
+        } else {
+          // 새로운 공연
+          newReviews.push({
+            concert: {
+              id: concertId,
+              title: review.concert.title,
+              poster: review.concert.poster,
+            },
+            reviews: [
+              {
+                contents: review.contents,
+                nickname: review.author.nickname,
+                rating: review.rating || 0,
+              },
+            ],
+          });
+        }
+      });
+
+      setMainReviews(newReviews);
+    }
+  }, [isMainShowingReviewListLoading, mainShowingReviewList]);
+
+  useEffect(() => {
+    console.log("currentPosterIndex", currentPosterIndex, mainReviews);
+  }, [currentPosterIndex]);
 
   const goToConcertList = (code: string) => {
     const navigateUrl =
@@ -30,44 +90,61 @@ export default function Main() {
   return (
     <section className={styles.main}>
       <h2 className='sr_only'>메인</h2>
-      <div className={styles.star}>
-        <StarScoreOnlyIcon primary rating={5} />
-      </div>
-      <p className={styles.main_showing_concert_title}>
-        {mainShowingConcertTitle}
-      </p>
-      <figure className={styles.main_showing_concert_posters}>
-        <img src={poster1} alt='메인 인기 포스터1' width={182} />
-        <img src={poster2} alt='메인 인기 포스터2' width={215} />
-        <img src={poster3} alt='메인 인기 포스터3' width={182} />
-      </figure>
+
+      {mainReviews &&
+        mainReviews.length > 0 &&
+        mainReviews[currentPosterIndex] && (
+          <>
+            <div className={styles.star}>
+              {/* 평균 평점 */}
+              <StarScoreOnlyIcon
+                primary
+                rating={
+                  mainReviews[currentPosterIndex].reviews.length > 0
+                    ? mainReviews[currentPosterIndex].reviews.reduce(
+                        (acc, cur) => acc + cur.rating,
+                        0
+                      ) / mainReviews[currentPosterIndex].reviews.length
+                    : 0
+                }
+              />
+            </div>
+            <p className={styles.main_showing_concert_title}>
+              {mainReviews[currentPosterIndex].concert.title}
+            </p>
+          </>
+        )}
+      {isMainShowingReviewListLoading ? (
+        <div className={styles.loading_imageSlider}>
+          <HeartSpinner size={40} color='#c9a8ff' />
+        </div>
+      ) : (
+        <ImageSlider
+          images={mainReviews.map((reviews) => reviews.concert)}
+          setCurrentPosterIndex={setCurrentPosterIndex}
+        />
+      )}
+
       <div className={styles.main_showing_concert_reviews}>
         {/* TODO: 반복문 사용 */}
-        <div>
-          <blockquote id='review1' className={styles.review}>
-            기대한것만큼 재밌습니다
-          </blockquote>
-          <cite
-            id='nickname1'
-            className={styles.nickname}
-            aria-labelledby='review1'
-          >
-            abdc123
-          </cite>
-        </div>
-        <div>
-          <blockquote id='review2' className={styles.review}>
-            시들이 하나하나 너무 아름답고 멜로디도 서정적이어서 아주 감명
-            깊었습니다.
-          </blockquote>
-          <cite
-            id='nickname2'
-            className={styles.nickname}
-            aria-labelledby='review2'
-          >
-            abdc123
-          </cite>
-        </div>
+        {mainReviews &&
+        mainReviews.length > 0 &&
+        mainReviews[currentPosterIndex]
+          ? mainReviews[currentPosterIndex].reviews.map((review) => (
+              <div key={review.contents}>
+                <blockquote id='review1' className={styles.review}>
+                  {review.contents}
+                </blockquote>
+                <cite
+                  id='nickname1'
+                  className={styles.nickname}
+                  aria-labelledby='review1'
+                >
+                  {review.nickname}
+                </cite>
+              </div>
+            ))
+          : null}
       </div>
       <div className={styles.category_nav}>
         {Object.entries(genreMap).map(([genre, code]) => (
