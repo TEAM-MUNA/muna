@@ -57,22 +57,21 @@ export const signupAsync = createAsyncThunk(
           downloadUrl = await dispatch(
             uploadProfileImage({ userId: user.uid, imageUrl: profileImage })
           ).unwrap();
-          // 2. nickname(displayName), profileImage(photoURL) 업데이트
-          if (user) {
-            await updateProfileToFirebase(user, nickname, downloadUrl);
-          } else {
-            return rejectWithValue("회원가입에 실패했습니다.");
-          }
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           return rejectWithValue("프로필 이미지를 등록하지 못했습니다.");
         }
       }
 
-      // 3. Firestore에 사용자 정보 등록
-      if (user.displayName === nickname && user.photoURL === profileImage) {
-        await setUserOnDoc(user, nickname, profileImage);
+      // 3. nickname(displayName), profileImage(photoURL) 업데이트
+      if (user) {
+        await updateProfileToFirebase(user, nickname, downloadUrl);
+      } else {
+        return rejectWithValue("회원가입에 실패했습니다.");
       }
+
+      // 4. Firestore에 사용자 정보 등록
+      await setUserOnDoc(user, nickname, downloadUrl || profileImage);
 
       return {
         user: {
@@ -108,7 +107,6 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
-      // console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
