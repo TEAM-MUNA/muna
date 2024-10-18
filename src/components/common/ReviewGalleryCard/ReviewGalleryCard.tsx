@@ -23,12 +23,12 @@ export default function ReviewGalleryCard({
       <img className={styles.thumbnail} src={thumbnail || poster} alt={title} />
       {hasMultiImages && (
         <span className={`${styles.icon} ${styles.icon_layers}`}>
-          <ImageLayersIcon size='14' />
+          <ImageLayersIcon size='16' />
         </span>
       )}
       {likeCount && (
         <span className={`${styles.icon} ${styles.icon_like}`}>
-          <LikeIcon size='14' />
+          <LikeIcon size='16' />
           {likeCount}
         </span>
       )}
