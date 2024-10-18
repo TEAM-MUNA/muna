@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom"; // useLocation : 현재페이지의 주소(URL) 정보를 제공 / useParams : URL의 동적 파라미터를 키/값 객체로 반환
 import useCurrentUser from "../../hooks/useCurrentUser"; // 사용자의 기본 정보 및 홈페이지에서 남긴 기록데이터를 가져옴
 import styles from "./ReviewEdit.module.scss";
 import Title from "../../components/common/Title/Title";
 import CalendarInput from "../../components/common/CalendarInput/CalendarInput";
 import StarForm from "../../components/common/StarForm/StarForm";
-import { ConcertType, DefaultConcertType } from "../../types/concertType";
+import { ConcertType } from "../../types/concertType";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
@@ -29,6 +29,14 @@ export default function ReviewEdit() {
     // 리뷰 체크표시 클릭시 저장
     console.log("저장완료");
   };
+
+  const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setReviewContent(value);
+  };
+
+  const [reviewImageList, setReviewImageList] = useState<string[]>([]);
+  const [reviewContent, setReviewContent] = useState<string>("");
 
   return (
     <section className={styles.reviewEdit_form}>
@@ -62,8 +70,19 @@ export default function ReviewEdit() {
         <StarForm initialRating={0} />
       </div>
       <ReviewImageUploader
-      // onImageChange={(imageUrls) => console.log(imageUrls)}
+        onImageChange={(imageUrls) => {
+          setReviewImageList(imageUrls);
+        }}
       />
+      <label htmlFor='review-textarea'>
+        <span className='sr_only'>리뷰 작성</span>
+        <textarea
+          id='review-textarea'
+          className={styles.textarea}
+          placeholder={`${concertDetail?.prfnm}에 대한 기록을 남겨보세요. (1,500자 이내)`}
+          onChange={handleTextArea}
+        />
+      </label>
     </section>
   );
 }
