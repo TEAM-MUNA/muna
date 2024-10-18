@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../app/store";
 import { updateProfileAsync, updateUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
 import { useRequestContext } from "../../context/RequestContext";
+import { updateAuthorProfileInReviews } from "../../api/firebase/reviewAPI";
 
 import styles from "./Settings.module.scss";
 
@@ -69,6 +70,11 @@ export default function SettingsProfile() {
           nickname,
           profileImage: profileImage || currentUser?.profileImage || null,
         })
+      );
+      await updateAuthorProfileInReviews(
+        currentUser.reviews,
+        nickname,
+        profileImage
       );
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
