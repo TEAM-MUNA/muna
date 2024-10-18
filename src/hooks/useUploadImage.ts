@@ -19,6 +19,7 @@ export enum ImageCategory {
 
 const useGetImageDownloadUrl = () => {
   const getImageDownloadUrl = async (
+    id: string,
     imageUrl: string,
     category: ImageCategory
   ) => {
@@ -27,7 +28,7 @@ const useGetImageDownloadUrl = () => {
     const canvas = await getResizeImage(imageUrl, 300, 300);
     const resizedImageUrl = canvas.toDataURL();
 
-    const storageRef = ref(storage, `${category}/${Date.now()}`);
+    const storageRef = ref(storage, `${category}/${id}/${Date.now()}`);
     await uploadString(storageRef, resizedImageUrl, "data_url");
     const downloadUrl = await getDownloadURL(storageRef);
     // console.log("download url", downloadUrl);

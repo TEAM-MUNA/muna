@@ -23,6 +23,26 @@ export interface ReviewType {
   likeCount: number;
 }
 
+export interface ReviewListType {
+  concert?: {
+    id?: string;
+    title: string;
+    poster?: string;
+  };
+  reviewId?: string;
+  author?: {
+    id?: string;
+    nickname?: string;
+    profileImage?: string;
+  };
+  rating?: number;
+  date?: string;
+  contentsPreview?: string; // 200자 미리보기
+  thumbnail?: string; // 대표이미지
+  hasMultipleImages?: boolean; // 갤러리뷰에서 필요
+  likeCount?: number;
+}
+
 export interface ReviewPropType {
   title?: string;
   content?: string;

@@ -13,6 +13,7 @@ import {
 } from "../api/firebase/authAPI";
 import { UserType } from "../types/userType";
 import { firebaseAuth } from "../firebase";
+import { uploadProfileImage } from "./imageSlice";
 
 interface AuthState {
   user: UserType | null;
@@ -41,26 +42,36 @@ export const signupAsync = createAsyncThunk(
       nickname: string;
       profileImage: string | null;
     },
-    { rejectWithValue }
+    { dispatch, rejectWithValue }
   ) => {
     let user: User | null = null;
+    let downloadUrl: string | null = null;
+
     try {
       // 1. 회원가입
       user = await signupToFirebase(email, password);
 
-      // 2. nickname(displayName), profileImage(photoURL) 업데이트
+      if (user && profileImage) {
+        // 2. profileImage storage에 업로드
+        try {
+          downloadUrl = await dispatch(
+            uploadProfileImage({ userId: user.uid, imageUrl: profileImage })
+          ).unwrap();
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          return rejectWithValue("프로필 이미지를 등록하지 못했습니다.");
+        }
+      }
+
+      // 3. nickname(displayName), profileImage(photoURL) 업데이트
       if (user) {
-        await updateProfileToFirebase(user, nickname, profileImage);
+        await updateProfileToFirebase(user, nickname, downloadUrl);
       } else {
         return rejectWithValue("회원가입에 실패했습니다.");
       }
 
-      // 3. Firestore에 사용자 정보 등록
-      if (user.displayName === nickname && user.photoURL === profileImage) {
-        await setUserOnDoc(user, nickname, profileImage);
-      } else {
-        return rejectWithValue("프로필 정보 업데이트에 실패했습니다.");
-      }
+      // 4. Firestore에 사용자 정보 등록
+      await setUserOnDoc(user, nickname, downloadUrl || profileImage);
 
       return {
         user: {
@@ -80,7 +91,6 @@ export const signupAsync = createAsyncThunk(
             // console.error("사용자 삭제 중 에러", e);
           }
         }
-        // console.log("파이어베이스 ㅇ에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("회원가입 중 에러 발생"); // 그 외 오류: 기본 메시지
@@ -97,7 +107,6 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
-      // console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -327,8 +336,6 @@ const authSlice = createSlice({
           >
         ) => {
           state.status = "succeeded";
-          // console.log(action.payload);
-
           if (action.payload) {
             state.user = {
               ...state.user, // 기존의 state.user 속성 유지

@@ -1,0 +1,53 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+@mixin image-box {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  border: 1px solid $line-lighter;
+}
+.container {
+  display: flex;
+  gap: 12px;
+
+  .add_image {
+    @include image-box;
+    cursor: pointer;
+    background-color: $box-light;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .preview_list_container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    overflow-x: scroll;
+
+    .preview_container {
+      @include image-box;
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+
+      .remove {
+        background-color: transparent !important;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}

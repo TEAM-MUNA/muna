@@ -138,28 +138,32 @@ export const updateUserBookmark = async (
   concertId: string,
   cancel: boolean = false
 ) => {
-  const usersDocRef = doc(db, "users", userId);
+  const userDocRef = doc(db, "users", userId);
   const action = cancel ? arrayRemove : arrayUnion;
 
-  await updateDoc(usersDocRef, {
+  await updateDoc(userDocRef, {
     bookmarkedConcerts: action(concertId),
   });
 };
 
-// (모든)유저 아이디 입력 -> 작성한 리뷰 아이디 배열 출력
-// export const getUserReviewIds = async (
-//   userId: string
-// ): Promise<string[] | undefined> => {
-//   try {
-//     const userDocRef = doc(db, "reviews", userId);
-//     const userDocSnapshot = await getDoc(userDocRef);
+// TODO: refactor - 함수 하나로 합치기
+export const updateUserReview = async (userId: string, reviewId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    reviews: arrayUnion(reviewId),
+  });
+};
 
-//     if (userDocSnapshot.exists()) {
-//       const userData = userDocSnapshot.data();
-//       return userData.bookmarkedConcerts || [];
-//     }
-//   } catch (error) {
-//     console.error("유저의 북마크 리스트 가져오기 실패:", error);
-//   }
-//   return undefined;
-// };
+// (모든)유저 아이디 입력 -> 작성한 리뷰 아이디 배열 출력
+export const getReviewIdsByUserId = async (
+  userId: string
+): Promise<string[] | undefined> => {
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnapshot = await getDoc(userDocRef);
+
+  if (userDocSnapshot.exists()) {
+    const userData = userDocSnapshot.data();
+    return userData.reviews || [];
+  }
+  return [];
+};

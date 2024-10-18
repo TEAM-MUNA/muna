@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../app/store";
 import { updateProfileAsync, updateUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
 import { useRequestContext } from "../../context/RequestContext";
+import { updateAuthorProfileInReviews } from "../../api/firebase/reviewAPI";
 
 import styles from "./Settings.module.scss";
 
@@ -70,6 +71,11 @@ export default function SettingsProfile() {
           profileImage: profileImage || currentUser?.profileImage || null,
         })
       );
+      await updateAuthorProfileInReviews(
+        currentUser.reviews,
+        nickname,
+        profileImage
+      );
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
       navigate("/settings");
@@ -86,9 +92,12 @@ export default function SettingsProfile() {
 
   const handleProfileImage = async (imageUrl: string) => {
     setIsUploading(true);
+    if (!user?.userId) {
+      return;
+    }
     try {
       const profileImageUrl = await dispatch(
-        uploadProfileImage(imageUrl)
+        uploadProfileImage({ userId: user.userId, imageUrl })
       ).unwrap();
       setProfileImage(profileImageUrl);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
