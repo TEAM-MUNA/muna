@@ -35,7 +35,6 @@ const regionCodeMap: { [key: string]: string[] } = {
 export default function ConcertList() {
   // concertList(from Kopis)
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
-  console.log("🚀 ~ ConcertList ~ concertList:", concertList);
   const [genreCode, setGenreCode] = useState<string>("");
   const [pfStateCode, setPfStateCode] = useState<string>("");
   const [regionCodes, setRegionCodes] = useState<string[]>([]);
