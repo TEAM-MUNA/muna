@@ -14,7 +14,6 @@ import ReviewImageUploader from "../../components/common/ReviewImageUploader/Rev
 import { ReviewType } from "../../types/reviewType";
 import { uploadReviewAsync } from "../../slices/interactionSlice";
 import useGetReview from "../../hooks/useGetReview";
-import Button from "../../components/common/Button/Button";
 
 export default function ReviewEdit() {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,11 +45,18 @@ export default function ReviewEdit() {
 
   useEffect(() => {
     if (!isReviewLoading && review) {
-      setReviewImageList(review.images || []);
-      setReviewContent(review.contents || "");
-      setDate(review.date || "");
-      setRating(review.rating || undefined);
-      setConcertId(review.concert.id);
+      const authorized = review.author.id === userId;
+
+      if (authorized) {
+        setReviewImageList(review.images || []);
+        setReviewContent(review.contents || "");
+        setDate(review.date || "");
+        setRating(review.rating || undefined);
+        setConcertId(review.concert.id);
+      } else {
+        // 권한 없는 경우 리다이렉트 또는 404 에러 페이지
+        navigate(`/review/${id}`);
+      }
     }
   }, [isReviewLoading, review]);
 
