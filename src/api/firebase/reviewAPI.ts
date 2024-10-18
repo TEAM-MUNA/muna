@@ -8,6 +8,7 @@ import {
   where,
   doc,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { ReviewListType } from "../../types/reviewType";
 import { db } from "../../firebase";
@@ -79,3 +80,30 @@ export const getReviewListById = async (
 };
 
 export const a = () => null;
+
+// 프로필 변경시, 작성한 리뷰의 author 정보 업데이트
+export const updateAuthorProfileInReviews = async (
+  reviewIds: string[] | undefined,
+  nickname: string,
+  profileImage: string | null
+) => {
+  if (!reviewIds || reviewIds.length === 0) {
+    throw new Error("No reviews found for this user.");
+  }
+
+  // 리뷰 ID 배열을 순회하며 각 후기를 업데이트
+  const updatePromises = reviewIds.map(async (reviewId) => {
+    const reviewDocRef = doc(db, "reviews", reviewId);
+
+    // 파이어베이스에서 리뷰 업데이트
+    await updateDoc(reviewDocRef, {
+      author: {
+        nickname,
+        profileImage: profileImage || "",
+      },
+    });
+  });
+
+  // 모든 업데이트가 완료될 때까지 대기
+  await Promise.all(updatePromises);
+};
