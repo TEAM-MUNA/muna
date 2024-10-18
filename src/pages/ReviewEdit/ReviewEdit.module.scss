@@ -61,6 +61,7 @@
     margin-top: 24px;
     padding: 4px;
     font-weight: $font-regular;
+    line-height: $font-height-lg;
 
     &::placeholder {
       color: $black-lighter;

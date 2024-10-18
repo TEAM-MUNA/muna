@@ -3,14 +3,14 @@ import useGetImageDownloadUrl, { ImageCategory } from "../hooks/useUploadImage";
 // TODO: 그냥 훅으로 만들기
 interface ImageSlice {
   profileImage: string | null;
-  contentImage: string | null;
+  reviewImages: string[] | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: ImageSlice = {
   profileImage: null,
-  contentImage: null,
+  reviewImages: null,
   status: "idle",
   error: null,
 };
@@ -21,11 +21,33 @@ export const uploadProfileImage = createAsyncThunk(
   async (imageUrl: string, { rejectWithValue }) => {
     const { getImageDownloadUrl } = useGetImageDownloadUrl(); // 훅
     try {
-      const url = await getImageDownloadUrl(imageUrl, ImageCategory.Users);
-      return url;
+      const downloadUrl = await getImageDownloadUrl(
+        imageUrl,
+        ImageCategory.Users
+      );
+      return downloadUrl;
     } catch (error) {
       console.log("프로필 error", error);
       return rejectWithValue("프로필 이미지 업로드 실패");
+    }
+  }
+);
+
+// 리뷰 이미지 리스트 업로드
+export const uploadReviewImages = createAsyncThunk(
+  "images/uploadReview",
+  async (imageUrls: string[], { rejectWithValue }) => {
+    const { getImageDownloadUrl } = useGetImageDownloadUrl();
+    try {
+      const downloadUrls = await Promise.all(
+        imageUrls.map((imageUrl) =>
+          getImageDownloadUrl(imageUrl, ImageCategory.Reviews)
+        )
+      );
+      return downloadUrls;
+    } catch (error) {
+      console.error("uploadReviewImages", error);
+      return rejectWithValue("리뷰 이미지 업로드 실패");
     }
   }
 );
@@ -48,9 +70,6 @@ const imageSlice = createSlice({
       .addCase(uploadProfileImage.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(uploadProfileImage.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(uploadProfileImage.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.profileImage = action.payload; // 프로필 이미지 저장
@@ -59,6 +78,20 @@ const imageSlice = createSlice({
         state.status = "failed";
         console.log("프로필 이미지 업로드 rejected", action.payload);
         // state.error = action.payload as string;
+      });
+    // 리뷰 이미지 업로드 처리
+    builder
+      .addCase(uploadReviewImages.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(uploadReviewImages.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.reviewImages = action.payload;
+      })
+      .addCase(uploadReviewImages.rejected, (state, action) => {
+        state.status = "failed";
+        console.log("리뷰 이미지 업로드 rejected", action.payload);
+        state.error = action.payload as string;
       });
   },
 });

@@ -49,6 +49,13 @@ export const getReviewFromFirebase = async (
 // reviews에 추가하기
 export const addReviewToFirebase = async (review: ReviewType) => {
   const docRef = doc(db, "reviews", review.reviewId);
-  await setDoc(docRef, review);
+
+  // 별점 없는 경우
+  const { rating, ...rest } = review;
+  const updateReview = {
+    ...rest,
+    ...(rating !== undefined ? { rating } : {}),
+  };
+  await setDoc(docRef, updateReview);
   return review.reviewId;
 };

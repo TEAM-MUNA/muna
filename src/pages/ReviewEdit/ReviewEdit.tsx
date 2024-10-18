@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../app/store";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import styles from "./ReviewEdit.module.scss";
 import Title from "../../components/common/Title/Title";
@@ -20,6 +20,8 @@ export default function ReviewEdit() {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const { concertId } = location.state || {};
+  const { id } = useParams<{ id: string }>(); // 리뷰 아이디
+
   const {
     userId,
     nickname,
@@ -44,7 +46,6 @@ export default function ReviewEdit() {
     }
   }, []);
 
-  const { id } = useParams<{ id: string }>(); // 리뷰 아이디
   const {
     concertDetail,
     isLoading: isConcertDetailLoading,
@@ -55,6 +56,8 @@ export default function ReviewEdit() {
   const [reviewContent, setReviewContent] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [rating, setRating] = useState<number | undefined>(undefined);
+  const status = useSelector((state: RootState) => state.interaction.status);
+  const isLoading = status === "loading";
 
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -123,6 +126,7 @@ export default function ReviewEdit() {
         buttonRight='done'
         handleDoneButton={handleDone}
       />
+      {isLoading && <LoadingSpinner />}
       {!isConcertDetailLoading ? (
         <div className={styles.concert_date}>
           <div className={styles.concert_image}>

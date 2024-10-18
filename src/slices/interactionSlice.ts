@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 import {
   getUserFromFirebase,
   updateUserBookmark,
@@ -14,6 +16,8 @@ import { UserInteractionType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
 import { ReviewType } from "../types/reviewType";
 import { addReviewToFirebase } from "../api/firebase/reviewAPI";
+
+import { uploadReviewImages } from "./imageSlice";
 
 // 사용자 인터렉션
 
@@ -112,22 +116,39 @@ export const bookmarkConcertAsync = createAsyncThunk<
 export const uploadReviewAsync = createAsyncThunk<
   string[] | undefined,
   { userId: string; review: ReviewType }
->("interaction/review", async ({ userId, review }, { rejectWithValue }) => {
-  try {
-    await Promise.all([
-      // 1. 리뷰 컬렉션에 추가
-      await addReviewToFirebase(review),
-      // 2. 유저에 리뷰 추가
-      await updateUserReview(userId, review.reviewId),
-    ]);
-    // 유저 정보에 리뷰를 저장해야됨
-    const updatedUser = await getUserFromFirebase(userId);
-    return updatedUser?.reviews; // 유저 정보의 리뷰 리스트 반환
-  } catch (error) {
-    console.error("uploadReviewAsync", error);
-    return rejectWithValue(error);
+>(
+  "interaction/review",
+  async ({ userId, review }, { dispatch, rejectWithValue }) => {
+    let downloadUrls: string[] = [];
+    try {
+      if (review.images) {
+        // 1. 이미지 리스트 업로드
+        try {
+          downloadUrls = await dispatch(
+            uploadReviewImages(review.images)
+          ).unwrap();
+          console.log(downloadUrls);
+          // return;
+        } catch (e) {
+          console.error(`uploadReviewAsync: ${e}`);
+        }
+      }
+
+      await Promise.all([
+        // 2. 리뷰 컬렉션에 추가
+        await addReviewToFirebase({ ...review, images: downloadUrls }),
+        // 3. 유저에 리뷰 추가
+        await updateUserReview(userId, review.reviewId),
+      ]);
+      // 유저 정보에 리뷰를 저장해야됨
+      const updatedUser = await getUserFromFirebase(userId);
+      return updatedUser?.reviews; // 유저 정보의 리뷰 리스트 반환
+    } catch (error) {
+      console.error("uploadReviewAsync", error);
+      return rejectWithValue(error);
+    }
   }
-});
+);
 
 const interactionSlice = createSlice({
   name: "interaction",
