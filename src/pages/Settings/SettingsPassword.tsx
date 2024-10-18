@@ -56,7 +56,7 @@ export default function SettingsPassword() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
+    // console.log(data);
 
     const hasEmptyInput = Object.values(data).every((value) => value === "");
     const hasErrors =

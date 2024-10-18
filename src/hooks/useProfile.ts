@@ -19,8 +19,9 @@ const useProfile = (userId: string | undefined) => {
             setProfile(null); // 사용자 정보가 없을 경우 null
           }
           setIsLoading(false);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-          console.error("프로필 정보를 가져오는 중 오류 발생:", error);
+          // console.error("프로필 정보를 가져오는 중 오류 발생:", error);
           setProfile(null); // 오류 발생 시 null
         }
       }

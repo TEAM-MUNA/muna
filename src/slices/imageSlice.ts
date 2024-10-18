@@ -23,8 +23,9 @@ export const uploadProfileImage = createAsyncThunk(
     try {
       const url = await getImageDownloadUrl(imageUrl, ImageCategory.Users);
       return url;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.log("프로필 error", error);
+      // console.log("프로필 error", error);
       return rejectWithValue("프로필 이미지 업로드 실패");
     }
   }
@@ -55,9 +56,9 @@ const imageSlice = createSlice({
         state.status = "succeeded";
         state.profileImage = action.payload; // 프로필 이미지 저장
       })
-      .addCase(uploadProfileImage.rejected, (state, action) => {
+      .addCase(uploadProfileImage.rejected, (state) => {
         state.status = "failed";
-        console.log("프로필 이미지 업로드 rejected", action.payload);
+        // console.log("프로필 이미지 업로드 rejected", action.payload);
         // state.error = action.payload as string;
       });
   },

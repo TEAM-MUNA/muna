@@ -47,11 +47,11 @@ export default function BookmarkToggle({
   );
 
   const handleBookmark = async () => {
-    console.log(userId, concert);
+    // console.log(userId, concert);
     if (userId && concertDetail) {
       onBookmarkToggle();
       try {
-        const updatedBookmarks = await dispatch(
+        await dispatch(
           bookmarkConcertAsync({
             userId,
             concert: {
@@ -62,13 +62,14 @@ export default function BookmarkToggle({
             cancel: isBookmarked,
           })
         ).unwrap();
-        console.log(updatedBookmarks);
+        // console.log(updatedBookmarks);
 
         toast.success(
           !isBookmarked ? "북마크에 추가되었습니다." : "북마크를 해제했습니다."
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        console.error(e);
+        // console.error(e);
         toast.error("북마크에 추가하지 못했습니다.");
         onBookmarkToggle(); // 북마크 해제
       }

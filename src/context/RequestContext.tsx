@@ -47,8 +47,9 @@ function RequestProvider({ children }: { children: React.ReactNode }) {
       await axios.post(DISCORD_WEBHOOK_URL || "", {
         content: `1초 내 요청 수가 ${count}을 초과했습니다! 각 위치별 발생 횟수: ${locationDetails}`,
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Discord 알림 전송 실패:", error);
+      // console.error("Discord 알림 전송 실패:", error);
     }
   };
 

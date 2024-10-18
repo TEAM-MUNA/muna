@@ -47,7 +47,7 @@ export default function Search() {
   }, []);
 
   useEffect(() => {
-    console.log("🚀 ~ recommends:", recommends);
+    // console.log("🚀 ~ recommends:", recommends);
   }, [recommends]); // recommends가 변경될 때마다 실행
 
   // 최근 검색어 가져오기
