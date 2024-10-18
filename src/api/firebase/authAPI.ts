@@ -68,10 +68,17 @@ export const updateProfileToFirebase = async (
   nickname?: string,
   profileImage?: string | null
 ) => {
-  await updateProfile(user, {
-    displayName: nickname,
-    photoURL: profileImage,
-  });
+  const profileUpdates: { displayName?: string; photoURL?: string } = {};
+
+  if (nickname) {
+    profileUpdates.displayName = nickname;
+  }
+
+  // profileImage가 null이 아닐 경우에만 photoURL 추가
+  if (profileImage !== null) {
+    profileUpdates.photoURL = profileImage;
+  }
+  await updateProfile(user, profileUpdates);
 };
 
 // 프로필 업데이트 시 Firestore 사용자 정보 업데이트
