@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
@@ -15,3 +15,9 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(); // app 인스턴스를 getAuth에 전달
 export const db = getFirestore(app); // app 인스턴스를 getFirestore에 전달
+
+// 에뮬레이터가 실행 중인 경우 연결
+if (window.location.hostname === "localhost") {
+  connectFirestoreEmulator(db, "localhost", 8080); // Firestore 에뮬레이터
+  connectAuthEmulator(firebaseAuth, "http://localhost:9099"); // Auth 에뮬레이터
+}
