@@ -155,7 +155,7 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
           {reviews.reverse().map((i) => (
             <li key={i.reviewId}>
               <ReviewCard
-                hasProfile={false}
+                hasAvatar={false}
                 reviewLink={`/review/${i.reviewId}`}
                 title={i.concert?.title || "제목 없음"}
                 likeCount={i.likeCount}

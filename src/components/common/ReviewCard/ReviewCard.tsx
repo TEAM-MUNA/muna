@@ -9,7 +9,7 @@ import LikeButton from "../Button/LikeButton";
 import Avatar from "../Avatar/Avatar";
 
 interface ReviewCardProps extends UserType, ReviewPropType {
-  hasProfile?: boolean;
+  hasAvatar?: boolean;
 }
 
 export default function ReviewCard({
@@ -24,7 +24,7 @@ export default function ReviewCard({
   thumbnail = defaultReviewType.thumbnail,
   starRate = defaultReviewType.starRate,
   likeCount = defaultReviewType.likeCount,
-  hasProfile = true,
+  hasAvatar = true,
 }: ReviewCardProps) {
   const location = useLocation();
   const pathname = location.pathname;
@@ -32,7 +32,7 @@ export default function ReviewCard({
 
   return (
     <div className={`${styles.card} card_review page_${page}`}>
-      {hasProfile ? (
+      {hasAvatar ? (
         <div className={styles.top}>
           <Avatar
             nickname={nickname}
