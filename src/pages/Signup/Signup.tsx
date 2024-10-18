@@ -93,10 +93,11 @@ export default function Signup() {
         uploadProfileImage(imageUrl)
       ).unwrap();
 
-      console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
+      // console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
       setProfileImage(profileImageUrl);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

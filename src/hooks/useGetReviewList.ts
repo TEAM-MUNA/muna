@@ -26,8 +26,9 @@ const useGetReviewList = ({
         incrementRequestCount(`${pageName} useGetReviewList`);
         const reviewData = await getReviewListFromFirebase(concertId, criteria);
         setReviewList(reviewData as ReviewType[]);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        console.error(e);
+        // console.error(e);
       } finally {
         setIsLoading(false);
       }

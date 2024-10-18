@@ -27,8 +27,9 @@ function AppHeader() {
   const location = useLocation();
   const isLoginPage = location.pathname.includes("/login");
   const isReviewPage = location.pathname.includes("/review");
+  const isSearchPage = location.pathname.includes("/search");
 
-  if (isLoginPage) {
+  if (isLoginPage || isSearchPage) {
     return <Header buttonLeft='back' />;
   }
   if (!isReviewPage) {

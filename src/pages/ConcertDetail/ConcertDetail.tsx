@@ -110,7 +110,7 @@ export default function ConcertDetail() {
       onBookmarkToggle();
       try {
         incrementRequestCount("ConcertDetail handleBookmark");
-        const updatedBookmarks = await dispatch(
+        await dispatch(
           bookmarkConcertAsync({
             userId,
             concert: {
@@ -121,13 +121,14 @@ export default function ConcertDetail() {
             cancel: isBookmarked,
           })
         ).unwrap();
-        console.log(updatedBookmarks);
+        // console.log(updatedBookmarks);
 
         toast.success(
           !isBookmarked ? "북마크에 추가되었습니다." : "북마크를 해제했습니다."
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        console.error(e);
+        // console.error(e);
         toast.error("북마크에 추가하지 못했습니다.");
         onBookmarkToggle(); // 북마크 해제
       }
@@ -382,8 +383,10 @@ export default function ConcertDetail() {
                   <dt className='sr_only'>공연 설명</dt>
                   <dd
                     className={styles.description}
-                    dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
-                  />
+                    // dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
+                  >
+                    {concertDetail.sty} {/* 순수 텍스트로 렌더링 */}
+                  </dd>
                 </>
               ) : null}
 
