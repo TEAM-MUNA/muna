@@ -3,10 +3,12 @@ import styles from "./CalendarInput.module.scss";
 
 interface CalendarInputProps {
   fullWidth?: boolean;
+  onCalendarChange: (date: string) => void;
 }
 
 export default function CalendarInput({
   fullWidth = false,
+  onCalendarChange,
 }: CalendarInputProps) {
   const placeholder = "공연 관람일을 입력하세요";
   const [date, setDate] = useState<string>("");
@@ -19,7 +21,9 @@ export default function CalendarInput({
   }, [date]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+    const selectedDate = e.target.value;
+    setDate(selectedDate);
+    onCalendarChange(selectedDate);
   };
 
   return (

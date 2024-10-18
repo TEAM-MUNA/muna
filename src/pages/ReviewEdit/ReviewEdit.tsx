@@ -12,7 +12,6 @@ import { addReviewToFirebase } from "../../api/firebase/reviewAPI";
 import { ReviewType } from "../../types/reviewType";
 
 export default function ReviewEdit() {
-  // // 이전 페이지에서 불러오기
   // 원래 있던 리뷰면 가져오기 (필요)
   // 원래 없던 새로운 리뷰면 새로 등록
   const location = useLocation();
@@ -27,6 +26,8 @@ export default function ReviewEdit() {
 
   const [reviewImageList, setReviewImageList] = useState<string[]>([]);
   const [reviewContent, setReviewContent] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [rating, setRating] = useState<number | undefined>(undefined);
 
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -62,13 +63,13 @@ export default function ReviewEdit() {
         nickname,
         profileImage: profileImage || undefined,
       },
-      rating: 4, // rating
-      date: "",
-      createdAt: "", // 현재시간
+      rating,
+      date,
+      createdAt: new Date().toISOString(), // 현재시간
       contents: reviewContent,
       images: reviewImageList, // firebase에 등록하고 가져와야함.
-      likedBy: [],
-      likeCount: 0,
+      likedBy: [], // 기본값
+      likeCount: 0, // 기본값
     };
 
     try {
@@ -88,7 +89,6 @@ export default function ReviewEdit() {
         buttonRight='done'
         handleDoneButton={handleDone}
       />
-      {/* 바꾸기 */}
       {!isConcertDetailLoading ? (
         <div className={styles.concert_date}>
           <div className={styles.concert_image}>
@@ -101,14 +101,23 @@ export default function ReviewEdit() {
                 {concertDetail?.genrenm}
               </span>
             </p>
-            <CalendarInput />
+            <CalendarInput
+              onCalendarChange={(selectedDate) => {
+                setDate(selectedDate);
+              }}
+            />
           </div>
         </div>
       ) : (
         <LoadingSpinner />
       )}
       <div className={styles.star_form}>
-        <StarForm initialRating={0} />
+        <StarForm
+          initialRating={0}
+          onRatingChange={(newRating) => {
+            setRating(newRating);
+          }}
+        />
       </div>
       <ReviewImageUploader
         onImageChange={(imageUrls) => {
