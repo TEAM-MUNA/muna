@@ -1,8 +1,6 @@
 import {
   collection,
-  doc,
   DocumentData,
-  getDoc,
   getDocs,
   limit,
   orderBy,

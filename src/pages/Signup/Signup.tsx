@@ -86,20 +86,6 @@ export default function Signup() {
     }
   };
 
-  // const handleProfileImage = async (imageUrl: string) => {
-  //   try {
-  //     incrementRequestCount("Signup handleProfileImage");
-  //     const profileImageUrl = await dispatch(
-  //       uploadProfileImage(imageUrl)
-  //     ).unwrap();
-
-  //     console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
-  //     setProfileImage(profileImageUrl);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
     <article className={styles.signup}>
       <section>

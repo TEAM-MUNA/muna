@@ -30,6 +30,7 @@ export const uploadProfileImage = createAsyncThunk(
         ImageCategory.Users
       );
       return downloadUrl;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // console.log("프로필 error", error);
       return rejectWithValue("프로필 이미지 업로드 실패");
