@@ -144,7 +144,6 @@ export const uploadReviewAsync = createAsyncThunk<
       const updatedUser = await getUserFromFirebase(userId);
       return updatedUser?.reviews; // 유저 정보의 리뷰 리스트 반환
     } catch (error) {
-      console.error("uploadReviewAsync", error);
       return rejectWithValue(error);
     }
   }

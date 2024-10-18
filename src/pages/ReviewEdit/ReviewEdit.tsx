@@ -99,8 +99,8 @@ export default function ReviewEdit() {
       await dispatch(uploadReviewAsync({ userId, review: newReview })).unwrap();
       toast.success("리뷰가 등록되었습니다.");
       navigate(`/review/${id}`);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
       toast.error("리뷰를 등록하지 못했습니다.");
     }
   };
@@ -122,7 +122,6 @@ export default function ReviewEdit() {
         buttonRight='done'
         handleDoneButton={handleDone}
       />
-      <Button onClick={() => console.log(reviewImageList)} label='화깅ㄴ' />
       {isLoading && <LoadingSpinner />}
       {concertDetail && (
         <div className={styles.concert_date}>

@@ -19,8 +19,8 @@ const useGetReview = (reviewId?: string) => {
       try {
         const data = await getReviewFromFirebase(reviewId);
         setReview(data as ReviewType);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error(err);
         setError("리뷰를 불러오는 데 실패했습니다.");
       } finally {
         setIsLoading(false);

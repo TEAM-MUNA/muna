@@ -56,8 +56,9 @@ export const uploadReviewImages = createAsyncThunk(
         })
       );
       return downloadUrls;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("uploadReviewImages", error);
+      // console.error("uploadReviewImages", error);
       return rejectWithValue("리뷰 이미지 업로드 실패");
     }
   }
@@ -101,7 +102,6 @@ const imageSlice = createSlice({
       })
       .addCase(uploadReviewImages.rejected, (state, action) => {
         state.status = "failed";
-        console.log("리뷰 이미지 업로드 rejected", action.payload);
         state.error = action.payload as string;
       });
   },

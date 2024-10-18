@@ -63,8 +63,8 @@ export const signupAsync = createAsyncThunk(
           } else {
             return rejectWithValue("회원가입에 실패했습니다.");
           }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
-          console.error(`profileImage storage에 업로드: ${e}`);
           return rejectWithValue("프로필 이미지를 등록하지 못했습니다.");
         }
       }
@@ -338,8 +338,6 @@ const authSlice = createSlice({
           >
         ) => {
           state.status = "succeeded";
-          // console.log(action.payload);
-
           if (action.payload) {
             state.user = {
               ...state.user, // 기존의 state.user 속성 유지
