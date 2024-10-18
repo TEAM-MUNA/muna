@@ -221,7 +221,7 @@ export default function Profile() {
   const reviewCount = profile?.reviews?.length || 0;
   const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
-    ["나의 후기", reviewCount],
+    ["나의 후기", null],
   ]);
 
   useEffect(() => {
@@ -231,9 +231,14 @@ export default function Profile() {
     const newTabTitle: [string, number | null][] = isProfileOwner
       ? [
           ["북마크한 공연", null],
-          ["나의 후기", reviewCount],
+          ["나의 후기", reviewCount === 0 ? null : reviewCount],
         ]
-      : [[`${profile?.nickname ?? ""}님의 후기`, reviewCount]];
+      : [
+          [
+            `${profile?.nickname ?? ""}님의 후기`,
+            reviewCount === 0 ? null : reviewCount,
+          ],
+        ];
     setTabTitle(newTabTitle);
   }, [profile, reviewCount, currentUserId]);
 
