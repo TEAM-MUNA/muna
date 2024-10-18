@@ -141,6 +141,7 @@ export default function Search() {
                     title={item.title}
                     poster={item.poster}
                     concertId={item.concertId}
+                    pageName='Search'
                   />
                 </li>
               ))}

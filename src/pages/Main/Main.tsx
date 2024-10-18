@@ -24,13 +24,13 @@ export default function Main() {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
     error: popularReviewListError,
-  } = useGetReviewList({ criteria: "likeCount" });
+  } = useGetReviewList({ criteria: "likeCount", pageName: "Main(likeCount)" });
 
   const {
     reviewList: mainShowingReviewList,
     isLoading: isMainShowingReviewListLoading,
     error: mainShowingReviewListError,
-  } = useGetReviewList({ criteria: "rating" });
+  } = useGetReviewList({ criteria: "rating", pageName: "Main(rating)" });
 
   const [mainReviews, setMainReviews] = useState<MainReviewType[]>([]);
   const [currentPosterIndex, setCurrentPosterIndex] = useState<number>(0);

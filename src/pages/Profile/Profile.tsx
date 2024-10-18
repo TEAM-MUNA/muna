@@ -85,6 +85,7 @@ function BookmarkList() {
                 title={i.title}
                 poster={i.poster}
                 bookmarkInteractive
+                pageName='Profile'
               />
             </li>
           ))}

@@ -13,11 +13,13 @@ import useInput from "../../hooks/useInput";
 import { uploadProfileImage } from "../../slices/imageSlice";
 import { errorMessages } from "../../utils/constants/errorMessages";
 import { placeholder } from "../../utils/constants/placeholder";
+import { useRequestContext } from "../../context/RequestContext";
 
 export default function Signup() {
   const dispatch = useDispatch<AppDispatch>();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { incrementRequestCount } = useRequestContext();
 
   const {
     value: email,
@@ -51,8 +53,6 @@ export default function Signup() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    console.log(data);
-
     const hasEmptyInput = Object.values(data).every((value) => value === "");
     const hasErrors = !!emailError || !!passwordError || !!passwordCheckError;
 
@@ -67,6 +67,7 @@ export default function Signup() {
     const loadingToastId = toast.loading("회원가입 중...");
 
     try {
+      incrementRequestCount("Signup handleSignup");
       await dispatch(
         signupAsync({ email, password, nickname, profileImage })
       ).unwrap();
@@ -87,6 +88,7 @@ export default function Signup() {
 
   const handleProfileImage = async (imageUrl: string) => {
     try {
+      incrementRequestCount("Signup handleProfileImage");
       const profileImageUrl = await dispatch(
         uploadProfileImage(imageUrl)
       ).unwrap();
