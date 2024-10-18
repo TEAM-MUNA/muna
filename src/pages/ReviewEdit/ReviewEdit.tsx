@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import useCurrentUser from "../../hooks/useCurrentUser";
@@ -21,6 +21,7 @@ export default function ReviewEdit() {
   const location = useLocation();
   const { concertId } = location.state || {};
   const { id } = useParams<{ id: string }>(); // 리뷰 아이디
+  const navigate = useNavigate();
 
   const {
     userId,
@@ -111,6 +112,7 @@ export default function ReviewEdit() {
         })
       ).unwrap();
       toast.success("리뷰가 등록되었습니다.");
+      navigate(`/review/${id}`);
     } catch (error) {
       console.error(error);
       toast.error("리뷰를 등록하지 못했습니다.");
