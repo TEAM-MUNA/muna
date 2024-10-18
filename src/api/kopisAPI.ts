@@ -16,8 +16,9 @@ export const fetchConcertDetail = async (mt20id: string) => {
 
     const concertDetail = parseXml(data) as ConcertReturnType;
     return concertDetail;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return null;
   }
 };
@@ -47,8 +48,9 @@ export const fetchConcertList = async (
 
     const concertList = parseXml(data) as ConcertReturnType[];
     return concertList;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Error fetching data:", error);
+    // console.error("Error fetching data:", error);
     return [];
   }
 };

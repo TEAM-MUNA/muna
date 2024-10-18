@@ -113,7 +113,7 @@ export const ReauthenticateFromFirebase = async (password: string) => {
     return true;
   }
 
-  console.error("현재 사용자 정보가 없습니다.");
+  // console.error("현재 사용자 정보가 없습니다.");
   return false; // 사용자 정보가 없는 경우 false 반환
 };
 

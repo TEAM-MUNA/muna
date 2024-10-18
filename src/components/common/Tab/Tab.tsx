@@ -38,8 +38,8 @@ export default function Tab({
     // onTabChanged(index);
 
     // 클릭한 요소
-    const selectedItem = tabTitleList[index][0];
-    console.log(selectedItem);
+    // const selectedItem = tabTitleList[index][0];
+    // console.log(selectedItem);
 
     // 부모 컴포넌트로 선택된 탭 정보 전달
     if (onTabChanged) {

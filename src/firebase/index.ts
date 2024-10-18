@@ -25,10 +25,10 @@ const connectToEmulators = async () => {
       if (response.ok) {
         connectFirestoreEmulator(db, "localhost", 8080); // Firestore 에뮬레이터
         connectAuthEmulator(firebaseAuth, "http://localhost:9099"); // Auth 에뮬레이터
-        console.log("Connected to emulators");
+        // console.log("Connected to emulators");
       }
     } catch {
-      console.log("Emulator is not running");
+      // console.log("Emulator is not running");
     }
   }
 };
