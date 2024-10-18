@@ -13,50 +13,46 @@ import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinne
 import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
 import { ReviewType } from "../../types/reviewType";
 import { uploadReviewAsync } from "../../slices/interactionSlice";
+import useGetReview from "../../hooks/useGetReview";
 
 export default function ReviewEdit() {
-  // 원래 있던 리뷰면 가져오기 (필요)
-  // 원래 없던 새로운 리뷰면 새로 등록
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { concertId } = location.state || {};
   const { id } = useParams<{ id: string }>(); // 리뷰 아이디
   const navigate = useNavigate();
 
-  const {
-    userId,
-    nickname,
-    profileImage,
-    // likedReviews,
-    // bookmarkedConcerts,
-    reviews,
-  } = useCurrentUser();
+  const { userId, nickname, profileImage } = useCurrentUser();
 
-  useEffect(() => {
-    console.log(
-      userId,
-      nickname,
-      profileImage,
-      // likedReviews,
-      // bookmarkedConcerts,
-      reviews
-    );
-    if (reviews && reviews.length > 0) {
-      // reviews.some((review) => review)
-      console.log(reviews);
-    }
-  }, []);
+  const {
+    review,
+    isLoading: isReviewLoading,
+    error: reviewError,
+  } = useGetReview(id);
+
+  const { concertId: reviewConcertId } = location.state || {};
+  const [concertId, setConcertId] = useState<string>(reviewConcertId);
 
   const {
     concertDetail,
     isLoading: isConcertDetailLoading,
     error: concertDetailError,
-  } = useGetConcertDetail(concertId); // 파이어베이스 통신 줄이기 위해 kopis에서 불러옴
+  } = useGetConcertDetail(concertId);
 
   const [reviewImageList, setReviewImageList] = useState<string[]>([]);
   const [reviewContent, setReviewContent] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [rating, setRating] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!isReviewLoading && review) {
+      setReviewImageList(review.images || []);
+      setReviewContent(review.contents || "");
+      setDate(review.date || "");
+      setRating(review.rating || undefined);
+      setConcertId(review.concert.id);
+    }
+  }, [isReviewLoading, review]);
+
   const status = useSelector((state: RootState) => state.interaction.status);
   const isLoading = status === "loading";
 
@@ -65,30 +61,25 @@ export default function ReviewEdit() {
     setReviewContent(value);
   };
 
-  // // 오른쪽상단 체크아이콘 클릭시 저장
   const handleDone = async () => {
-    // 리뷰 체크표시 클릭시 저장
-    // 리뷰 업로드
-    if (!id) {
-      // 리뷰 없음.
-      return;
-    }
-    if (!userId || !nickname) {
-      // 유저 없음. 로그인 페이지로 이동 등
-      return;
-    }
-    if (!concertDetail?.prfnm || !concertDetail?.poster) {
-      // 콘서트 정보 없음
+    if (
+      !id ||
+      !userId ||
+      !nickname ||
+      !concertDetail?.prfnm ||
+      !concertDetail?.poster
+    ) {
+      toast.error("후기를 등록하는 도중 문제가 발생했습니다.");
       return;
     }
 
     const newReview: ReviewType = {
       concert: {
         id: concertDetail.mt20id,
-        title: concertDetail?.prfnm,
-        poster: concertDetail?.poster,
+        title: concertDetail.prfnm,
+        poster: concertDetail.poster,
       },
-      reviewId: id, // review id
+      reviewId: id,
       author: {
         id: userId,
         nickname,
@@ -96,21 +87,15 @@ export default function ReviewEdit() {
       },
       rating,
       date,
-      createdAt: new Date().toISOString(), // 현재시간
+      createdAt: new Date().toISOString(),
       contents: reviewContent,
-      images: reviewImageList, // firebase에 등록하고 가져와야함.
-      likedBy: [], // 기본값
-      likeCount: 0, // 기본값
+      images: reviewImageList,
+      likedBy: [],
+      likeCount: 0,
     };
 
     try {
-      // 리뷰 등록
-      await dispatch(
-        uploadReviewAsync({
-          userId,
-          review: newReview,
-        })
-      ).unwrap();
+      await dispatch(uploadReviewAsync({ userId, review: newReview })).unwrap();
       toast.success("리뷰가 등록되었습니다.");
       navigate(`/review/${id}`);
     } catch (error) {
@@ -118,6 +103,14 @@ export default function ReviewEdit() {
       toast.error("리뷰를 등록하지 못했습니다.");
     }
   };
+
+  if (isReviewLoading || isConcertDetailLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (reviewError || concertDetailError) {
+    return <div>Error: {reviewError || concertDetailError}</div>;
+  }
 
   return (
     <section className={styles.reviewEdit_form}>
@@ -129,37 +122,37 @@ export default function ReviewEdit() {
         handleDoneButton={handleDone}
       />
       {isLoading && <LoadingSpinner />}
-      {!isConcertDetailLoading ? (
+      {concertDetail && (
         <div className={styles.concert_date}>
           <div className={styles.concert_image}>
-            <img src={concertDetail?.poster} alt={concertDetail?.prfnm} />
+            <img src={concertDetail.poster} alt={concertDetail.prfnm} />
           </div>
           <div className={styles.concert_inner}>
             <p>
-              <h3 className={styles.concert_title}>{concertDetail?.prfnm}</h3>
+              <h3 className={styles.concert_title}>{concertDetail.prfnm}</h3>
               <span className={styles.concert_genre}>
-                {concertDetail?.genrenm}
+                {concertDetail.genrenm}
               </span>
             </p>
             <CalendarInput
+              currentDate={date}
               onCalendarChange={(selectedDate) => {
                 setDate(selectedDate);
               }}
             />
           </div>
         </div>
-      ) : (
-        <LoadingSpinner />
       )}
       <div className={styles.star_form}>
         <StarForm
-          initialRating={0}
+          initialRating={rating || 0}
           onRatingChange={(newRating) => {
             setRating(newRating);
           }}
         />
       </div>
       <ReviewImageUploader
+        imageList={reviewImageList}
         onImageChange={(imageUrls) => {
           setReviewImageList(imageUrls);
         }}
@@ -169,8 +162,9 @@ export default function ReviewEdit() {
         <textarea
           id='review-textarea'
           className={styles.textarea}
-          placeholder={`${concertDetail?.prfnm}에 대한 기록을 남겨보세요. (1,500자 이내)`}
+          placeholder={`${concertDetail?.prfnm || "공연"}에 대한 기록을 남겨보세요. (1,500자 이내)`}
           onChange={handleTextArea}
+          value={reviewContent}
         />
       </label>
     </section>
