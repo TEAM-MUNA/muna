@@ -2,14 +2,8 @@ import axios from "axios";
 import parseXml from "../utils/parseXml";
 import { ConcertReturnType } from "../types/concertType";
 
-// const PROXY =
-//   window.location.hostname === "localhost"
-//     ? "/openApi/restful/pblprfr"
-//     : "/openApi/restful/pblprfr";
-// const URL = `${PROXY}`;
-
 // kopis Open API
-axios.defaults.baseURL = "https://www.kopis.or.kr/openApi/restful/pblprfr";
+axios.defaults.baseURL = "/openApi/restful/pblprfr";
 
 // 공연 상세 정보 조회
 export const fetchConcertDetail = async (mt20id: string) => {

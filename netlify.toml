@@ -1,9 +1,8 @@
 [[redirects]]
   from = "/openApi/*"
-  to = "https://www.kopis.or.kr/openApi/:splat"
+  to = "https://www.kopis.or.kr/:splat"
   status = 200
   force = true
-  headers = {X-Forwarded-Host = "munamuna.netlify.app"}
 
 [[redirects]]
   from = "/*"
