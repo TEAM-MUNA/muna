@@ -173,9 +173,18 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
   return (
     <section className={`${styles.tab_content} ${styles.review_gallery}`}>
       <ul>
-        <li>
-          <ReviewGalleryCard reviewLink='#' hasMultiImages />
-        </li>
+        {reviews.reverse().map((i) => (
+          <li key={i.reviewId}>
+            <ReviewGalleryCard
+              reviewLink={`/review/${i.reviewId}`}
+              title={i.concert?.title || "제목 없음"}
+              thumbnail={i.thumbnail || ""}
+              likeCount={i.likeCount}
+              poster={i.concert?.poster}
+              hasMultiImages
+            />
+          </li>
+        ))}
       </ul>
     </section>
   );
