@@ -112,8 +112,9 @@ function BookmarkList() {
 }
 
 function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
+  const navigate = useNavigate();
   const { incrementRequestCount } = useRequestContext();
-
+  const currentUserId = useCurrentUser().userId;
   const { userId } = useParams<{ userId: string }>();
   const [reviews, setReviews] = useState<ReviewListType[]>([]);
 
@@ -138,6 +139,28 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
 
   // const reviewOrderSelectOptions = ["최신순", "인기순"];
   // const handleReviewDropdownSelect = () => {};
+
+  if (reviews.length === 0) {
+    return (
+      <div className='empty'>
+        {currentUserId === userId ? (
+          <>
+            <p>{emptyMessages.profileMyReview}</p>
+            <div className='wrapper_btn'>
+              <Button
+                label='모든 공연 보기'
+                size='md'
+                color='default'
+                onClick={() => navigate("/concert")}
+              />
+            </div>
+          </>
+        ) : (
+          <p>{emptyMessages.profileReview}</p>
+        )}
+      </div>
+    );
+  }
 
   if (activeView === "list") {
     return (
@@ -169,7 +192,6 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
       </section>
     );
   }
-
   return (
     <section className={`${styles.tab_content} ${styles.review_gallery}`}>
       <ul>
@@ -195,9 +217,11 @@ export default function Profile() {
   const currentUserId = useCurrentUser().userId;
   const { profile, isLoading } = useProfile(userId);
   const [isMine, setIsMine] = useState<boolean>(false);
+
+  const reviewCount = profile?.reviews?.length || 0;
   const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
-    ["나의 후기", 10],
+    ["나의 후기", null],
   ]);
 
   useEffect(() => {
@@ -207,11 +231,16 @@ export default function Profile() {
     const newTabTitle: [string, number | null][] = isProfileOwner
       ? [
           ["북마크한 공연", null],
-          ["나의 후기", 10],
+          ["나의 후기", reviewCount === 0 ? null : reviewCount],
         ]
-      : [[`${profile?.nickname ?? ""}님의 후기`, 10]];
+      : [
+          [
+            `${profile?.nickname ?? ""}님의 후기`,
+            reviewCount === 0 ? null : reviewCount,
+          ],
+        ];
     setTabTitle(newTabTitle);
-  }, [userId, currentUserId, profile?.nickname]);
+  }, [profile, reviewCount, currentUserId]);
 
   const tabList = useMemo<[string, number | null][]>(
     () => tabTitle,
