@@ -8,7 +8,7 @@ interface CalendarInputProps {
 export default function CalendarInput({
   fullWidth = false,
 }: CalendarInputProps) {
-  const placeholder = "공연 관람일을 선택하세요";
+  const placeholder = "공연 관람일을 입력하세요";
   const [date, setDate] = useState<string>("");
   const isEmptyDate = date === placeholder;
 

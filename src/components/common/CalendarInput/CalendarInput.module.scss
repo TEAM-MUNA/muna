@@ -4,6 +4,9 @@
 
 .calendarInput {
   justify-content: space-between;
+  font-size: $font-md !important;
+  border-bottom: 1px solid $line-light;
+  padding-bottom: 6.5px !important;
 
   &::-webkit-datetime-edit-text,
   &::-webkit-datetime-edit-month-field,

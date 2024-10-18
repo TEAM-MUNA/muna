@@ -1,6 +1,8 @@
 import {
   collection,
+  doc,
   DocumentData,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -32,6 +34,13 @@ export const getReviewListFromFirebase = async (
     ...fbDoc.data(),
   }));
   return reviewList;
+};
+
+export const getReviewFromFirebase = async (
+  reviewId: string
+): Promise<DocumentData | undefined> => {
+  const result = await getDoc(doc(db, "reviews", reviewId));
+  return result.data();
 };
 
 export const a = () => null;
