@@ -11,9 +11,8 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ReviewListType } from "../../types/reviewType";
+import { ReviewListType, ReviewType } from "../../types/reviewType";
 import { db } from "../../firebase";
-import { ReviewType } from "../../types/reviewType";
 
 // 콘서트 아이디 입력 -> Firebase에서 리뷰 리스트 불러오기
 export const getReviewListFromFirebase = async (
