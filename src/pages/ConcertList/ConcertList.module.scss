@@ -18,3 +18,10 @@
 .faded {
   opacity: 0.5;
 }
+
+.emptyMessage {
+  text-align: center;
+  color: $black-light;
+  font-size: $font-md;
+  margin-top: 60px;
+}

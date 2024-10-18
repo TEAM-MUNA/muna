@@ -1,0 +1,15 @@
+@import "../../styles/_variables";
+@import "../../styles/_mixin";
+
+.searchResult {
+  @include full_width;
+  text-align: center;
+  margin-top: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid $line-lighter;
+}
+
+.searchQuery {
+  font-size: 20px;
+  font-weight: 500;
+}

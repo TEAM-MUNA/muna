@@ -4,7 +4,7 @@ export const emptyMessages = {
   profileReview: `작성한 후기가 없습니다.`,
   concertDetailReview: `작성된 후기가 없습니다. \n공연을 보셨다면 소중한 후기를 남겨주세요!`,
   searchResult: `검색 결과가 없습니다. \n다른 검색어나 필터링 조건으로 찾아보세요!`,
-  concerts: `선택한 조건에 맞는 공연이 없습니다. \n다른 필터링 조건으로 찾아보세요!`,
+  concerts: `조건에 맞는 공연이 없습니다. \n다른 키워드로 검색하거나, 필터 조건을 변경해 보세요!`,
   page404: `페이지 주소가 잘못되었습니다. \n존재하지 않는 페이지입니다.`,
 };
 
