@@ -23,7 +23,8 @@
   .id {
     font-size: $font-xs;
     color: $black-lighter;
-    // font-weight: $font-light;
+    word-break: break-all;
+    font-weight: $font-light;
   }
 
   &.lg {
