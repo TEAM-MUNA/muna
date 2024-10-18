@@ -42,39 +42,32 @@ export const getReviewListById = async (
   reviewIds?: string[]
 ): Promise<ReviewListType[] | undefined> => {
   if (!reviewIds || reviewIds.length === 0) {
-    console.warn("유효하지 않은 리뷰 ID입니다.");
+    // console.warn("유효하지 않은 리뷰 ID입니다.");
     return []; // 유효하지 않은 경우 undefined 반환
   }
 
   // 각 리뷰 ID에 대한 비동기 작업을 배열로 만듭니다.
   const reviewPromises = reviewIds.map(async (reviewId) => {
-    try {
-      const reviewDocRef = doc(db, "reviews", reviewId);
-      const reviewDocSnapshot = await getDoc(reviewDocRef);
+    const reviewDocRef = doc(db, "reviews", reviewId);
+    const reviewDocSnapshot = await getDoc(reviewDocRef);
 
-      if (reviewDocSnapshot.exists()) {
-        const data = reviewDocSnapshot.data();
-        return {
-          reviewId: reviewDocSnapshot.id,
-          concert: {
-            title: data.concert.title,
-            poster: data.concert.poster,
-          },
-          date: data.date,
-          contentsPreview: data.contents.slice(0, 200), // 내용 앞 200자
-          thumbnail: data.images[0],
-          hasMultipleImages: data.images.length > 1,
-          likeCount: data.likeCount,
-          rating: data.rating || 0,
-        } as ReviewListType;
-      }
-      console.warn(`리뷰 ID ${reviewId}에 해당하는 문서를 찾을 수 없습니다.`);
-    } catch (error) {
-      console.error(
-        `리뷰 ID ${reviewId} 정보를 가져오는 데 실패했습니다:`,
-        error
-      );
+    if (reviewDocSnapshot.exists()) {
+      const data = reviewDocSnapshot.data();
+      return {
+        reviewId: reviewDocSnapshot.id,
+        concert: {
+          title: data.concert.title,
+          poster: data.concert.poster,
+        },
+        date: data.date,
+        contentsPreview: data.contents.slice(0, 200), // 내용 앞 200자
+        thumbnail: data.images[0],
+        hasMultipleImages: data.images.length > 1,
+        likeCount: data.likeCount,
+        rating: data.rating || 0,
+      } as ReviewListType;
     }
+    // console.warn(`리뷰 ID ${reviewId}에 해당하는 문서를 찾을 수 없습니다.`);
     return null; // 문서가 존재하지 않거나 에러가 발생한 경우 null 반환
   });
 

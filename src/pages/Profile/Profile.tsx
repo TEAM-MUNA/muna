@@ -121,17 +121,17 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
     const fetchReviews = async () => {
       // API 요청을 보낼 때마다 요청 수 추적
       incrementRequestCount("Profile fetchReviews");
-      try {
-        if (userId) {
-          // 1. 유저 아이디로 리뷰 아이디 배열 가져오기
-          const reviewIds = (await getReviewIdsByUserId(userId)) || [];
-          // 2. 리뷰 아이디 배열로 리뷰리스트에 필요한 데이터 가져오기
-          const reviewData = (await getReviewListById(reviewIds)) || [];
-          setReviews(reviewData);
-        }
-      } catch (error) {
-        console.error("리뷰 데이터 가져오기 실패:", error);
+      // try {
+      if (userId) {
+        // 1. 유저 아이디로 리뷰 아이디 배열 가져오기
+        const reviewIds = (await getReviewIdsByUserId(userId)) || [];
+        // 2. 리뷰 아이디 배열로 리뷰리스트에 필요한 데이터 가져오기
+        const reviewData = (await getReviewListById(reviewIds)) || [];
+        setReviews(reviewData);
       }
+      // } catch (error) {
+      //   console.error("리뷰 데이터 가져오기 실패:", error);
+      // }
     };
     fetchReviews();
   }, [userId]);

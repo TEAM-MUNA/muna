@@ -150,16 +150,12 @@ export const updateUserBookmark = async (
 export const getReviewIdsByUserId = async (
   userId: string
 ): Promise<string[] | undefined> => {
-  try {
-    const userDocRef = doc(db, "users", userId);
-    const userDocSnapshot = await getDoc(userDocRef);
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnapshot = await getDoc(userDocRef);
 
-    if (userDocSnapshot.exists()) {
-      const userData = userDocSnapshot.data();
-      return userData.reviews || [];
-    }
-  } catch (error) {
-    console.error("유저의 후기 리스트 가져오기 실패:", error);
+  if (userDocSnapshot.exists()) {
+    const userData = userDocSnapshot.data();
+    return userData.reviews || [];
   }
-  return undefined;
+  return [];
 };
