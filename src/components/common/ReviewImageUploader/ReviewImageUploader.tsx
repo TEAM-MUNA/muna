@@ -23,18 +23,23 @@ export default function ReviewImageUploader({
   }, [imageList]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
+    const files = e.target.files;
+    if (files) {
+      const newPreviewList: string[] = [];
 
-      reader.onloadend = () => {
-        const newPreview = reader.result as string;
-        const updatedPreviewList = [...previewList, newPreview];
-        setPreviewList(updatedPreviewList);
-        onImageChange?.(updatedPreviewList);
-      };
-      reader.readAsDataURL(file);
-      console.log(file);
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const newPreview = reader.result as string;
+          newPreviewList.push(newPreview);
+          if (newPreviewList.length === files.length) {
+            const updatedPreviewList = [...previewList, ...newPreviewList];
+            setPreviewList(updatedPreviewList);
+            onImageChange?.(updatedPreviewList);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
@@ -58,6 +63,7 @@ export default function ReviewImageUploader({
           className='sr_only'
           onChange={handleFileChange}
           name='review-image'
+          multiple
         />
       </label>
       <div className={styles.preview_list_container}>
