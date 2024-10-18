@@ -61,7 +61,9 @@ export default function ReviewEdit() {
       <div className={styles.star_form}>
         <StarForm initialRating={0} />
       </div>
-      <ReviewImageUploader />
+      <ReviewImageUploader
+      // onImageChange={(imageUrls) => console.log(imageUrls)}
+      />
     </section>
   );
 }

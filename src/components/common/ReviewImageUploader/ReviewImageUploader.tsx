@@ -43,12 +43,14 @@ export default function ReviewImageUploader({
       (previewSrc) => previewSrc !== src
     );
     setPreviewList(newPreviewList);
+    onImageChange?.(newPreviewList);
   };
 
   return (
     <div className={styles.container}>
-      <label htmlFor='review-image-input'>
+      <label htmlFor='review-image-input' className={styles.add_image}>
         <span className='sr_only'>리뷰 이미지 등록</span>
+        <PlusIcon />
         <input
           type='file'
           accept='image/*'
@@ -58,9 +60,6 @@ export default function ReviewImageUploader({
           name='review-image'
         />
       </label>
-      <div className={styles.add_image}>
-        <PlusIcon />
-      </div>
       <div className={styles.preview_list_container}>
         {previewList.length > 0 &&
           previewList.map((src, index) => (
