@@ -7,9 +7,11 @@ import {
   limit,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { ReviewType } from "../../types/reviewType";
 
 // Firebase에서 리뷰 리스트 불러오기
 export const getReviewListFromFirebase = async (
@@ -43,4 +45,8 @@ export const getReviewFromFirebase = async (
   return result.data();
 };
 
-export const a = () => null;
+export const addReviewToFirebase = async (review: ReviewType) => {
+  const docRef = doc(db, "reviews", review.reviewId);
+  await setDoc(docRef, review);
+  return review.reviewId;
+};
