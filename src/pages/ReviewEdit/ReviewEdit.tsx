@@ -14,6 +14,7 @@ import ReviewImageUploader from "../../components/common/ReviewImageUploader/Rev
 import { ReviewType } from "../../types/reviewType";
 import { uploadReviewAsync } from "../../slices/interactionSlice";
 import useGetReview from "../../hooks/useGetReview";
+import Button from "../../components/common/Button/Button";
 
 export default function ReviewEdit() {
   const dispatch = useDispatch<AppDispatch>();
@@ -121,6 +122,7 @@ export default function ReviewEdit() {
         buttonRight='done'
         handleDoneButton={handleDone}
       />
+      <Button onClick={() => console.log(reviewImageList)} label='화깅ㄴ' />
       {isLoading && <LoadingSpinner />}
       {concertDetail && (
         <div className={styles.concert_date}>

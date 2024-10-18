@@ -48,9 +48,12 @@ export const uploadReviewImages = createAsyncThunk(
     const { getImageDownloadUrl } = useGetImageDownloadUrl();
     try {
       const downloadUrls = await Promise.all(
-        imageUrls.map((imageUrl) =>
-          getImageDownloadUrl(reviewId, imageUrl, ImageCategory.Reviews)
-        )
+        imageUrls.map((imageUrl) => {
+          if (imageUrl.startsWith("https://firebasestorage.googleapis.com")) {
+            return imageUrl;
+          }
+          return getImageDownloadUrl(reviewId, imageUrl, ImageCategory.Reviews);
+        })
       );
       return downloadUrls;
     } catch (error) {
