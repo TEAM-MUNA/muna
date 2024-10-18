@@ -3,6 +3,7 @@
   to = "https://www.kopis.or.kr/openApi/:splat"
   status = 200
   force = true
+  headers = {X-Forwarded-Host = "munamuna.netlify.app"}
 
 [[redirects]]
   from = "/*"
