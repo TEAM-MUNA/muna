@@ -11,6 +11,19 @@ export const genreList = [
   "기타",
 ];
 
+export const genreCodeList = [
+  "", // 전체
+  "GGGA", // 뮤지컬
+  "AAAA", // 연극
+  "CCCC", // 국악
+  "CCCA", // 클래식
+  "CCCD", // 대중음악
+  "BBBC", // 서양/한국무용
+  "EEEB", // 서커스/마술
+  "BBBE", // 대중무용
+  "EEEA", // 기타
+];
+
 export const genreMap: { [key: string]: string } = {
   뮤지컬: "GGGA",
   연극: "AAAA",
