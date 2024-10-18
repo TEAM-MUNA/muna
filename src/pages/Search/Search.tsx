@@ -41,14 +41,22 @@ export default function Search() {
         })
       );
 
-      setRecommends(fbConcerts);
+      // 북마크 수로 내림차순 정렬 후, 상위 6개 선택
+      const sortedConcerts = fbConcerts
+        .sort(
+          (a, b) =>
+            (b.bookmarkedBy?.length || 0) - (a.bookmarkedBy?.length || 0)
+        )
+        .slice(0, 6);
+
+      // 상위 6개의 콘서트를 랜덤으로 섞기
+      const shuffledConcerts = sortedConcerts.sort(() => Math.random() - 0.5);
+
+      setRecommends(shuffledConcerts);
     };
+
     getdata();
   }, []);
-
-  useEffect(() => {
-    // console.log("🚀 ~ recommends:", recommends);
-  }, [recommends]); // recommends가 변경될 때마다 실행
 
   // 최근 검색어 가져오기
   useEffect(() => {
