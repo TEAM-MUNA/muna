@@ -8,6 +8,7 @@ import useUserRedirect from "../../hooks/useUserRedirect";
 import { AppDispatch, RootState } from "../../app/store";
 import { updateProfileAsync, updateUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
+import { useRequestContext } from "../../context/RequestContext";
 
 import styles from "./Settings.module.scss";
 
@@ -21,10 +22,10 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 
 export default function SettingsProfile() {
+  const { incrementRequestCount } = useRequestContext();
   useUserRedirect();
   const user = useAppSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
-
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useCurrentUser();
   const initialNickname = currentUser?.nickname || "";
@@ -37,6 +38,8 @@ export default function SettingsProfile() {
   const [isUploading, setIsUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // API 요청을 보낼 때마다 요청 수 추적
+    incrementRequestCount("SettingsProfile handleSubmit");
     e.preventDefault();
 
     // 이미지가 업로드 중일 경우에는 제출을 막음
