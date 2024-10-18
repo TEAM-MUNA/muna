@@ -18,9 +18,9 @@ const RequestContext = createContext<RequestContextType>({
 
 export const useRequestContext = () => useContext(RequestContext);
 
-const DISCORD_WEBHOOK_URL = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const TIME_WINDOW = 1000; // 1초
-const REQUEST_LIMIT = 100; // 1초 동안 100번 이상 요청 발생 시 알림
+const REQUEST_LIMIT = 30; // 1초 동안 30번 이상 요청 발생 시 알림
 
 function RequestProvider({ children }: { children: React.ReactNode }) {
   const [requestTimestamps, setRequestTimestamps] = useState<
@@ -47,8 +47,9 @@ function RequestProvider({ children }: { children: React.ReactNode }) {
       await axios.post(DISCORD_WEBHOOK_URL || "", {
         content: `1초 내 요청 수가 ${count}을 초과했습니다! 각 위치별 발생 횟수: ${locationDetails}`,
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Discord 알림 전송 실패:", error);
+      // console.error("Discord 알림 전송 실패:", error);
     }
   };
 

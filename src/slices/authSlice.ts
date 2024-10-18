@@ -87,8 +87,9 @@ export const signupAsync = createAsyncThunk(
         if (user) {
           try {
             await deleteUser(user); // 하나라도 실패하면 삭제
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (e) {
-            console.error("사용자 삭제 중 에러", e);
+            // console.error("사용자 삭제 중 에러", e);
           }
         }
         return rejectWithValue(error.message); // firebase 오류일 경우
@@ -107,7 +108,7 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
-      console.log(user);
+      // console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -165,7 +166,7 @@ export const updateProfileAsync = createAsyncThunk(
       }
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        console.log("파이어베이스 에러:", error.message);
+        // console.log("파이어베이스 에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("프로필 변경 중 에러 발생"); // 그 외 오류: 기본 메시지
@@ -211,7 +212,7 @@ export const withdrawAsync = createAsyncThunk(
 
     try {
       await withdrawFromFirebase(user);
-      console.log("탈퇴 성공");
+      // console.log("탈퇴 성공");
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         return rejectWithValue(error.message);
@@ -267,7 +268,7 @@ const authSlice = createSlice({
           }>
         ) => {
           state.status = "succeeded";
-          console.log(action.payload);
+          // console.log(action.payload);
           // state.user = action.payload; // 유저 정보 업데이트
           state.user = {
             userId: action.payload.user.userId,
@@ -281,7 +282,7 @@ const authSlice = createSlice({
       .addCase(signupAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string; // 사용자 정의 에러 메시지 저장
-        console.error("에러 확인:", state.error, action.error.message);
+        // console.error("에러 확인:", state.error, action.error.message);
       });
 
     // 로그인 처리
@@ -337,7 +338,7 @@ const authSlice = createSlice({
           >
         ) => {
           state.status = "succeeded";
-          console.log(action.payload);
+          // console.log(action.payload);
 
           if (action.payload) {
             state.user = {

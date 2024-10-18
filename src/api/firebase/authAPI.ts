@@ -113,7 +113,7 @@ export const ReauthenticateFromFirebase = async (password: string) => {
     return true;
   }
 
-  console.error("현재 사용자 정보가 없습니다.");
+  // console.error("현재 사용자 정보가 없습니다.");
   return false; // 사용자 정보가 없는 경우 false 반환
 };
 
@@ -155,19 +155,15 @@ export const updateUserReview = async (userId: string, reviewId: string) => {
 };
 
 // (모든)유저 아이디 입력 -> 작성한 리뷰 아이디 배열 출력
-// export const getUserReviewIds = async (
-//   userId: string
-// ): Promise<string[] | undefined> => {
-//   try {
-//     const userDocRef = doc(db, "reviews", userId);
-//     const userDocSnapshot = await getDoc(userDocRef);
+export const getReviewIdsByUserId = async (
+  userId: string
+): Promise<string[] | undefined> => {
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnapshot = await getDoc(userDocRef);
 
-//     if (userDocSnapshot.exists()) {
-//       const userData = userDocSnapshot.data();
-//       return userData.bookmarkedConcerts || [];
-//     }
-//   } catch (error) {
-//     console.error("유저의 북마크 리스트 가져오기 실패:", error);
-//   }
-//   return undefined;
-// };
+  if (userDocSnapshot.exists()) {
+    const userData = userDocSnapshot.data();
+    return userData.reviews || [];
+  }
+  return [];
+};

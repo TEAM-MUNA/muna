@@ -47,12 +47,13 @@ function WithdrawMenu() {
         await dispatch(withdrawAsync()).unwrap();
         closeModal();
 
-        console.log("계정이 성공적으로 삭제되었습니다.");
+        // console.log("계정이 성공적으로 삭제되었습니다.");
         toast.success("탈퇴 완료되었습니다.");
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("비밀번호가 올바르지 않습니다.");
-      console.error("탈퇴 중 오류 발생:", error);
+      // console.error("탈퇴 중 오류 발생:", error);
     }
   };
 

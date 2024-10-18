@@ -10,6 +10,7 @@ import { ConcertType } from "../../types/concertType";
 import { getConcertsFromFirebase } from "../../api/firebase/concertAPI";
 import PosterCard from "../../components/common/PosterCard/PosterCard";
 import { setQuery } from "../../slices/searchSlice";
+import RecentSearchList from "./RecentSearchList";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -41,14 +42,22 @@ export default function Search() {
         })
       );
 
-      setRecommends(fbConcerts);
+      // 북마크 수로 내림차순 정렬 후, 상위 6개 선택
+      const sortedConcerts = fbConcerts
+        .sort(
+          (a, b) =>
+            (b.bookmarkedBy?.length || 0) - (a.bookmarkedBy?.length || 0)
+        )
+        .slice(0, 6);
+
+      // 상위 6개의 콘서트를 랜덤으로 섞기
+      const shuffledConcerts = sortedConcerts.sort(() => Math.random() - 0.5);
+
+      setRecommends(shuffledConcerts);
     };
+
     getdata();
   }, []);
-
-  useEffect(() => {
-    console.log("🚀 ~ recommends:", recommends);
-  }, [recommends]); // recommends가 변경될 때마다 실행
 
   // 최근 검색어 가져오기
   useEffect(() => {
@@ -72,45 +81,19 @@ export default function Search() {
     localStorage.setItem("recentQueries", JSON.stringify(updatedQueries));
   };
 
-  // 날짜 포맷팅 함수
-  const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${month}.${day}`;
-  };
-
   return (
     <div>
       {query ? (
         <SearchResult />
       ) : (
         <>
-          <div>
-            <h2>최근 검색어</h2>
-            <ul>
-              {recentQueries.map((item) => (
-                <li
-                  key={item.query}
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Button
-                    label={item.query}
-                    onClick={() => handleRecentQueryClick(item.query)}
-                  />
-                  <div>
-                    <span>{formatDate(item.date)}</span>
-                    <button
-                      type='button'
-                      onClick={() => removeQuery(item.query)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {recentQueries.length !== 0 ? (
+            <RecentSearchList
+              recentQueries={recentQueries}
+              onQueryClick={handleRecentQueryClick}
+              onQueryRemove={removeQuery}
+            />
+          ) : null}
           <div className={styles.category_nav}>
             {Object.entries(genreMap).map(([genre, code]) => {
               // 제외할 장르의 코드
@@ -133,7 +116,7 @@ export default function Search() {
             })}
           </div>
           <div>
-            <h2>추천 콘텐츠</h2>
+            <h2 style={{ fontSize: "18px" }}>추천 콘텐츠</h2>
             <ul className={styles.recommends_container}>
               {recommends?.map((item) => (
                 <li key={item.concertId}>

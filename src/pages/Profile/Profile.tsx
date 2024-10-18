@@ -6,6 +6,9 @@ import { getConcertsForBookmarkList } from "../../api/firebase/concertAPI";
 import emptyMessages from "../../utils/constants/emptyMessages";
 import { useRequestContext } from "../../context/RequestContext";
 
+import { getReviewIdsByUserId } from "../../api/firebase/authAPI";
+import { getReviewListById } from "../../api/firebase/reviewAPI";
+import { ReviewListType } from "../../types/reviewType";
 import styles from "./Profile.module.scss";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -30,8 +33,7 @@ function BookmarkList() {
   >([]);
 
   // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
-  const bookmarkedConcertsId = useCurrentUser().bookmarkedConcerts;
-  console.log(bookmarkedConcertsId);
+  const bookmarkedConcertsIds = useCurrentUser().bookmarkedConcerts;
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -41,19 +43,20 @@ function BookmarkList() {
       try {
         if (userId) {
           // 2. 북마크 콘서트의 title과 poster 가져오기
-          if (bookmarkedConcertsId && bookmarkedConcertsId.length > 0) {
-            const bookmarkedConcertData =
-              await getConcertsForBookmarkList(bookmarkedConcertsId);
+          if (bookmarkedConcertsIds && bookmarkedConcertsIds.length > 0) {
+            const bookmarkedConcertData = await getConcertsForBookmarkList(
+              bookmarkedConcertsIds
+            );
             setBookmarkedConcerts(Object.values(bookmarkedConcertData));
           }
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("북마크 데이터 가져오기 실패:", error);
+        // console.error("북마크 데이터 가져오기 실패:", error);
       }
     };
     fetchBookmarks();
-    console.log(bookmarkedConcerts);
-  }, [userId, bookmarkedConcertsId]);
+  }, [userId, bookmarkedConcertsIds]);
 
   // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
   // const concertOrderSelectOptions = ["최신순", "북마크순"];
@@ -94,7 +97,6 @@ function BookmarkList() {
     );
   }
   return (
-    // TODO: 비어있을때 UI
     <div className='empty'>
       <p>{emptyMessages.profileMyBookmark}</p>
       <div className='wrapper_btn'>
@@ -110,7 +112,29 @@ function BookmarkList() {
 }
 
 function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
-  // getUserReviewIds;
+  const { incrementRequestCount } = useRequestContext();
+
+  const { userId } = useParams<{ userId: string }>();
+  const [reviews, setReviews] = useState<ReviewListType[]>([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      // API 요청을 보낼 때마다 요청 수 추적
+      incrementRequestCount("Profile fetchReviews");
+      // try {
+      if (userId) {
+        // 1. 유저 아이디로 리뷰 아이디 배열 가져오기
+        const reviewIds = (await getReviewIdsByUserId(userId)) || [];
+        // 2. 리뷰 아이디 배열로 리뷰리스트에 필요한 데이터 가져오기
+        const reviewData = (await getReviewListById(reviewIds)) || [];
+        setReviews(reviewData);
+      }
+      // } catch (error) {
+      //   console.error("리뷰 데이터 가져오기 실패:", error);
+      // }
+    };
+    fetchReviews();
+  }, [userId]);
 
   // const reviewOrderSelectOptions = ["최신순", "인기순"];
   // const handleReviewDropdownSelect = () => {};
@@ -127,9 +151,20 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
             />
           </div> */}
         <ul>
-          <li>
-            <ReviewCard reviewLink='#' />
-          </li>
+          {reviews.reverse().map((i) => (
+            <li key={i.reviewId}>
+              <ReviewCard
+                hasAvatar={false}
+                reviewLink={`/review/${i.reviewId}`}
+                title={i.concert?.title || "제목 없음"}
+                likeCount={i.likeCount}
+                starRate={i.rating}
+                thumbnail={i.thumbnail || ""}
+                date={i.date}
+                content={i.contentsPreview}
+              />
+            </li>
+          ))}
         </ul>
       </section>
     );
@@ -138,9 +173,18 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
   return (
     <section className={`${styles.tab_content} ${styles.review_gallery}`}>
       <ul>
-        <li>
-          <ReviewGalleryCard reviewLink='#' hasMultiImages />
-        </li>
+        {reviews.reverse().map((i) => (
+          <li key={i.reviewId}>
+            <ReviewGalleryCard
+              reviewLink={`/review/${i.reviewId}`}
+              title={i.concert?.title || "제목 없음"}
+              thumbnail={i.thumbnail || ""}
+              likeCount={i.likeCount}
+              poster={i.concert?.poster}
+              hasMultiImages
+            />
+          </li>
+        ))}
       </ul>
     </section>
   );

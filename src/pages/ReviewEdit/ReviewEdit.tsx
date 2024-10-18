@@ -116,6 +116,8 @@ export default function ReviewEdit() {
     <section className={styles.reviewEdit_form}>
       <h2 className='sr_only'>리뷰생성 및 수정</h2>
       <Title
+      <h2 className='sr_only'>리뷰생성 및 수정</h2>
+      <Title
         label='기록하기'
         buttonLeft='close'
         buttonRight='done'
@@ -168,5 +170,6 @@ export default function ReviewEdit() {
         />
       </label>
     </section>
+  );
   );
 }

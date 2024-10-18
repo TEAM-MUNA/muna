@@ -24,8 +24,9 @@ const useGetConcert = (concertId: string | undefined, pageName: string) => {
         incrementRequestCount(`${pageName} useGetConcertDetail`);
         const data = await getConcertFromFirebase(concertId);
         setConcert(data as ConcertType);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         setError("Firebase 공연 정보를 가져오는 데 실패했습니다.");
       } finally {
         setIsLoading(false);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { RootState } from "../../app/store";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
@@ -9,7 +10,7 @@ import { fetchConcertList } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType } from "../../types/concertType";
-import { genreList, genreMap } from "../../utils/constants/genreData";
+import { genreCodeList, genreList } from "../../utils/constants/genreData";
 import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
 import MultiSelectTab from "../../components/common/MultiSelectTab/MultiSelectTab";
@@ -44,6 +45,8 @@ export default function ConcertList() {
   const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
   const getData = async () => {
     const dataList = await Promise.all(
@@ -53,9 +56,10 @@ export default function ConcertList() {
     );
     const addedConcerts = dataList.flat();
 
-    setConcertList((prevData) =>
-      sortConcertList([...prevData, ...addedConcerts], sortOrder)
-    );
+    setConcertList((prevData) => [
+      ...prevData,
+      ...sortConcertList(addedConcerts, sortOrder),
+    ]);
   };
 
   // 컴포넌트가 언마운트될 때 검색어 초기화
@@ -66,12 +70,13 @@ export default function ConcertList() {
     [dispatch]
   );
 
+  // 필터 값 변경 시 리스트 초기화
   useEffect(() => {
-    setConcertList([]); // 필터 값 변경 시 리스트 초기화
+    setConcertList([]);
     setPage(1); // 페이지를 1로 리셋
   }, [genreCode, pfStateCode, regionCodes, sortOrder, keyword]);
 
-  // 공연 목록 정보 조회 요청
+  // 페이지 변경시 공연 리스트 요청
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -80,7 +85,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [genreCode, pfStateCode, regionCodes, page, sortOrder, keyword]);
+  }, [page]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -91,10 +96,23 @@ export default function ConcertList() {
 
   // onTabChanged 함수 정의
   const handleTabChange = useCallback((index: number) => {
-    const selectedGenre = genreList[index];
-    const code = genreMap[selectedGenre];
+    setSelectedTabIndex(index); // 탭 인덱스 업데이트
+    const code = genreCodeList[index];
     setGenreCode(code);
   }, []);
+
+  // URL에서 genre 파라미터를 읽어와서 해당 탭과 genreCode를 설정
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const genreParam = searchParams.get("genre");
+    if (genreParam) {
+      const genreIndex = genreCodeList.indexOf(genreParam);
+      if (genreIndex !== -1) {
+        setSelectedTabIndex(genreIndex); // 탭 인덱스 설정
+        setGenreCode(genreParam); // 장르 코드 설정
+      }
+    }
+  }, [location.search]);
 
   // 공연 상태 onSelect 함수 정의
   const handlePfStateChange = useCallback((selected: string) => {
@@ -132,7 +150,11 @@ export default function ConcertList() {
   return (
     <>
       {!keyword ? (
-        <Tab tabList={genreList} onTabChanged={handleTabChange} />
+        <Tab
+          tabList={genreList}
+          onTabChanged={handleTabChange}
+          selectedIndex={selectedTabIndex}
+        />
       ) : (
         <MultiSelectTab />
       )}

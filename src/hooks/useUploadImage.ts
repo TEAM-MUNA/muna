@@ -31,7 +31,7 @@ const useGetImageDownloadUrl = () => {
     const storageRef = ref(storage, `${category}/${id}/${Date.now()}`);
     await uploadString(storageRef, resizedImageUrl, "data_url");
     const downloadUrl = await getDownloadURL(storageRef);
-    console.log("download url", downloadUrl);
+    // console.log("download url", downloadUrl);
 
     return downloadUrl;
   };

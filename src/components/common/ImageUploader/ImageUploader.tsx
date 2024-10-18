@@ -30,7 +30,7 @@ export default function ImageUploader({
         onImageChange?.(newPreview);
       };
       reader.readAsDataURL(file);
-      console.log(file);
+      // console.log(file);
     }
   };
 

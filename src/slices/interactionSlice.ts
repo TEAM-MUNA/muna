@@ -54,7 +54,7 @@ export const fetchUserInteraction = createAsyncThunk<
       };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        console.log("파이어베이스 에러:", error.message);
+        // console.log("파이어베이스 에러:", error.message);
         return rejectWithValue(error.message);
       }
       return rejectWithValue("사용자 데이터를 불러오는 데 실패했습니다.");
@@ -100,12 +100,12 @@ export const bookmarkConcertAsync = createAsyncThunk<
         updateUserBookmark(userId, concert.concertId!, cancel),
       ]);
       const updatedUser = await getUserFromFirebase(userId);
-      console.log("updated", updatedUser);
+      // console.log("updated", updatedUser);
 
       // 업데이트된 북마크 목록 반환
       return updatedUser?.bookmarkedConcerts;
     } catch (error) {
-      console.log("bookmarkconceertasync", error);
+      // console.log("bookmarkconceertasync", error);
 
       return rejectWithValue(error);
     }

@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../app/store";
 import { updateProfileAsync, updateUser } from "../../slices/authSlice";
 import { uploadProfileImage } from "../../slices/imageSlice";
 import { useRequestContext } from "../../context/RequestContext";
+import { updateAuthorProfileInReviews } from "../../api/firebase/reviewAPI";
 
 import styles from "./Settings.module.scss";
 
@@ -48,9 +49,9 @@ export default function SettingsProfile() {
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
+    // const formData = new FormData(e.currentTarget);
+    // const data = Object.fromEntries(formData.entries());
+    // console.log(data);
 
     // 닉네임이 비어 있을 경우 오류 메시지
     if (!nickname) {
@@ -69,6 +70,11 @@ export default function SettingsProfile() {
           nickname,
           profileImage: profileImage || currentUser?.profileImage || null,
         })
+      );
+      await updateAuthorProfileInReviews(
+        currentUser.reviews,
+        nickname,
+        profileImage
       );
 
       toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
@@ -94,8 +100,9 @@ export default function SettingsProfile() {
         uploadProfileImage({ userId: user.userId, imageUrl })
       ).unwrap();
       setProfileImage(profileImageUrl);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("이미지 업로드 중 오류 발생:", error);
+      // console.error("이미지 업로드 중 오류 발생:", error);
     } finally {
       setIsUploading(false); // 업로드 완료 또는 오류 발생 시 업로드 상태 초기화
     }
