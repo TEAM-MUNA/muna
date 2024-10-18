@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/openApi/*"
-  to = "https://www.kopis.or.kr/:splat"
+  to = "https://www.kopis.or.kr/openApi/:splat"
   status = 200
   force = true
 
