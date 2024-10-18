@@ -12,6 +12,7 @@ import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import { placeholder } from "../../utils/constants/placeholder";
+import { useRequestContext } from "../../context/RequestContext";
 
 export default function Login() {
   const {
@@ -32,6 +33,7 @@ export default function Login() {
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { incrementRequestCount } = useRequestContext();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +51,7 @@ export default function Login() {
     const loadingToastId = toast.loading("로그인 중...");
 
     try {
+      incrementRequestCount("Login handleLogin");
       await dispatch(loginAsync({ email, password })).unwrap();
       toast.success("로그인에 성공하였습니다.", { id: loadingToastId });
       navigate(-1);

@@ -15,26 +15,28 @@ interface BookmarkToggleProps {
   concertId?: string;
   interactive?: boolean;
   color?: "white" | "primary";
+  pageName: string; // Firebase 사용 추적
 }
 
 export default function BookmarkToggle({
   concertId,
   interactive = false,
   color = "white",
+  pageName,
 }: BookmarkToggleProps) {
   const dispatch = useAppDispatch();
   const userId = useCurrentUser().userId;
 
   const {
     concertDetail,
-    // isLoading: isConertDetailLoading,
+    // isLoading: isConcertDetailLoading,
     // error: concertDetailError,
   } = useGetConcertDetail(concertId); // kopis
   const {
     concert,
     // isLoading: isConcertLoading,
     // error: concertError,
-  } = useGetConcert(concertId); // Firebase
+  } = useGetConcert(concertId, pageName); // Firebase
 
   const isBookmarkedInitialState =
     concert?.bookmarkedBy?.some(

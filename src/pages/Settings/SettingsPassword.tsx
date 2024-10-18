@@ -6,6 +6,7 @@ import useUserRedirect from "../../hooks/useUserRedirect";
 import { AppDispatch } from "../../app/store";
 import { updatePasswordAsync } from "../../slices/authSlice";
 import { ReauthenticateFromFirebase } from "../../api/firebase/authAPI";
+import { useRequestContext } from "../../context/RequestContext";
 
 import styles from "./Settings.module.scss";
 
@@ -19,10 +20,9 @@ import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 
 export default function SettingsPassword() {
+  const { incrementRequestCount } = useRequestContext();
   useUserRedirect();
-
   const dispatch = useDispatch<AppDispatch>();
-  useUserRedirect();
   const navigate = useNavigate();
 
   const {
@@ -50,6 +50,8 @@ export default function SettingsPassword() {
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // API 요청을 보낼 때마다 요청 수 추적
+    incrementRequestCount("SettingsPassword handleSubmit");
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
