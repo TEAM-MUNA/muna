@@ -13,7 +13,6 @@ import { ConcertReturnType } from "../../types/concertType";
 import { genreCodeList, genreList } from "../../utils/constants/genreData";
 import regionList from "../../utils/constants/regionData";
 import sortConcertList from "./sortConcertList";
-import MultiSelectTab from "../../components/common/MultiSelectTab/MultiSelectTab";
 import { clearQuery } from "../../slices/searchSlice";
 
 const pfStateCodeMap: { [key: string]: string } = {
@@ -85,7 +84,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [page]);
+  }, [page, keyword]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -149,15 +148,11 @@ export default function ConcertList() {
 
   return (
     <>
-      {!keyword ? (
-        <Tab
-          tabList={genreList}
-          onTabChanged={handleTabChange}
-          selectedIndex={selectedTabIndex}
-        />
-      ) : (
-        <MultiSelectTab />
-      )}
+      <Tab
+        tabList={genreList}
+        onTabChanged={handleTabChange}
+        selectedIndex={selectedTabIndex}
+      />
       <div className={styles.flex_container}>
         <div>
           <DropdownSelect
@@ -179,9 +174,17 @@ export default function ConcertList() {
           <HeartSpinner size={65} color='#7926ff' />
         </div>
       )}
-      <ul className={isLoading ? styles.faded : ""}>
-        {concertList.map(renderConcertItem)}
-      </ul>
+      {!isLoading && concertList[1] === undefined ? (
+        <p className={styles.emptyMessage}>
+          조건에 맞는 공연이 없습니다.
+          <br />
+          다른 키워드로 검색하거나, 필터 조건을 변경해 보세요!
+        </p>
+      ) : (
+        <ul className={isLoading ? styles.faded : ""}>
+          {concertList.map(renderConcertItem)}
+        </ul>
+      )}
     </>
   );
 }
