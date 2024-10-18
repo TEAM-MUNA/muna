@@ -1,0 +1,81 @@
+import React, { useState, useEffect } from "react";
+import styles from "./ReviewImageUploader.module.scss";
+import PlusIcon from "../../../assets/svg/PlusIcon";
+import CloseIcon from "../../../assets/svg/CloseIcon";
+import Button from "../Button/Button";
+
+interface ImageUploaderProps {
+  imageList?: string[] | null;
+  onImageChange?: (imageUrl: string) => void;
+}
+
+// 리뷰 이미지 업로더 리스트
+export default function ReviewImageUploader({
+  imageList,
+  onImageChange,
+}: ImageUploaderProps) {
+  const [previewList, setPreviewList] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (imageList) {
+      setPreviewList(imageList);
+    }
+  }, [imageList]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const newPreview = reader.result as string;
+        setPreviewList([...previewList, newPreview]);
+        onImageChange?.(newPreview);
+      };
+      reader.readAsDataURL(file);
+      console.log(file);
+    }
+  };
+
+  const removeImage = (src: string) => {
+    const newPreviewList = previewList.filter(
+      (previewSrc) => previewSrc !== src
+    );
+    setPreviewList(newPreviewList);
+  };
+
+  return (
+    <div className={styles.container}>
+      <label htmlFor='review-image-input'>
+        <span className='sr_only'>리뷰 이미지 등록</span>
+        <input
+          type='file'
+          accept='image/*'
+          id='review-image-input'
+          className='sr_only'
+          onChange={handleFileChange}
+          name='review-image'
+        />
+      </label>
+      <div className={styles.add_image}>
+        <PlusIcon />
+      </div>
+      <div className={styles.preview_list_container}>
+        {previewList.length > 0 &&
+          previewList.map((src, index) => (
+            <div key={src} className={styles.preview_container}>
+              <Button
+                className={styles.remove}
+                iconOnly={<CloseIcon size='20' />}
+                label='리뷰 사진 삭제'
+                onClick={() => {
+                  removeImage(src);
+                }}
+              />
+              <img src={src} alt={`리뷰 이미지 ${index + 1}`} />
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+}

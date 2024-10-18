@@ -8,6 +8,7 @@ import StarForm from "../../components/common/StarForm/StarForm";
 import { ConcertType, DefaultConcertType } from "../../types/concertType";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
+import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
 
 export default function ReviewEdit() {
   // // 이전 페이지에서 불러오기
@@ -60,6 +61,7 @@ export default function ReviewEdit() {
       <div className={styles.star_form}>
         <StarForm initialRating={0} />
       </div>
+      <ReviewImageUploader />
     </section>
   );
 }
