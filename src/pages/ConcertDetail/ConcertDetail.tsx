@@ -383,8 +383,10 @@ export default function ConcertDetail() {
                   <dt className='sr_only'>공연 설명</dt>
                   <dd
                     className={styles.description}
-                    dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
-                  />
+                    // dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
+                  >
+                    {concertDetail.sty} {/* 순수 텍스트로 렌더링 */}
+                  </dd>
                 </>
               ) : null}
 
