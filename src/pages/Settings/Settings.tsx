@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { AppDispatch } from "../../app/store";
-import useToggle from "../../hooks/useToggle";
 import { logoutAsync, withdrawAsync } from "../../slices/authSlice";
 import useUserRedirect from "../../hooks/useUserRedirect";
 import Modal from "../../components/common/Modal/Modal";
@@ -14,14 +13,16 @@ import errorMessages from "../../utils/constants/errorMessages";
 import { passwordRegex } from "../../utils/validations";
 import placeholder from "../../utils/constants/placeholder";
 import { ReauthenticateFromFirebase } from "../../api/firebase/authAPI";
+import { useRequestContext } from "../../context/RequestContext";
 
 import Button from "../../components/common/Button/Button";
-import Toggle from "../../components/common/Toggle/Toggle";
 import ColumnMenuItem from "../../components/common/ColumnMenuItem/ColumnMenuItem";
 import Input from "../../components/common/Input/Input";
 import styles from "./Settings.module.scss";
 
 function WithdrawMenu() {
+  const { incrementRequestCount } = useRequestContext();
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -36,6 +37,9 @@ function WithdrawMenu() {
   );
 
   const handleWithdraw = async () => {
+    // API 요청을 보낼 때마다 요청 수 추적
+    incrementRequestCount("Settings handleWithdraw");
+
     try {
       const isReauthenticated = await ReauthenticateFromFirebase(password);
       if (isReauthenticated) {
@@ -87,6 +91,8 @@ function WithdrawMenu() {
 }
 
 function LogoutMenu() {
+  const { incrementRequestCount } = useRequestContext();
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -95,6 +101,8 @@ function LogoutMenu() {
 
   const handleLogout = async () => {
     if (isLogout) return; // 이미 로그아웃 중이라면 중복 요청 방지
+    // API 요청을 보낼 때마다 요청 수 추적
+    incrementRequestCount("Settings handleLogout");
 
     setIsLogout(true);
     try {
