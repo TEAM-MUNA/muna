@@ -1,0 +1,36 @@
+@import "../../styles/_variables";
+@import "../../styles/_mixin";
+
+.recentSearchList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recentSearchItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0px;
+
+  button {
+    color: $black-light;
+  }
+  span {
+    color: $black-light;
+    font-size: $font-sm;
+    margin-right: 2px;
+  }
+}
+
+.searchInfo {
+  display: flex;
+  align-items: center;
+}
+
+.removeButton {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}

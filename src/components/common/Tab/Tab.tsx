@@ -6,6 +6,7 @@ interface TabProps {
   tabList?: (string | [string, number | null])[];
   withNumber?: boolean;
   onTabChanged?: (index: number) => void;
+  selectedIndex?: number; // selectedIndex 속성 추가
   children?: ReactNode;
 }
 
@@ -13,6 +14,7 @@ export default function Tab({
   tabList = [],
   withNumber = false,
   onTabChanged,
+  selectedIndex, // selectedIndex 추가
   children,
 }: TabProps) {
   const [activeList, setActiveList] = useState<boolean[]>([]);
@@ -29,17 +31,20 @@ export default function Tab({
       temp = (tabList as string[]).map((item) => [item, null]);
     }
 
-    setActiveList(new Array(temp.length).fill(false).fill(true, 0, 1));
     setTabTitleList(temp);
-  }, [tabList]);
+
+    // selectedIndex가 존재 하면 해당 인덱스에 값이 있도록 함
+    const initialIndex = selectedIndex !== undefined ? selectedIndex : 0;
+
+    setActiveList(
+      new Array(temp.length)
+        .fill(false)
+        .fill(true, initialIndex, initialIndex + 1)
+    );
+  }, [tabList, selectedIndex]);
 
   const onClick = (index: number) => {
     setActiveList((prev) => prev.map((_, i) => i === index));
-    // onTabChanged(index);
-
-    // 클릭한 요소
-    // const selectedItem = tabTitleList[index][0];
-    // console.log(selectedItem);
 
     // 부모 컴포넌트로 선택된 탭 정보 전달
     if (onTabChanged) {
