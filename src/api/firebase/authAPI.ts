@@ -138,11 +138,19 @@ export const updateUserBookmark = async (
   concertId: string,
   cancel: boolean = false
 ) => {
-  const usersDocRef = doc(db, "users", userId);
+  const userDocRef = doc(db, "users", userId);
   const action = cancel ? arrayRemove : arrayUnion;
 
-  await updateDoc(usersDocRef, {
+  await updateDoc(userDocRef, {
     bookmarkedConcerts: action(concertId),
+  });
+};
+
+// TODO: refactor - 함수 하나로 합치기
+export const updateUserReview = async (userId: string, reviewId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    reviews: arrayUnion(reviewId),
   });
 };
 

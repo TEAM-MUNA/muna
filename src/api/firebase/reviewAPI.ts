@@ -38,6 +38,7 @@ export const getReviewListFromFirebase = async (
   return reviewList;
 };
 
+// 리뷰 하나 불러오기
 export const getReviewFromFirebase = async (
   reviewId: string
 ): Promise<DocumentData | undefined> => {
@@ -45,6 +46,7 @@ export const getReviewFromFirebase = async (
   return result.data();
 };
 
+// reviews에 추가하기
 export const addReviewToFirebase = async (review: ReviewType) => {
   const docRef = doc(db, "reviews", review.reviewId);
   await setDoc(docRef, review);

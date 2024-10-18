@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import { useLocation, useParams } from "react-router-dom"; // useLocation : 현재페이지의 주소(URL) 정보를 제공 / useParams : URL의 동적 파라미터를 키/값 객체로 반환
-import useCurrentUser from "../../hooks/useCurrentUser"; // 사용자의 기본 정보 및 홈페이지에서 남긴 기록데이터를 가져옴
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useLocation, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import useCurrentUser from "../../hooks/useCurrentUser";
 import styles from "./ReviewEdit.module.scss";
 import Title from "../../components/common/Title/Title";
 import CalendarInput from "../../components/common/CalendarInput/CalendarInput";
@@ -8,15 +11,39 @@ import StarForm from "../../components/common/StarForm/StarForm";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
-import { addReviewToFirebase } from "../../api/firebase/reviewAPI";
 import { ReviewType } from "../../types/reviewType";
+import { uploadReviewAsync } from "../../slices/interactionSlice";
 
 export default function ReviewEdit() {
   // 원래 있던 리뷰면 가져오기 (필요)
   // 원래 없던 새로운 리뷰면 새로 등록
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { concertId } = location.state || {}; // 특정 콘서트의 concertId를 가져옴 (이전페이지에서 전달받은 concertId를 가져옴)
-  const { userId, nickname, profileImage } = useCurrentUser(); // 로그인한 사용자의 userId를 가져옴
+  const { concertId } = location.state || {};
+  const {
+    userId,
+    nickname,
+    profileImage,
+    // likedReviews,
+    // bookmarkedConcerts,
+    reviews,
+  } = useCurrentUser();
+
+  useEffect(() => {
+    console.log(
+      userId,
+      nickname,
+      profileImage,
+      // likedReviews,
+      // bookmarkedConcerts,
+      reviews
+    );
+    if (reviews && reviews.length > 0) {
+      // reviews.some((review) => review)
+      console.log(reviews);
+    }
+  }, []);
+
   const { id } = useParams<{ id: string }>(); // 리뷰 아이디
   const {
     concertDetail,
@@ -73,10 +100,17 @@ export default function ReviewEdit() {
     };
 
     try {
-      const reviewId = await addReviewToFirebase(newReview);
-      console.log(reviewId, "저장 완료");
+      // 리뷰 등록
+      await dispatch(
+        uploadReviewAsync({
+          userId,
+          review: newReview,
+        })
+      ).unwrap();
+      toast.success("리뷰가 등록되었습니다.");
     } catch (error) {
       console.error(error);
+      toast.error("리뷰를 등록하지 못했습니다.");
     }
   };
 
