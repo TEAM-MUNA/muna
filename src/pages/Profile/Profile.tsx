@@ -195,9 +195,11 @@ export default function Profile() {
   const currentUserId = useCurrentUser().userId;
   const { profile, isLoading } = useProfile(userId);
   const [isMine, setIsMine] = useState<boolean>(false);
+
+  const reviewCount = profile?.reviews?.length || 0;
   const [tabTitle, setTabTitle] = useState<[string, number | null][]>([
     ["북마크한 공연", null],
-    ["나의 후기", 10],
+    ["나의 후기", reviewCount],
   ]);
 
   useEffect(() => {
@@ -207,11 +209,11 @@ export default function Profile() {
     const newTabTitle: [string, number | null][] = isProfileOwner
       ? [
           ["북마크한 공연", null],
-          ["나의 후기", 10],
+          ["나의 후기", reviewCount],
         ]
-      : [[`${profile?.nickname ?? ""}님의 후기`, 10]];
+      : [[`${profile?.nickname ?? ""}님의 후기`, reviewCount]];
     setTabTitle(newTabTitle);
-  }, [userId, currentUserId, profile?.nickname]);
+  }, [profile, reviewCount, currentUserId]);
 
   const tabList = useMemo<[string, number | null][]>(
     () => tabTitle,
