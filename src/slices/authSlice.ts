@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
+import { deleteUser, User } from "firebase/auth";
 import {
   loginToFirebase,
   logoutFromFirebase,
@@ -42,15 +43,24 @@ export const signupAsync = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
+    let user: User | null = null;
     try {
       // 1. 회원가입
-      const user = await signupToFirebase(email, password);
+      user = await signupToFirebase(email, password);
 
       // 2. nickname(displayName), profileImage(photoURL) 업데이트
-      await updateProfileToFirebase(user, nickname, profileImage);
+      if (user) {
+        await updateProfileToFirebase(user, nickname, profileImage);
+      } else {
+        return rejectWithValue("회원가입에 실패했습니다.");
+      }
 
       // 3. Firestore에 사용자 정보 등록
-      await setUserOnDoc(user, nickname, profileImage);
+      if (user.displayName === nickname && user.photoURL === profileImage) {
+        await setUserOnDoc(user, nickname, profileImage);
+      } else {
+        return rejectWithValue("프로필 정보 업데이트에 실패했습니다.");
+      }
 
       return {
         user: {
@@ -62,7 +72,15 @@ export const signupAsync = createAsyncThunk(
       };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        console.log("파이어베이스 에러:", error.message);
+        if (user) {
+          try {
+            await deleteUser(user); // 하나라도 실패하면 삭제
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch (e) {
+            // console.error("사용자 삭제 중 에러", e);
+          }
+        }
+        // console.log("파이어베이스 ㅇ에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("회원가입 중 에러 발생"); // 그 외 오류: 기본 메시지
@@ -79,7 +97,7 @@ export const loginAsync = createAsyncThunk(
   ) => {
     try {
       const user = await loginToFirebase(email, password);
-      console.log(user);
+      // console.log(user);
       return { uid: user.uid, email: user.email! };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -137,7 +155,7 @@ export const updateProfileAsync = createAsyncThunk(
       }
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        console.log("파이어베이스 에러:", error.message);
+        // console.log("파이어베이스 에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("프로필 변경 중 에러 발생"); // 그 외 오류: 기본 메시지
@@ -183,7 +201,7 @@ export const withdrawAsync = createAsyncThunk(
 
     try {
       await withdrawFromFirebase(user);
-      console.log("탈퇴 성공");
+      // console.log("탈퇴 성공");
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         return rejectWithValue(error.message);
@@ -239,7 +257,7 @@ const authSlice = createSlice({
           }>
         ) => {
           state.status = "succeeded";
-          console.log(action.payload);
+          // console.log(action.payload);
           // state.user = action.payload; // 유저 정보 업데이트
           state.user = {
             userId: action.payload.user.userId,
@@ -253,7 +271,7 @@ const authSlice = createSlice({
       .addCase(signupAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string; // 사용자 정의 에러 메시지 저장
-        console.error("에러 확인:", state.error, action.error.message);
+        // console.error("에러 확인:", state.error, action.error.message);
       });
 
     // 로그인 처리
@@ -309,7 +327,7 @@ const authSlice = createSlice({
           >
         ) => {
           state.status = "succeeded";
-          console.log(action.payload);
+          // console.log(action.payload);
 
           if (action.payload) {
             state.user = {

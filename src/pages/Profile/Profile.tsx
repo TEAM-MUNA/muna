@@ -31,7 +31,7 @@ function BookmarkList() {
 
   // 1. 유저의 북마크 콘서트 아이디 배열 가져오기
   const bookmarkedConcertsId = useCurrentUser().bookmarkedConcerts;
-  console.log(bookmarkedConcertsId);
+  // console.log(bookmarkedConcertsId);
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -47,12 +47,13 @@ function BookmarkList() {
             setBookmarkedConcerts(Object.values(bookmarkedConcertData));
           }
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("북마크 데이터 가져오기 실패:", error);
+        // console.error("북마크 데이터 가져오기 실패:", error);
       }
     };
     fetchBookmarks();
-    console.log(bookmarkedConcerts);
+    // console.log(bookmarkedConcerts);
   }, [userId, bookmarkedConcertsId]);
 
   // const concertStateSelectOptions = ["공연전체", "진행중", "진행완료"];
@@ -85,6 +86,7 @@ function BookmarkList() {
                 title={i.title}
                 poster={i.poster}
                 bookmarkInteractive
+                pageName='Profile'
               />
             </li>
           ))}

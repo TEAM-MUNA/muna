@@ -138,8 +138,9 @@ export const getConcertsForBookmarkList = async (
     );
 
     return concertInfo;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("콘서트 타이틀, 포스터 정보를 가져오는데 실패함:", error);
+    // console.error("콘서트 타이틀, 포스터 정보를 가져오는데 실패함:", error);
     return {};
   }
 };

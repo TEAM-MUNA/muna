@@ -23,12 +23,14 @@ import generateRandomId from "../../utils/generateRandomId";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Dialog from "../../components/common/Modal/Modal";
 import useModal from "../../hooks/useModal";
+import { useRequestContext } from "../../context/RequestContext";
 
 export default function ConcertDetail() {
   const { id: concertId } = useParams<{ id: string }>();
   const { userId } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const [tabIndex, setTabIndex] = useState<number>(0);
+  const { incrementRequestCount } = useRequestContext();
 
   const {
     isOpen: isReservationLinkModalOpen,
@@ -57,13 +59,13 @@ export default function ConcertDetail() {
     concert,
     isLoading: isConcertLoading,
     error: concertError,
-  } = useGetConcert(concertId); // Firebase
+  } = useGetConcert(concertId, "ConcertDetail"); // Firebase
 
   const {
     reviewList = [],
     isLoading: isReviewListLoading,
     error: reviewListError,
-  } = useGetReviewList({ concertId });
+  } = useGetReviewList({ concertId, pageName: "ConcertDetail" });
 
   const isBookmarkedInitialState =
     concert?.bookmarkedBy?.some(
@@ -72,12 +74,6 @@ export default function ConcertDetail() {
   const { isActive: isBookmarked, onToggle: onBookmarkToggle } = useToggle(
     isBookmarkedInitialState
   );
-
-  useEffect(() => {
-    if (concertDetail) {
-      console.log(concertDetail);
-    }
-  }, [concertDetail]);
 
   const tabList = useMemo<[string, number | null][]>(
     () => [
@@ -113,7 +109,8 @@ export default function ConcertDetail() {
     if (userId && concertDetail) {
       onBookmarkToggle();
       try {
-        const updatedBookmarks = await dispatch(
+        incrementRequestCount("ConcertDetail handleBookmark");
+        await dispatch(
           bookmarkConcertAsync({
             userId,
             concert: {
@@ -124,13 +121,14 @@ export default function ConcertDetail() {
             cancel: isBookmarked,
           })
         ).unwrap();
-        console.log(updatedBookmarks);
+        // console.log(updatedBookmarks);
 
         toast.success(
           !isBookmarked ? "북마크에 추가되었습니다." : "북마크를 해제했습니다."
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        console.error(e);
+        // console.error(e);
         toast.error("북마크에 추가하지 못했습니다.");
         onBookmarkToggle(); // 북마크 해제
       }
@@ -385,8 +383,10 @@ export default function ConcertDetail() {
                   <dt className='sr_only'>공연 설명</dt>
                   <dd
                     className={styles.description}
-                    dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
-                  />
+                    // dangerouslySetInnerHTML={{ __html: concertDetail.sty }}
+                  >
+                    {concertDetail.sty} {/* 순수 텍스트로 렌더링 */}
+                  </dd>
                 </>
               ) : null}
 

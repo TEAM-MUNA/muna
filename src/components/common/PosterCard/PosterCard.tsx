@@ -7,6 +7,7 @@ import BookmarkToggle from "../BookmarkToggle/BookmarkToggle";
 interface PosterCardProps extends ConcertType {
   concertId?: string;
   bookmarkInteractive?: boolean;
+  pageName: string; // Firebase 사용 추적
 }
 
 export default function PosterCard({
@@ -14,6 +15,7 @@ export default function PosterCard({
   bookmarkInteractive = false,
   title = defaultConcertType.title,
   poster = defaultConcertType.poster,
+  pageName,
 }: PosterCardProps) {
   return (
     <div className={`${styles.card} card_poster`}>
@@ -27,6 +29,7 @@ export default function PosterCard({
         <BookmarkToggle
           concertId={concertId}
           interactive={bookmarkInteractive}
+          pageName={pageName}
         />
       </div>
     </div>

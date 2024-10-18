@@ -23,8 +23,9 @@ const useGetConcertDetail = (mt20id: string | undefined) => {
       try {
         const concertData = await fetchConcertDetail(mt20id);
         setConcertDetail(concertData);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         setError("kopis 공연 상세 정보를 가져오는 데 실패했습니다.");
       } finally {
         setIsLoading(false);
