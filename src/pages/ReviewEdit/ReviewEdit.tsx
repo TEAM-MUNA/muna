@@ -30,13 +30,13 @@ export default function ReviewEdit() {
     console.log("저장완료");
   };
 
+  const [reviewImageList, setReviewImageList] = useState<string[]>([]);
+  const [reviewContent, setReviewContent] = useState<string>("");
+
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setReviewContent(value);
   };
-
-  const [reviewImageList, setReviewImageList] = useState<string[]>([]);
-  const [reviewContent, setReviewContent] = useState<string>("");
 
   return (
     <section className={styles.reviewEdit_form}>
