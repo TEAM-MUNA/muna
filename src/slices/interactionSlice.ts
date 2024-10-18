@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
+
 import {
   getUserFromFirebase,
   updateUserBookmark,
@@ -125,12 +124,13 @@ export const uploadReviewAsync = createAsyncThunk<
         // 1. 이미지 리스트 업로드
         try {
           downloadUrls = await dispatch(
-            uploadReviewImages(review.images)
+            uploadReviewImages({
+              reviewId: review.reviewId,
+              imageUrls: review.images,
+            })
           ).unwrap();
-          console.log(downloadUrls);
-          // return;
         } catch (e) {
-          console.error(`uploadReviewAsync: ${e}`);
+          rejectWithValue(e);
         }
       }
 

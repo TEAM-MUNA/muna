@@ -18,10 +18,14 @@ const initialState: ImageSlice = {
 // 프로필 이미지 업로드
 export const uploadProfileImage = createAsyncThunk(
   "images/uploadProfile",
-  async (imageUrl: string, { rejectWithValue }) => {
+  async (
+    { userId, imageUrl }: { userId: string; imageUrl: string },
+    { rejectWithValue }
+  ) => {
     const { getImageDownloadUrl } = useGetImageDownloadUrl(); // 훅
     try {
       const downloadUrl = await getImageDownloadUrl(
+        userId,
         imageUrl,
         ImageCategory.Users
       );
@@ -36,12 +40,15 @@ export const uploadProfileImage = createAsyncThunk(
 // 리뷰 이미지 리스트 업로드
 export const uploadReviewImages = createAsyncThunk(
   "images/uploadReview",
-  async (imageUrls: string[], { rejectWithValue }) => {
+  async (
+    { reviewId, imageUrls }: { reviewId: string; imageUrls: string[] },
+    { rejectWithValue }
+  ) => {
     const { getImageDownloadUrl } = useGetImageDownloadUrl();
     try {
       const downloadUrls = await Promise.all(
         imageUrls.map((imageUrl) =>
-          getImageDownloadUrl(imageUrl, ImageCategory.Reviews)
+          getImageDownloadUrl(reviewId, imageUrl, ImageCategory.Reviews)
         )
       );
       return downloadUrls;

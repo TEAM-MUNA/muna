@@ -86,9 +86,12 @@ export default function SettingsProfile() {
 
   const handleProfileImage = async (imageUrl: string) => {
     setIsUploading(true);
+    if (!user?.userId) {
+      return;
+    }
     try {
       const profileImageUrl = await dispatch(
-        uploadProfileImage(imageUrl)
+        uploadProfileImage({ userId: user.userId, imageUrl })
       ).unwrap();
       setProfileImage(profileImageUrl);
     } catch (error) {
