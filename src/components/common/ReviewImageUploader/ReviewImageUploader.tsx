@@ -6,7 +6,7 @@ import Button from "../Button/Button";
 
 interface ImageUploaderProps {
   imageList?: string[] | null;
-  onImageChange?: (imageUrl: string) => void;
+  onImageChange?: (imageUrls: string[]) => void;
 }
 
 // 리뷰 이미지 업로더 리스트
@@ -29,8 +29,9 @@ export default function ReviewImageUploader({
 
       reader.onloadend = () => {
         const newPreview = reader.result as string;
-        setPreviewList([...previewList, newPreview]);
-        onImageChange?.(newPreview);
+        const updatedPreviewList = [...previewList, newPreview];
+        setPreviewList(updatedPreviewList);
+        onImageChange?.(updatedPreviewList);
       };
       reader.readAsDataURL(file);
       console.log(file);
