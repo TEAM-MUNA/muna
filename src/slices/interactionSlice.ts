@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
+
 import {
   getUserFromFirebase,
   updateUserBookmark,
+  updateUserReview,
 } from "../api/firebase/authAPI";
 import {
   addConcert,
@@ -11,6 +13,10 @@ import {
 } from "../api/firebase/concertAPI";
 import { UserInteractionType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
+import { ReviewType } from "../types/reviewType";
+import { addReviewToFirebase } from "../api/firebase/reviewAPI";
+
+import { uploadReviewImages } from "./imageSlice";
 
 // 사용자 인터렉션
 
@@ -105,6 +111,44 @@ export const bookmarkConcertAsync = createAsyncThunk<
     }
   }
 );
+
+export const uploadReviewAsync = createAsyncThunk<
+  string[] | undefined,
+  { userId: string; review: ReviewType }
+>(
+  "interaction/review",
+  async ({ userId, review }, { dispatch, rejectWithValue }) => {
+    let downloadUrls: string[] = [];
+    try {
+      if (review.images) {
+        // 1. 이미지 리스트 업로드
+        try {
+          downloadUrls = await dispatch(
+            uploadReviewImages({
+              reviewId: review.reviewId,
+              imageUrls: review.images,
+            })
+          ).unwrap();
+        } catch (e) {
+          rejectWithValue(e);
+        }
+      }
+
+      await Promise.all([
+        // 2. 리뷰 컬렉션에 추가
+        await addReviewToFirebase({ ...review, images: downloadUrls }),
+        // 3. 유저에 리뷰 추가
+        await updateUserReview(userId, review.reviewId),
+      ]);
+      // 유저 정보에 리뷰를 저장해야됨
+      const updatedUser = await getUserFromFirebase(userId);
+      return updatedUser?.reviews; // 유저 정보의 리뷰 리스트 반환
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const interactionSlice = createSlice({
   name: "interaction",
   initialState,
@@ -146,6 +190,24 @@ const interactionSlice = createSlice({
         state.error = null;
       })
       .addCase(bookmarkConcertAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
+
+    // 리뷰 업로드
+    builder
+      .addCase(uploadReviewAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(uploadReviewAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (state.userInteraction) {
+          state.userInteraction.reviews = action.payload;
+        }
+        state.error = null;
+      })
+      .addCase(uploadReviewAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

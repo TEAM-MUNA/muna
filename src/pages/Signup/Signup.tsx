@@ -86,28 +86,15 @@ export default function Signup() {
     }
   };
 
-  const handleProfileImage = async (imageUrl: string) => {
-    try {
-      incrementRequestCount("Signup handleProfileImage");
-      const profileImageUrl = await dispatch(
-        uploadProfileImage(imageUrl)
-      ).unwrap();
-
-      // console.log("업로드된 프로필 이미지 URL:", profileImageUrl);
-      setProfileImage(profileImageUrl);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      // console.error(error);
-    }
-  };
-
   return (
     <article className={styles.signup}>
       <section>
         <h2 className={styles.title}>회원가입</h2>
         <form className={styles.form} onSubmit={handleSignup}>
           <span className={styles.image_uploader}>
-            <ImageUploader onImageChange={handleProfileImage} />
+            <ImageUploader
+              onImageChange={(imageUrl) => setProfileImage(imageUrl)}
+            />
           </span>
           <Input
             name='email'

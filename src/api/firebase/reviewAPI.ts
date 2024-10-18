@@ -5,12 +5,13 @@ import {
   limit,
   orderBy,
   query,
+  setDoc,
   where,
   doc,
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ReviewListType } from "../../types/reviewType";
+import { ReviewListType, ReviewType } from "../../types/reviewType";
 import { db } from "../../firebase";
 
 // 콘서트 아이디 입력 -> Firebase에서 리뷰 리스트 불러오기
@@ -79,7 +80,27 @@ export const getReviewListById = async (
   return reviewList.filter((review) => review !== null) as ReviewListType[];
 };
 
-export const a = () => null;
+// 리뷰 하나 불러오기
+export const getReviewFromFirebase = async (
+  reviewId: string
+): Promise<DocumentData | undefined> => {
+  const result = await getDoc(doc(db, "reviews", reviewId));
+  return result.data();
+};
+
+// reviews에 추가하기
+export const addReviewToFirebase = async (review: ReviewType) => {
+  const docRef = doc(db, "reviews", review.reviewId);
+
+  // 별점 없는 경우
+  const { rating, ...rest } = review;
+  const updateReview = {
+    ...rest,
+    ...(rating !== undefined ? { rating } : {}),
+  };
+  await setDoc(docRef, updateReview);
+  return review.reviewId;
+};
 
 // 프로필 변경시, 작성한 리뷰의 author 정보 업데이트
 export const updateAuthorProfileInReviews = async (
