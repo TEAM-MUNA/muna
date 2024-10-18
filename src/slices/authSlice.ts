@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
+import { deleteUser, User } from "firebase/auth";
 import {
   loginToFirebase,
   logoutFromFirebase,
@@ -42,15 +43,24 @@ export const signupAsync = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
+    let user: User | null = null;
     try {
       // 1. 회원가입
-      const user = await signupToFirebase(email, password);
+      user = await signupToFirebase(email, password);
 
       // 2. nickname(displayName), profileImage(photoURL) 업데이트
-      await updateProfileToFirebase(user, nickname, profileImage);
+      if (user) {
+        await updateProfileToFirebase(user, nickname, profileImage);
+      } else {
+        return rejectWithValue("회원가입에 실패했습니다.");
+      }
 
       // 3. Firestore에 사용자 정보 등록
-      await setUserOnDoc(user, nickname, profileImage);
+      if (user.displayName === nickname && user.photoURL === profileImage) {
+        await setUserOnDoc(user, nickname, profileImage);
+      } else {
+        return rejectWithValue("프로필 정보 업데이트에 실패했습니다.");
+      }
 
       return {
         user: {
@@ -62,7 +72,14 @@ export const signupAsync = createAsyncThunk(
       };
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        console.log("파이어베이스 에러:", error.message);
+        if (user) {
+          try {
+            await deleteUser(user); // 하나라도 실패하면 삭제
+          } catch (e) {
+            console.error("사용자 삭제 중 에러", e);
+          }
+        }
+        console.log("파이어베이스 ㅇ에러:", error.message);
         return rejectWithValue(error.message); // firebase 오류일 경우
       }
       return rejectWithValue("회원가입 중 에러 발생"); // 그 외 오류: 기본 메시지
