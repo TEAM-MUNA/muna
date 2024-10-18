@@ -5,10 +5,11 @@ import styles from "./ReviewEdit.module.scss";
 import Title from "../../components/common/Title/Title";
 import CalendarInput from "../../components/common/CalendarInput/CalendarInput";
 import StarForm from "../../components/common/StarForm/StarForm";
-import { ConcertType } from "../../types/concertType";
 import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
+import { addReviewToFirebase } from "../../api/firebase/reviewAPI";
+import { ReviewType } from "../../types/reviewType";
 
 export default function ReviewEdit() {
   // // 이전 페이지에서 불러오기
@@ -16,19 +17,13 @@ export default function ReviewEdit() {
   // 원래 없던 새로운 리뷰면 새로 등록
   const location = useLocation();
   const { concertId } = location.state || {}; // 특정 콘서트의 concertId를 가져옴 (이전페이지에서 전달받은 concertId를 가져옴)
-  // const { userId } = useCurrentUser();                        // 로그인한 사용자의 userId를 가져옴
-  // const { id } = useParams<{ id: string }>();                 // 리뷰 아이디
+  const { userId, nickname, profileImage } = useCurrentUser(); // 로그인한 사용자의 userId를 가져옴
+  const { id } = useParams<{ id: string }>(); // 리뷰 아이디
   const {
     concertDetail,
     isLoading: isConcertDetailLoading,
     error: concertDetailError,
   } = useGetConcertDetail(concertId); // 파이어베이스 통신 줄이기 위해 kopis에서 불러옴
-
-  // // 오른쪽상단 체크아이콘 클릭시 저장
-  const handleDone = () => {
-    // 리뷰 체크표시 클릭시 저장
-    console.log("저장완료");
-  };
 
   const [reviewImageList, setReviewImageList] = useState<string[]>([]);
   const [reviewContent, setReviewContent] = useState<string>("");
@@ -36,6 +31,52 @@ export default function ReviewEdit() {
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setReviewContent(value);
+  };
+
+  // // 오른쪽상단 체크아이콘 클릭시 저장
+  const handleDone = async () => {
+    // 리뷰 체크표시 클릭시 저장
+    // 리뷰 업로드
+    if (!id) {
+      // 리뷰 없음.
+      return;
+    }
+    if (!userId || !nickname) {
+      // 유저 없음. 로그인 페이지로 이동 등
+      return;
+    }
+    if (!concertDetail?.prfnm || !concertDetail?.poster) {
+      // 콘서트 정보 없음
+      return;
+    }
+
+    const newReview: ReviewType = {
+      concert: {
+        id: concertDetail.mt20id,
+        title: concertDetail?.prfnm,
+        poster: concertDetail?.poster,
+      },
+      reviewId: id, // review id
+      author: {
+        id: userId,
+        nickname,
+        profileImage: profileImage || undefined,
+      },
+      rating: 4, // rating
+      date: "",
+      createdAt: "", // 현재시간
+      contents: reviewContent,
+      images: reviewImageList, // firebase에 등록하고 가져와야함.
+      likedBy: [],
+      likeCount: 0,
+    };
+
+    try {
+      const reviewId = await addReviewToFirebase(newReview);
+      console.log(reviewId, "저장 완료");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -48,7 +89,7 @@ export default function ReviewEdit() {
         handleDoneButton={handleDone}
       />
       {/* 바꾸기 */}
-      {isConcertDetailLoading ? (
+      {!isConcertDetailLoading ? (
         <div className={styles.concert_date}>
           <div className={styles.concert_image}>
             <img src={concertDetail?.poster} alt={concertDetail?.prfnm} />
