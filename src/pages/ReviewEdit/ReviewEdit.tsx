@@ -80,6 +80,15 @@ export default function ReviewEdit() {
       return;
     }
 
+    if (!date) {
+      toast.error("공연 관람일을 입력해주세요.");
+      return;
+    }
+    if (!reviewContent) {
+      toast.error("기록 내용이 비어있어요.");
+      return;
+    }
+
     const newReview: ReviewType = {
       concert: {
         id: concertDetail.mt20id,
