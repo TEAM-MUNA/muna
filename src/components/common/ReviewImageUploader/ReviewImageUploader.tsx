@@ -1,4 +1,13 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/no-array-index-key */
+
 import React, { useState, useEffect } from "react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import styles from "./ReviewImageUploader.module.scss";
 import PlusIcon from "../../../assets/svg/PlusIcon";
 import CloseIcon from "../../../assets/svg/CloseIcon";
@@ -51,6 +60,22 @@ export default function ReviewImageUploader({
     onImageChange?.(newPreviewList);
   };
 
+  // 프리뷰 이미지 배열 순서 바뀜
+  const handleDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    const updatedList = [...previewList];
+    const removed = updatedList.splice(source.index, 1);
+    updatedList.splice(destination.index, 0, removed[0]); // 배열 순서 변경
+
+    setPreviewList(updatedList);
+    onImageChange?.(updatedList);
+  };
+
   return (
     <div className={styles.container}>
       <label htmlFor='review-image-input' className={styles.add_image}>
@@ -66,22 +91,47 @@ export default function ReviewImageUploader({
           multiple
         />
       </label>
-      <div className={styles.preview_list_container}>
-        {previewList.length > 0 &&
-          previewList.map((src, index) => (
-            <div key={src} className={styles.preview_container}>
-              <Button
-                className={styles.remove}
-                iconOnly={<CloseIcon size='20' />}
-                label='리뷰 사진 삭제'
-                onClick={() => {
-                  removeImage(src);
-                }}
-              />
-              <img src={src} alt={`리뷰 이미지 ${index + 1}`} />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId='preview-list' direction='horizontal'>
+          {(droppableProvider) => (
+            <div
+              className={styles.preview_list_container}
+              {...droppableProvider.droppableProps}
+              ref={droppableProvider.innerRef}
+            >
+              {previewList.length > 0 &&
+                previewList.map((src, index) => (
+                  <Draggable
+                    draggableId={`draggable-${index}`}
+                    key={index}
+                    index={index}
+                  >
+                    {(draggableProvider) => (
+                      <div
+                        {...draggableProvider.dragHandleProps}
+                        {...draggableProvider.draggableProps}
+                        ref={draggableProvider.innerRef}
+                        key={src}
+                        className={styles.preview_container}
+                      >
+                        <Button
+                          className={styles.remove}
+                          iconOnly={<CloseIcon size='20' />}
+                          label='리뷰 사진 삭제'
+                          onClick={() => {
+                            removeImage(src);
+                          }}
+                        />
+                        <img src={src} alt={`리뷰 이미지 ${index + 1}`} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {droppableProvider.placeholder}
             </div>
-          ))}
-      </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }
