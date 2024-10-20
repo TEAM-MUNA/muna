@@ -116,11 +116,15 @@
   }
 
   .share_your_experience {
-    background-color: $box-light;
-    padding: 16px 0;
+    @include full_width;
+    // border-radius: 8px;
+    background-color: $primary-lighter;
+    padding: 20px 8px;
     margin-top: 36px;
+    font-size: $font-lg;
+    line-height: $font-height-lg;
     font-weight: $font-medium;
-    color: $black;
+    color: $primary;
     margin-bottom: 12px;
   }
 }
