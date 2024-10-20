@@ -3,22 +3,21 @@ import styles from "./StarTag.module.scss";
 import StarIcon from "../../../assets/svg/StarIcon";
 
 interface StarTagProps {
-  rating?: number;
+  rating: number | undefined;
 }
 
-export default function StarTag({ rating = 0 }: StarTagProps) {
-  const fixedRating = rating.toFixed(1);
+function StarTag({ rating }: StarTagProps) {
+  let fixedRating = "0.0";
+  if (typeof rating === "number") {
+    fixedRating = rating.toFixed(1);
+  }
 
   return (
-    <div className={styles.container}>
-      {rating ? (
-        <>
-          <StarIcon size='14px' active />
-          <div>{fixedRating}</div>
-        </>
-      ) : (
-        <StarIcon size='12.84px' />
-      )}
+    <div className={styles.star_tag}>
+      <StarIcon />
+      <span>{fixedRating}</span>
     </div>
   );
 }
+
+export default StarTag;
