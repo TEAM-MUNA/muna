@@ -133,7 +133,6 @@ export const uploadReviewAsync = createAsyncThunk<
           rejectWithValue(e);
         }
       }
-      console.log(concert);
 
       await Promise.all([
         // 2. 리뷰 컬렉션에 추가
