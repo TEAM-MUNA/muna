@@ -78,14 +78,15 @@ export default function SettingsProfile() {
         profileImage
       );
 
+      toast.dismiss(); // 이전 로딩 토스트 제거
       toast.success("프로필 변경이 완료되었습니다.");
       navigate("/settings");
     } catch (error) {
       if (typeof error === "string") {
-        toast.dismiss(); // 이전 로딩 토스트 제거
+        toast.dismiss();
         toast.error(error);
       } else {
-        toast.dismiss(); // 이전 로딩 토스트 제거
+        toast.dismiss();
         const errorMessage =
           (error as { message?: string }).message ||
           "프로필 변경 중 에러가 발생했습니다.";
