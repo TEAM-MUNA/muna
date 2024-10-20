@@ -89,11 +89,3 @@
     color: $black;
   }
 }
-.review_bar {
-  position: -webkit-sticky;
-  position: sticky;
-  bottom: 0;
-  background-color: $white;
-  @include fixed_bottom;
-  @include full_width;
-}
