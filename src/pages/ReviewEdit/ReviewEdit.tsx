@@ -111,7 +111,23 @@ export default function ReviewEdit() {
     };
 
     try {
-      await dispatch(uploadReviewAsync({ userId, review: newReview })).unwrap();
+      await dispatch(
+        uploadReviewAsync({
+          userId,
+          review: newReview,
+          concert: {
+            concertId: concertDetail.mt20id,
+            title: concertDetail.prfnm,
+            poster: concertDetail.poster,
+            area: concertDetail.area,
+            venue: concertDetail.fcltynm,
+            startDate: concertDetail.prfpdfrom,
+            endDate: concertDetail.prfpdto,
+            genre: concertDetail.genrenm,
+            state: concertDetail.prfstate,
+          },
+        })
+      ).unwrap();
       toast.success("리뷰가 등록되었습니다.");
       navigate(`/review/${id}`);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

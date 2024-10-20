@@ -61,9 +61,8 @@ export const getConcertsFromFirebase = async (
 // Firebase concerts 컬렉션에 공연 추가
 export const addConcert = async (concert: ConcertType) => {
   const docRef = doc(db, "concerts", concert.concertId!);
-  await setDoc(docRef, {
-    ...concert,
-  });
+  console.log(concert);
+  await setDoc(docRef, concert);
   return concert.concertId;
 };
 

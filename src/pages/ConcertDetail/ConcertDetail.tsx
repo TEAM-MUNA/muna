@@ -117,6 +117,12 @@ export default function ConcertDetail() {
               concertId: concertDetail.mt20id,
               title: concertDetail.prfnm,
               poster: concertDetail.poster,
+              area: concertDetail.area,
+              venue: concertDetail.fcltynm,
+              startDate: concertDetail.prfpdfrom,
+              endDate: concertDetail.prfpdto,
+              genre: concertDetail.genrenm,
+              state: concertDetail.prfstate,
             },
             cancel: isBookmarked,
           })
