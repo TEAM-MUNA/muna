@@ -33,7 +33,7 @@ export default function CalendarInput({
       <input
         className={`${styles.calendarInput} ${isEmptyDate ? styles.emptyDate : ""}`}
         type='date'
-        placeholder={date}
+        placeholder={date.replace(/-/g, ".")}
         value={isEmptyDate ? "" : date}
         onChange={onChange}
       />
