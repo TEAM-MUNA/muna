@@ -151,8 +151,8 @@ function LogoutMenu() {
 }
 
 export default function Settings() {
-  useUserRedirect();
   const navigate = useNavigate();
+  useUserRedirect();
 
   // const { isActive: isSettingToggleActive, onToggle: onSettingToggle } =
   //   useToggle(false);
