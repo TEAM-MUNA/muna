@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
-import Button from "../../components/common/Button/Button";
+
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
-import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
+import GenreButtons from "../../components/common/GenreButtons/GenreButtons";
 
 interface MainReviewType {
   concert: {
@@ -19,7 +19,6 @@ interface MainReviewType {
 }
 
 export default function Main() {
-  const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
@@ -81,12 +80,6 @@ export default function Main() {
       setMainReviews(newReviews);
     }
   }, [isMainShowingReviewListLoading, mainShowingReviewList]);
-
-  const goToConcertList = (code: string) => {
-    const navigateUrl =
-      code.length === 0 ? `/concert` : `/concert?genre=${code}`;
-    navigate(navigateUrl);
-  };
 
   return (
     <section className={styles.main}>
@@ -155,20 +148,7 @@ export default function Main() {
               ))
           : null}
       </div>
-      <div className={styles.category_nav}>
-        {Object.entries(genreMap).map(([genre, code]) => (
-          <Button
-            key={code}
-            label={genre === "전체" ? "모든 공연 보기" : genre}
-            color='default'
-            size='md'
-            className={code === "" ? styles.fullWidth : ""}
-            onClick={() => {
-              goToConcertList(code);
-            }}
-          />
-        ))}
-      </div>
+      <GenreButtons />
       <div className={styles.share_your_experience}>
         최근 관람한 공연이 있나요?
         <br />

@@ -114,18 +114,7 @@
       }
     }
   }
-  .category_nav {
-    margin-top: 36px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    row-gap: 8px;
-    column-gap: 12px;
 
-    .fullWidth {
-      grid-column: span 3;
-      margin-top: 4px;
-    }
-  }
   .share_your_experience {
     background-color: $box-light;
     padding: 16px 0;
