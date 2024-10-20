@@ -125,8 +125,10 @@ dd {
 }
 
 span.divider {
-  margin: 0 0.4em;
-  opacity: 0.4;
+  display: inline-flex;
+  margin: 2px 0.4em -2px;
+  border-right: 1px solid $line-light;
+  height: 1em;
 }
 
 button.btn_link,
