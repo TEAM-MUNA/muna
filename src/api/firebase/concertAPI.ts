@@ -104,6 +104,16 @@ export const updateConcertBookmark = async (
     await deleteInactiveConcert(concertId);
   });
 };
+// TODO: update 함수 합치기(refactor)
+export const updateConcertReview = async (
+  concertId: string,
+  reviewId: string
+) => {
+  const concertsDocRef = doc(db, "concerts", concertId);
+  await updateDoc(concertsDocRef, {
+    reviews: arrayUnion(reviewId),
+  });
+};
 
 export const a = () => 0;
 
