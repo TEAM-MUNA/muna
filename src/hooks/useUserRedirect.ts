@@ -16,7 +16,7 @@ const useUserRedirect = (
     // skipRedirectPaths에 포함된 경로에서는 리다이렉트 하지 않음
     const isSkipRedirect = skipRedirectPaths.includes(window.location.pathname);
 
-    if (!currentUserId && !hasRedirected.current && isSkipRedirect) {
+    if (!currentUserId && !hasRedirected.current && !isSkipRedirect) {
       navigate(redirectPath); // 로그인 정보가 없을 때 페이지 리다이렉트
       toast.error(toastMessages.userRedirect);
       hasRedirected.current = true; // 이후에는 실행되지 않도록
