@@ -10,8 +10,10 @@ interface ButtonProps {
     | "default"
     | "primary"
     | "primary_line"
+    | "primary_line_light"
     | "danger"
     | "black"
+    | "black_line"
     | "underlined"
     | undefined;
   iconRight?: ReactNode | undefined;
