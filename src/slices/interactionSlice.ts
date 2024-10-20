@@ -114,10 +114,10 @@ export const bookmarkConcertAsync = createAsyncThunk<
 
 export const uploadReviewAsync = createAsyncThunk<
   string[] | undefined,
-  { userId: string; review: ReviewType }
+  { userId: string; review: ReviewType; concert: ConcertType }
 >(
   "interaction/review",
-  async ({ userId, review }, { dispatch, rejectWithValue }) => {
+  async ({ userId, review, concert }, { dispatch, rejectWithValue }) => {
     let downloadUrls: string[] = [];
     try {
       if (review.images) {
@@ -133,12 +133,15 @@ export const uploadReviewAsync = createAsyncThunk<
           rejectWithValue(e);
         }
       }
+      console.log(concert);
 
       await Promise.all([
         // 2. 리뷰 컬렉션에 추가
         await addReviewToFirebase({ ...review, images: downloadUrls }),
         // 3. 유저에 리뷰 추가
         await updateUserReview(userId, review.reviewId),
+        // 4. 공연 컬렉션에 추가
+        await addConcert(concert),
       ]);
       // 유저 정보에 리뷰를 저장해야됨
       const updatedUser = await getUserFromFirebase(userId);

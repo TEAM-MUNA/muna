@@ -26,6 +26,13 @@ export interface ConcertType {
   concertId?: string; // TODO: ?(옵셔널) 빼기
   title?: string;
   poster?: string;
+  area?: string;
+  venue?: string;
+  startDate?: string;
+  endDate?: string;
+  genre?: string;
+  state?: string;
+  // user 활동
   averageRating?: number;
   bookmarkedBy?: string[];
   reviews?: string[];
