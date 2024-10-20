@@ -130,27 +130,29 @@ export default function Main() {
         {mainReviews &&
         mainReviews.length > 0 &&
         mainReviews[currentPosterIndex]
-          ? mainReviews[currentPosterIndex].reviews.map((review) => (
-              <Link
-                to={`/review/${review.id}`}
-                key={review.contents}
-                className={styles.reviews}
-              >
-                <blockquote
-                  id={`review-${review.id}`}
-                  className={styles.review}
+          ? mainReviews[currentPosterIndex].reviews
+              .slice(0, 2)
+              .map((review) => (
+                <Link
+                  to={`/review/${review.id}`}
+                  key={review.contents}
+                  className={styles.reviews}
                 >
-                  {review.contents}
-                </blockquote>
-                <cite
-                  id={`review-author-${review.id}`}
-                  className={styles.nickname}
-                  aria-labelledby={`review-${review.id} review-author-${review.id}`}
-                >
-                  {review.nickname}
-                </cite>
-              </Link>
-            ))
+                  <blockquote
+                    id={`review-${review.id}`}
+                    className={styles.review}
+                  >
+                    {review.contents}
+                  </blockquote>
+                  <cite
+                    id={`review-author-${review.id}`}
+                    className={styles.nickname}
+                    aria-labelledby={`review-${review.id} review-author-${review.id}`}
+                  >
+                    {review.nickname}
+                  </cite>
+                </Link>
+              ))
           : null}
       </div>
       <div className={styles.category_nav}>
