@@ -273,7 +273,7 @@ export default function ConcertDetail() {
             </div>
 
             <div>
-              <p className={`${styles.concert_info} wrapper_divider`}>
+              <p className={styles.concert_info}>
                 {concertDetail.genrenm}
                 <span className='divider' />
                 {concertDetail.prfruntime}
@@ -292,14 +292,18 @@ export default function ConcertDetail() {
         </div>
         <div className={styles.date_location}>
           <span className={styles.icon_text_container}>
-            <CalendarIcon size='16' />
+            <span className={styles.wrapper_icon}>
+              <CalendarIcon size='16' />
+            </span>
             <p aria-label='공연 기간'>
               {concertDetail.prfpdfrom} ~ {concertDetail.prfpdto}
             </p>
           </span>
           <span className={styles.icon_text_container}>
-            <LocationIcon size='16' />
-            <p aria-label='공연장' className='wrapper_divider'>
+            <span className={styles.wrapper_icon}>
+              <LocationIcon size='16' />
+            </span>
+            <p aria-label='공연장'>
               {concertDetail.area}
               <span className='divider' />
               {concertDetail.fcltynm}
