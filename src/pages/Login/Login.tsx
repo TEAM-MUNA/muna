@@ -13,8 +13,10 @@ import useInput from "../../hooks/useInput";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import { placeholder } from "../../utils/constants/placeholder";
 import { useRequestContext } from "../../context/RequestContext";
+import useUserRedirect from "../../hooks/useUserRedirect";
 
 export default function Login() {
+  useUserRedirect();
   const {
     value: email,
     onChange: onEmailChange,
