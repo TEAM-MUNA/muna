@@ -67,7 +67,7 @@ export default function ReviewCard({
                     </span>
                   ) : null}
                 </div>
-                <span className={styles.date}>{date}</span>
+                <span className={styles.date}>{date.replace(/-/g, ".")}</span>
               </div>
             )}
           </div>
