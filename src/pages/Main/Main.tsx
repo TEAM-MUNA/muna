@@ -103,9 +103,11 @@ export default function Main() {
                 }
               />
             </div>
-            <p className={styles.main_showing_concert_title}>
-              {mainReviews[currentPosterIndex].concert.title}
-            </p>
+            <div className={styles.wrapper_concert_title}>
+              <h3 className={styles.main_showing_concert_title}>
+                {mainReviews[currentPosterIndex].concert.title}
+              </h3>
+            </div>
           </>
         )}
       {isMainShowingReviewListLoading ? (
@@ -117,35 +119,38 @@ export default function Main() {
         />
       )}
 
-      <div className={styles.main_showing_concert_reviews}>
-        {mainReviews &&
-        mainReviews.length > 0 &&
-        mainReviews[currentPosterIndex]
-          ? mainReviews[currentPosterIndex].reviews
-              .slice(0, 2)
-              .map((review) => (
-                <Link
-                  to={`/review/${review.id}`}
-                  key={review.contents}
-                  className={styles.reviews}
-                >
-                  <blockquote
-                    id={`review-${review.id}`}
-                    className={styles.review}
+      <div className={styles.wrapper_main_showing}>
+        <div className={styles.main_showing_concert_reviews}>
+          {mainReviews &&
+          mainReviews.length > 0 &&
+          mainReviews[currentPosterIndex]
+            ? mainReviews[currentPosterIndex].reviews
+                .slice(0, 2)
+                .map((review) => (
+                  <Link
+                    to={`/review/${review.id}`}
+                    key={review.contents}
+                    className={styles.reviews}
                   >
-                    {review.contents}
-                  </blockquote>
-                  <cite
-                    id={`review-author-${review.id}`}
-                    className={styles.nickname}
-                    aria-labelledby={`review-${review.id} review-author-${review.id}`}
-                  >
-                    {review.nickname}
-                  </cite>
-                </Link>
-              ))
-          : null}
+                    <blockquote
+                      id={`review-${review.id}`}
+                      className={styles.review}
+                    >
+                      {review.contents}
+                    </blockquote>
+                    <cite
+                      id={`review-author-${review.id}`}
+                      className={styles.nickname}
+                      aria-labelledby={`review-${review.id} review-author-${review.id}`}
+                    >
+                      {review.nickname}
+                    </cite>
+                  </Link>
+                ))
+            : null}
+        </div>
       </div>
+
       <GenreButtons />
       <div className={styles.share_your_experience}>
         최근 관람한 공연이 있나요?

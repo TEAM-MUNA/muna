@@ -19,17 +19,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 35px;
+    margin-top: 40px;
+  }
+
+  .wrapper_concert_title {
+    display: flex;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .main_showing_concert_title {
+    @include text_ellipsis(2);
     font-size: $font-xl;
-    letter-spacing: -0.02em;
+    word-break: keep-all;
+    // letter-spacing: -0.02em;
     color: $black;
     line-height: $font-height-lg;
-    margin-top: 8px;
     font-weight: $font-medium;
-    margin-bottom: 15px;
   }
 
   .main_showing_concert_posters {
@@ -83,21 +93,20 @@
     @include full-width;
     background-color: $primary;
     color: $white;
-    height: 155px;
+    height: 172px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: -43px; // -26px
+    margin-top: -42px; // -26px
     // padding: 50px 23.5px 24px 23.5px;
-    padding: 0 24px;
-    padding-top: 15px;
+    padding: 20px 24px 12px 24px;
     letter-spacing: -0.02em;
 
     .reviews {
       animation: slideUp 0.5s ease-out;
 
       .review {
-        @include text_ellipsis(1);
+        @include text_ellipsis(2);
         font-size: $font-md;
         margin: 0;
         color: $white;
