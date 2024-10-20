@@ -3,6 +3,7 @@
 @import "../Input/Input.module.scss";
 
 .calendarInput {
+  cursor: pointer;
   justify-content: space-between;
   font-size: $font-md !important;
   border-bottom: 1px solid $line-light;
@@ -11,17 +12,21 @@
   &::-webkit-datetime-edit-text,
   &::-webkit-datetime-edit-month-field,
   &::-webkit-datetime-edit-day-field,
-  &::-webkit-datetime-edit-year-field {
+  &::-webkit-datetime-edit-year-field,
+  &::-webkit-calendar-picker-indicator {
     -webkit-appearance: none;
     display: none;
   }
-
   &::before {
     color: $black-lighter;
     content: attr(placeholder);
   }
-
   &:not(.emptyDate)::before {
-    color: $black;
+    color: $black-light;
   }
+}
+.calendar_icon {
+  position: absolute;
+  right: 6px;
+  color: $black-light;
 }
