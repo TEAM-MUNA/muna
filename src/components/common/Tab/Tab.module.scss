@@ -56,8 +56,10 @@
 
     .active {
       font-weight: $font-bold;
-      color: $black;
-      border-bottom: 2px solid $black;
+      // color: $black;
+      // border-bottom: 2px solid $black;
+      color: $primary;
+      border-bottom: 2px solid $primary;
     }
   }
 }

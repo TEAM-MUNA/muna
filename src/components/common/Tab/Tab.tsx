@@ -65,7 +65,7 @@ export default function Tab({
               >
                 {title}
                 {number !== null && (
-                  <Tag color='default' label={number.toString()} />
+                  <Tag color='primary_light' label={number.toString()} />
                 )}
               </button>
             </li>
