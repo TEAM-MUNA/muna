@@ -5,7 +5,7 @@ import { FirebaseError } from "firebase/app";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { loginAsync } from "../../slices/authSlice";
-import logo from "../../assets/img/logo.png";
+import Logo from "../../assets/img/logo";
 import styles from "./Login.module.scss";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
@@ -73,7 +73,8 @@ export default function Login() {
     <article className={styles.login}>
       <header className={styles.header}>
         <h1>
-          <img width={107} src={logo} alt='muna 로고' />
+          {/* <img width={107} src={logo} alt='muna 로고' /> */}
+          <Logo height={34} />
         </h1>
         <p className={styles.slogan}>우리들의 문화생활, 무나</p>
       </header>

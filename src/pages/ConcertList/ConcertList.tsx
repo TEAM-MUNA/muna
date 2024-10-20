@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { HeartSpinner } from "react-spinners-kit";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../app/store";
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
@@ -169,11 +169,7 @@ export default function ConcertList() {
           onSelect={handleSortChange}
         />
       </div>
-      {isLoading && (
-        <div className={styles.center}>
-          <HeartSpinner size={65} color='#7926ff' />
-        </div>
-      )}
+      {isLoading && <LoadingSpinner />}
       {!isLoading && concertList[1] === undefined ? (
         <p className={styles.emptyMessage}>
           조건에 맞는 공연이 없습니다.

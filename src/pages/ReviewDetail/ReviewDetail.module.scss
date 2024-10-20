@@ -1,98 +1,91 @@
 @import "../../styles/_variables";
 @import "../../styles/_mixin";
 
-.review_container{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.review_container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
-.review_form{
-    width: auto;
-    height: 100%;
-    position: relative;
-    flex: 1;
-    .review_title{
-        width: calc(100% + 40px);
-        position: sticky;
-        margin: 0 -20px;
-    }
-}
-.review_avatar{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 16px 0;
-}
-.review_imageForm{
-    display: flex;
-    position: relative;
-    height: 0;
-    padding: 95% 0 5%;
-    border-radius: 8px;
-    overflow: hidden;
-    .review_dot{
-        display: block;
-        position: relative;
-        width: fit-content;
-        height: auto;
-        margin: auto;
-        bottom: 0;
-        z-index: 10;
-        ul{
-            display: flex;
-            gap: 8px;
-            .review_dotList{
-                width: 8px;
-                height: 8px;
-                background-color: $white-light;
-                border-radius: 50%;
-            }
-            .active{
-                width: 8px;
-                height: 8px;
-                background-color: $white-lighter;
-                border-radius: 50%;
-            }
-        }
-    }
-    .review_imageBox{
-        display: flex;
-        width: fit-content;
-        .review_images{
-        display: flex;
-        align-items: center;
-        position: absolute;
-        margin: auto;
-        bottom: 0;
-        width: 100%;
-        transition: left 0.5s;
-        @for $i from 0 through 9 {
-            .review_image_#{$i}{
-                width: 100%;
-                user-select: none;
-                -webkit-user-drag: none;
-                -moz-user-select: none;
-            }
-        }
-        .selected{
-            width: auto;
-        }
-        }
-    }
-}
-.review_content{
-    padding: 24px 0;
-    .review_text{
-        font-size: $font-md;
-        line-height: $font-2xl;
-        letter-spacing: -2%;
-        color: $black;
-    }
-}
-.review_bar{
+.review_form {
+  width: auto;
+  height: 100%;
+  position: relative;
+  flex: 1;
+  .review_title {
+    @include full_width;
+    position: -webkit-sticky;
     position: sticky;
-    width: calc(100% + 40px);
+  }
+}
+.review_avatar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 16px 0;
+}
+.review_imageForm {
+  display: flex;
+  position: relative;
+  height: 0;
+  padding: 95% 0 5%;
+  border-radius: 8px;
+  overflow: hidden;
+  .review_dot {
+    display: block;
+    position: relative;
+    width: fit-content;
+    height: auto;
+    margin: auto;
     bottom: 0;
-    background-color: $white;
-    @include fixed_bottom;
+    z-index: 10;
+    ul {
+      display: flex;
+      gap: 8px;
+      .review_dotList {
+        width: 8px;
+        height: 8px;
+        background-color: $white-light;
+        border-radius: 50%;
+      }
+      .active {
+        width: 8px;
+        height: 8px;
+        background-color: $white-lighter;
+        border-radius: 50%;
+      }
+    }
+  }
+  .review_imageBox {
+    display: flex;
+    width: fit-content;
+    .review_images {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      margin: auto;
+      bottom: 0;
+      width: 100%;
+      transition: left 0.5s;
+      @for $i from 0 through 9 {
+        .review_image_#{$i} {
+          width: 100%;
+          user-select: none;
+          -webkit-user-drag: none;
+          -moz-user-select: none;
+        }
+      }
+      .selected {
+        width: auto;
+      }
+    }
+  }
+}
+.review_content {
+  padding: 24px 0;
+  .review_text {
+    font-size: $font-md;
+    line-height: $font-2xl;
+    letter-spacing: -2%;
+    color: $black;
+  }
 }

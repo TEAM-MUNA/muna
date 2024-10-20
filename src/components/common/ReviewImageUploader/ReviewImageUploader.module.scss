@@ -43,7 +43,7 @@
     display: flex;
     gap: 12px;
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
 
     .preview_container {
       @include image-box;
@@ -55,6 +55,7 @@
       position: relative;
 
       .remove {
+        color: $white;
         background-color: transparent !important;
         position: absolute;
         right: 0;

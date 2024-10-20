@@ -47,6 +47,17 @@
   background-color: $white;
 }
 
+.black_line {
+  color: $black;
+  border-color: $black;
+  background-color: $white;
+}
+
+.primary_line_light {
+  border-color: $primary-light;
+  background-color: $white;
+}
+
 .sm {
   font-size: $font-sm;
   padding: 4px 20px;

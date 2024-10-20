@@ -28,7 +28,7 @@ function RecentSearchList({
 
   return (
     <div>
-      <h2 style={{ fontSize: "18px", margin: "36px 0 16px" }}>최근 검색어</h2>
+      <h2 className={styles.h2}>최근 검색어</h2>
       <ul className={styles.recentSearchList}>
         {recentQueries.map((item) => (
           <li key={item.query} className={styles.recentSearchItem}>
@@ -41,7 +41,7 @@ function RecentSearchList({
               <Button
                 label=''
                 onClick={() => onQueryRemove(item.query)}
-                iconOnly={<CloseIcon size='20' />}
+                iconOnly={<CloseIcon size='18' />}
               />
             </div>
           </li>
