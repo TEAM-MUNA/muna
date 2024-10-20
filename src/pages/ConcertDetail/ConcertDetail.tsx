@@ -331,6 +331,7 @@ export default function ConcertDetail() {
                   likeCount={review.likedBy?.length || 0}
                   date={review.createdAt}
                   starRate={review.rating}
+                  reviewLink={`/review/${review.reviewId}`}
                 />
               ))}
             {!isReviewListLoading &&
