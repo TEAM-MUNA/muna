@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./CalendarInput.module.scss";
+import CalendarIcon from "../../../assets/svg/CalendarIcon";
 
 interface CalendarInputProps {
   fullWidth?: boolean;
@@ -15,6 +16,7 @@ export default function CalendarInput({
   const placeholder = "공연 관람일을 입력하세요";
   const [date, setDate] = useState<string>(currentDate || "");
   const isEmptyDate = date === placeholder;
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!date) {
@@ -22,21 +24,37 @@ export default function CalendarInput({
     }
   }, [date]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = e.target.value;
     setDate(selectedDate);
     onCalendarChange(selectedDate);
   };
 
+  const handleClick = () => {
+    if (inputRef.current) {
+      (inputRef.current as HTMLInputElement).showPicker();
+    }
+  };
+
   return (
-    <div className={`${styles.container} ${fullWidth ? styles.full : ""}`}>
+    <div
+      role='button'
+      className={`${styles.container} ${fullWidth ? styles.full : ""}`}
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleClick}
+    >
       <input
+        ref={inputRef}
         className={`${styles.calendarInput} ${isEmptyDate ? styles.emptyDate : ""}`}
         type='date'
         placeholder={date.replace(/-/g, ".")}
         value={isEmptyDate ? "" : date}
-        onChange={onChange}
+        onChange={handleChange}
       />
+      <span className={styles.calendar_icon}>
+        <CalendarIcon size='20' />
+      </span>
     </div>
   );
 }
