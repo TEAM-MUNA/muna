@@ -124,6 +124,11 @@ dd {
   }
 }
 
+span.divider {
+  margin: 0 0.4em;
+  opacity: 0.4;
+}
+
 button.btn_link,
 a.btn_link {
   color: $black-lighter;
