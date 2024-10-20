@@ -1,27 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./ReviewTitle.module.scss";
 import Button from "../Button/Button";
 import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
 import DropdownMenu from "../Dropdown/DropdownMenu";
+import useGetReview from "../../../hooks/useGetConcert";
 
 interface ReviewTitleProps {
   title: string; // 공연 제목 (prfnm)
-  concertId: number; // 공연 ID (mt20id)
-  genre: string; // 공연 장르 (genrenm)
   isMine?: boolean; // 내 리뷰임?
+  concertId?: string;
   nickname?: string;
 }
 
 export default function ReviewTitle({
   title,
-  concertId,
-  genre,
   isMine = false,
-  nickname = "사용자123",
+  concertId,
+  nickname = "",
 }: ReviewTitleProps) {
+  const navigate = useNavigate();
   const handleBackButton = () => {
-    // navigate(-1);
+    navigate(-1);
   };
   const handleDropDown = () => {};
 
@@ -36,11 +36,9 @@ export default function ReviewTitle({
         />
       </div>
       <div className={styles.title_container}>
-        <h2>
-          {reviewOwner}의 {genre} 후기
-        </h2>
-        <Link to={`/concert-detail/${concertId}`}>
-          <h1>{`${genre} <${title}>`}</h1>
+        <h2>{reviewOwner}의 후기</h2>
+        <Link to={`/concert/${concertId}`} key={concertId}>
+          <h1>{`<${title}>`}</h1>
         </Link>
       </div>
       {isMine && (
