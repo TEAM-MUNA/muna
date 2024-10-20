@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { HeartSpinner } from "react-spinners-kit";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
@@ -109,9 +109,7 @@ export default function Main() {
           </>
         )}
       {isMainShowingReviewListLoading ? (
-        <div className={styles.loading_imageSlider}>
-          <HeartSpinner size={40} color='#c9a8ff' />
-        </div>
+        <LoadingSpinner />
       ) : (
         <ImageSlider
           images={mainReviews.map((reviews) => reviews.concert)}
@@ -154,7 +152,7 @@ export default function Main() {
         <br />
         후기를 공유하고 감동을 나눠보세요!
       </div>
-      {isPopularReviewListLoading && <HeartSpinner />}
+      {isPopularReviewListLoading && <LoadingSpinner />}
       {popularReviewListError && (
         <p className={styles.error}>리뷰를 불러오는 중 문제가 발생했습니다.</p>
       )}
