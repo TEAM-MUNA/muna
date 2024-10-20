@@ -10,6 +10,7 @@ import {
   addConcert,
   getConcertFromFirebase,
   updateConcertBookmark,
+  updateConcertReview,
 } from "../api/firebase/concertAPI";
 import { UserInteractionType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
@@ -119,7 +120,14 @@ export const uploadReviewAsync = createAsyncThunk<
   "interaction/review",
   async ({ userId, review, concert }, { dispatch, rejectWithValue }) => {
     let downloadUrls: string[] = [];
+    let concertId: string | undefined = concert.concertId!;
     try {
+      const firebaseConcert = await getConcertFromFirebase(concert.concertId!);
+
+      if (!firebaseConcert) {
+        concertId = await addConcert(concert);
+      }
+
       if (review.images) {
         // 1. 이미지 리스트 업로드
         try {
@@ -139,8 +147,8 @@ export const uploadReviewAsync = createAsyncThunk<
         await addReviewToFirebase({ ...review, images: downloadUrls }),
         // 3. 유저에 리뷰 추가
         await updateUserReview(userId, review.reviewId),
-        // 4. 공연 컬렉션에 추가
-        await addConcert(concert),
+        // 4. 공연에 리뷰 추가
+        await updateConcertReview(concertId!, review.reviewId),
       ]);
       // 유저 정보에 리뷰를 저장해야됨
       const updatedUser = await getUserFromFirebase(userId);
