@@ -17,7 +17,7 @@ export default function StarForm({
   initialRating = 0,
   onRatingChange,
 }: StarFormProps) {
-  const { onToggle, isActive } = useToggle(false);
+  const { onToggle, isActive } = useToggle(true);
 
   const [rating, setRating] = useState(initialRating);
 
