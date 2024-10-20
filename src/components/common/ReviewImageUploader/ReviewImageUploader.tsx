@@ -118,6 +118,7 @@ export default function ReviewImageUploader({
                           className={styles.remove}
                           iconOnly={<CloseIcon size='20' />}
                           label='리뷰 사진 삭제'
+                          iconShadow
                           onClick={() => {
                             removeImage(src);
                           }}

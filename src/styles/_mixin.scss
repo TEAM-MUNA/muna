@@ -30,7 +30,8 @@
 }
 
 @mixin icon_shadow {
-  filter: drop-shadow(2px 2px 2.4px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(2px 1.2px 1.8px rgba(0, 0, 0, 0.48));
+  // filter: drop-shadow(2px 2px 2.4px rgba(0, 0, 0, 0.4));
 }
 
 @mixin poster_shadow {

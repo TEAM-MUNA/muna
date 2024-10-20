@@ -4,7 +4,6 @@ export default function Logo({ height = 18 }: { height?: number }) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      width='auto'
       height={height}
       fill='none'
       viewBox='0 0 59 18'
