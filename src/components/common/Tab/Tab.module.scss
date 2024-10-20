@@ -2,11 +2,11 @@
 @import "../../../styles/_mixin";
 
 .tab_container {
+  @include full_width;
   position: -webkit-sticky;
   position: sticky;
   top: 54px;
   border-bottom: 1px solid $line-lighter;
-  margin: 0 -20px;
   background: $white;
   z-index: $z-tab;
   overflow: visible;
