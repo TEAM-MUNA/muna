@@ -4,6 +4,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import "./ImageSlider.scss";
 import { Link, useNavigate } from "react-router-dom";
+import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
+import ArrowRightIcon from "../../../assets/svg/ArrowRightIcon";
 
 export interface SliderPosterType {
   id: string;
@@ -72,6 +74,16 @@ export default function ImageSlider({
           setCurrentPosterIndex(next);
           setCurrentSlide(next);
         }}
+        nextArrow={
+          <span>
+            <ArrowRightIcon size='24' />
+          </span>
+        }
+        prevArrow={
+          <div>
+            <ArrowLeftIcon size='24' />
+          </div>
+        }
       >
         {images.map((image, index) => (
           <Link
