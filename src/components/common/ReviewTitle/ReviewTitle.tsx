@@ -4,13 +4,13 @@ import styles from "./ReviewTitle.module.scss";
 import Button from "../Button/Button";
 import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
 import DropdownMenu from "../Dropdown/DropdownMenu";
-import useGetReview from "../../../hooks/useGetConcert";
 
 interface ReviewTitleProps {
   title: string; // 공연 제목 (prfnm)
   isMine?: boolean; // 내 리뷰임?
   concertId?: string;
   nickname?: string;
+  reviewId?: string;
 }
 
 export default function ReviewTitle({
@@ -18,12 +18,17 @@ export default function ReviewTitle({
   isMine = false,
   concertId,
   nickname = "",
+  reviewId,
 }: ReviewTitleProps) {
   const navigate = useNavigate();
   const handleBackButton = () => {
     navigate(-1);
   };
-  const handleDropDown = () => {};
+  const handleDropDown = (value: string) => {
+    if (value === "후기 수정") {
+      navigate(`/review/edit/${reviewId}`);
+    }
+  };
 
   const reviewOwner = isMine ? "나" : `${nickname} 님`; // 내 후기일 경우 "나"로 설정
   return (
