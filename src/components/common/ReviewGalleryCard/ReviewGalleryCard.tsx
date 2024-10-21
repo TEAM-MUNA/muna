@@ -26,7 +26,7 @@ export default function ReviewGalleryCard({
           <ImageLayersIcon size='16' />
         </span>
       )}
-      {likeCount && (
+      {likeCount !== 0 && (
         <span className={`${styles.icon} ${styles.icon_like}`}>
           <LikeIcon size='16' />
           {likeCount}

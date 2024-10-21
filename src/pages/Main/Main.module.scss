@@ -97,13 +97,13 @@
     @include full-width;
     background-color: $primary;
     color: $white;
-    height: 172px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-top: -42px; // -26px
     // padding: 50px 23.5px 24px 23.5px;
-    padding: 20px 24px 12px 24px;
+    padding: 44px 24px 12px 24px;
     letter-spacing: -0.02em;
 
     .reviews {
