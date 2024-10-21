@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
-
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 import GenreButtons from "../../components/common/GenreButtons/GenreButtons";
-import Button from "../../components/common/Button/Button";
 
 interface MainReviewType {
   concert: {
@@ -20,7 +18,6 @@ interface MainReviewType {
 }
 
 export default function Main() {
-  const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,

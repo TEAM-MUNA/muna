@@ -4,7 +4,7 @@ import React, {
   useEffect,
   MouseEvent as ReactMouseEvent,
 } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import styles from "./ReviewDetail.module.scss";
 import ReviewTitle from "../../components/common/ReviewTitle/ReviewTitle";
@@ -14,11 +14,9 @@ import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
 import useGetReview from "../../hooks/useGetReview";
 
 export default function ReviewDetail() {
-  const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
-  const { userId, nickname, profileImage } = useCurrentUser();
+  const { userId } = useCurrentUser();
 
   const {
     review,
