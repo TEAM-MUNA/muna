@@ -227,8 +227,14 @@ export default function ConcertList() {
         </p>
       ) : (
         <ul className={isLoading ? styles.faded : ""}>
-          {sortedFbConcertList.map(renderConcertItem)}
-          {concertList.map(renderConcertItem)}
+          {["북마크순", "리뷰순", "평점순"].includes(sortOrder) ? (
+            <>
+              {sortedFbConcertList.map(renderConcertItem)}
+              {concertList.map(renderConcertItem)}
+            </>
+          ) : (
+            concertList.map(renderConcertItem)
+          )}
         </ul>
       )}
     </>
