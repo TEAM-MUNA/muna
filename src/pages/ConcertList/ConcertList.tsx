@@ -111,7 +111,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [page, keyword, genreCode]);
+  }, [page, keyword, genreCode, pfStateCode, regionCodes]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
