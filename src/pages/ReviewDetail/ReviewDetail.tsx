@@ -4,7 +4,7 @@ import React, {
   useEffect,
   MouseEvent as ReactMouseEvent,
 } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import styles from "./ReviewDetail.module.scss";
 import ReviewTitle from "../../components/common/ReviewTitle/ReviewTitle";
@@ -14,11 +14,9 @@ import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
 import useGetReview from "../../hooks/useGetReview";
 
 export default function ReviewDetail() {
-  const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
-  const { userId, nickname, profileImage } = useCurrentUser();
+  const { userId } = useCurrentUser();
 
   const {
     review,
@@ -31,18 +29,6 @@ export default function ReviewDetail() {
   const [isSwiping, setIsSwiping] = useState(false);
   const [translate, setTranslate] = useState(0);
   const imageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (review && review.author.id !== userId) {
-      navigate(`/some-other-page`);
-    }
-    if (review && review.author.nickname !== nickname) {
-      navigate(`/some-other-page`);
-    }
-    if (review && review.author.profileImage !== profileImage) {
-      navigate(`/some-other-page`);
-    }
-  }, [review, userId, navigate]);
 
   // 후기 이미지 슬라이드
   const handleDotClick = (index: number) => {
@@ -107,9 +93,11 @@ export default function ReviewDetail() {
         <div className={styles.review_title}>
           {review && (
             <ReviewTitle
+              nickname={review.author.nickname}
               title={review.concert.title}
               isMine={review.author.id === userId}
               concertId={review.concert.id}
+              reviewId={review.reviewId}
             />
           )}
         </div>
@@ -120,10 +108,10 @@ export default function ReviewDetail() {
             nickname={review?.author.nickname}
             userId={review?.author.id}
             profileImage={review?.author.profileImage}
-            watchDate={review?.date}
+            watchDate={review?.date.replace(/-/g, ".")}
             userLink={`/profile/${review?.author.id}`}
           />
-          <StarTag rating={review?.rating} />
+          <StarTag rating={review?.rating ?? 0} />
         </div>
 
         {/* images가 있으면 imageForm 없으면 숨김(null) */}

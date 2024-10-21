@@ -54,7 +54,7 @@ export default function SettingsProfile() {
     // console.log(data);
 
     // 닉네임이 비어 있을 경우 오류 메시지
-    if (!nickname) {
+    if (!nickname || !user?.userId) {
       toast.error(errorMessages.nicknameRequired);
       return;
     }
@@ -72,8 +72,10 @@ export default function SettingsProfile() {
           profileImage: profileImage || currentUser?.profileImage || null,
         })
       );
+
       await updateAuthorProfileInReviews(
         currentUser.reviews,
+        user.userId,
         nickname,
         profileImage
       );

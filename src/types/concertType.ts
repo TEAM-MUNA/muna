@@ -33,6 +33,7 @@ export interface ConcertType {
   genre?: string;
   state?: string;
   // user 활동
+  ratings?: number[];
   averageRating?: number;
   bookmarkedBy?: string[];
   reviews?: string[];

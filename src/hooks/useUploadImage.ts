@@ -24,9 +24,15 @@ const useGetImageDownloadUrl = () => {
     category: ImageCategory
   ) => {
     const storage = getStorage();
+    let size: number = 300;
     // 업로드 시 사진 사이즈 줄이기
-    const canvas = await getResizeImage(imageUrl, 300, 300);
-    const resizedImageUrl = canvas.toDataURL();
+    if (category === ImageCategory.Users) {
+      size = 300;
+    } else if (category === ImageCategory.Reviews) {
+      size = 900;
+    }
+    const canvas = await getResizeImage(imageUrl, size, size);
+    const resizedImageUrl = canvas.toDataURL("image/jpeg", 0.8); // JPEG로 변환 및 품질 설정
 
     const storageRef = ref(storage, `${category}/${id}/${Date.now()}`);
     await uploadString(storageRef, resizedImageUrl, "data_url");

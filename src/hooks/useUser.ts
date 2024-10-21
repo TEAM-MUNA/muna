@@ -4,10 +4,7 @@ import { getUserFromFirebase } from "../api/firebase/authAPI";
 import { firebaseAuth } from "../firebase";
 import { AppDispatch } from "../app/store";
 import { setUser } from "../slices/authSlice";
-import {
-  fetchUserInteraction,
-  setUserInteraction,
-} from "../slices/interactionSlice";
+import { fetchUserActivity, setUserActivity } from "../slices/activitySlice";
 
 const useUser = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,10 +22,10 @@ const useUser = () => {
             profileImage: userInfo?.profileImage,
           })
         );
-        dispatch(fetchUserInteraction(currentUser.uid));
+        dispatch(fetchUserActivity(currentUser.uid));
       } else {
         dispatch(setUser(null)); // 로그아웃 -> null
-        dispatch(setUserInteraction(null)); // 로그아웃 -> null
+        dispatch(setUserActivity(null)); // 로그아웃 -> null
       }
     });
 

@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { bookmarkConcertAsync } from "../../slices/interactionSlice";
+import { bookmarkConcertAsync } from "../../slices/activitySlice";
 import styles from "./ConcertDetail.module.scss";
 import Tag from "../../components/common/Tag/Tag";
 import Button from "../../components/common/Button/Button";
@@ -265,7 +265,7 @@ export default function ConcertDetail() {
                   <>
                     <StarScoreOnlyIcon rating={concert.averageRating} />
                     <p className={styles.rating_text}>
-                      평점 {concert.averageRating}
+                      평점 {concert.averageRating.toFixed(1)}
                     </p>
                   </>
                 ) : (

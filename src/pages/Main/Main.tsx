@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
-
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 import GenreButtons from "../../components/common/GenreButtons/GenreButtons";
-import Button from "../../components/common/Button/Button";
 
 interface MainReviewType {
   concert: {
@@ -20,7 +18,6 @@ interface MainReviewType {
 }
 
 export default function Main() {
-  const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
@@ -105,15 +102,14 @@ export default function Main() {
                 }
               />
             </div>
-            <Button
-              className={styles.main_showing_concert_title}
-              onClick={() =>
-                navigate(
-                  `/concert/${mainReviews[currentPosterIndex].concert.id}`
-                )
-              }
-              label={mainReviews[currentPosterIndex].concert.title}
-            />
+            <div className={styles.wrapper_concert_title}>
+              <Link
+                className={styles.main_showing_concert_title}
+                to={`/concert/${mainReviews[currentPosterIndex].concert.id}`}
+              >
+                {mainReviews[currentPosterIndex].concert.title}
+              </Link>
+            </div>
           </>
         )}
       {isMainShowingReviewListLoading ? (
@@ -130,9 +126,12 @@ export default function Main() {
           {mainReviews &&
           mainReviews.length > 0 &&
           mainReviews[currentPosterIndex]
-            ? mainReviews[currentPosterIndex].reviews
-                .slice(0, 2)
-                .map((review) => (
+            ? (() => {
+                const reviews = mainReviews[currentPosterIndex].reviews.slice(
+                  0,
+                  2
+                );
+                return reviews.map((review) => (
                   <Link
                     to={`/review/${review.id}`}
                     key={review.contents}
@@ -140,7 +139,7 @@ export default function Main() {
                   >
                     <blockquote
                       id={`review-${review.id}`}
-                      className={styles.review}
+                      className={`${styles.review} ${reviews.length === 2 ? styles.two_lines : ""}`}
                     >
                       {review.contents}
                     </blockquote>
@@ -152,7 +151,8 @@ export default function Main() {
                       {review.nickname}
                     </cite>
                   </Link>
-                ))
+                ));
+              })()
             : null}
         </div>
       </div>

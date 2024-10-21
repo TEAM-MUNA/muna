@@ -10,9 +10,10 @@ import {
   addConcert,
   getConcertFromFirebase,
   updateConcertBookmark,
+  updateConcertRating,
   updateConcertReview,
 } from "../api/firebase/concertAPI";
-import { UserInteractionType } from "../types/userType";
+import { UserActivityType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
 import { ReviewType } from "../types/reviewType";
 import { addReviewToFirebase } from "../api/firebase/reviewAPI";
@@ -21,14 +22,14 @@ import { uploadReviewImages } from "./imageSlice";
 
 // 사용자 인터렉션
 
-interface InteractionState {
-  userInteraction: UserInteractionType | null;
+interface ActivityState {
+  userActivity: UserActivityType | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
-const initialState: InteractionState = {
-  userInteraction: {
+const initialState: ActivityState = {
+  userActivity: {
     bookmarkedConcerts: [],
     likedReviews: [],
     reviews: [],
@@ -38,13 +39,13 @@ const initialState: InteractionState = {
 };
 
 // 유저 인터랙션 초기화하기 위해 fetch
-// initializeUserInteraction
-export const fetchUserInteraction = createAsyncThunk<
-  UserInteractionType | null,
+// initializeUserActivity
+export const fetchUserActivity = createAsyncThunk<
+  UserActivityType | null,
   string,
   { rejectValue: string }
 >(
-  "interaction/fetchUserInteraction",
+  "activity/fetchUserActivity",
   async (userId: string, { rejectWithValue }) => {
     try {
       const user = await getUserFromFirebase(userId);
@@ -72,7 +73,7 @@ export const bookmarkConcertAsync = createAsyncThunk<
     cancel?: boolean;
   }
 >(
-  "interaction/bookmark",
+  "activity/bookmark",
   async (
     {
       userId,
@@ -117,7 +118,7 @@ export const uploadReviewAsync = createAsyncThunk<
   string[] | undefined,
   { userId: string; review: ReviewType; concert: ConcertType }
 >(
-  "interaction/review",
+  "activity/review",
   async ({ userId, review, concert }, { dispatch, rejectWithValue }) => {
     let downloadUrls: string[] = [];
     let concertId: string | undefined = concert.concertId!;
@@ -149,6 +150,8 @@ export const uploadReviewAsync = createAsyncThunk<
         await updateUserReview(userId, review.reviewId),
         // 4. 공연에 리뷰 추가
         await updateConcertReview(concertId!, review.reviewId),
+        // 5. 공연에 평점 추가
+        await updateConcertRating(concertId!, review.rating),
       ]);
       // 유저 정보에 리뷰를 저장해야됨
       const updatedUser = await getUserFromFirebase(userId);
@@ -159,29 +162,29 @@ export const uploadReviewAsync = createAsyncThunk<
   }
 );
 
-const interactionSlice = createSlice({
-  name: "interaction",
+const activitySlice = createSlice({
+  name: "activity",
   initialState,
   reducers: {
-    setUserInteraction: (
+    setUserActivity: (
       state,
-      action: PayloadAction<InteractionState["userInteraction"]>
+      action: PayloadAction<ActivityState["userActivity"]>
     ) => {
-      state.userInteraction = action.payload;
+      state.userActivity = action.payload;
     },
   },
   extraReducers: (builder) => {
     // 초기화
     builder
-      .addCase(fetchUserInteraction.pending, (state) => {
+      .addCase(fetchUserActivity.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(fetchUserInteraction.fulfilled, (state, action) => {
+      .addCase(fetchUserActivity.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.userInteraction = action.payload; // user interaction 정보 초기화
+        state.userActivity = action.payload; // user activity 정보 초기화
       })
-      .addCase(fetchUserInteraction.rejected, (state, action) => {
+      .addCase(fetchUserActivity.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });
@@ -194,8 +197,8 @@ const interactionSlice = createSlice({
       })
       .addCase(bookmarkConcertAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (state.userInteraction) {
-          state.userInteraction.bookmarkedConcerts = action.payload;
+        if (state.userActivity) {
+          state.userActivity.bookmarkedConcerts = action.payload;
         }
         state.error = null;
       })
@@ -212,8 +215,8 @@ const interactionSlice = createSlice({
       })
       .addCase(uploadReviewAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (state.userInteraction) {
-          state.userInteraction.reviews = action.payload;
+        if (state.userActivity) {
+          state.userActivity.reviews = action.payload;
         }
         state.error = null;
       })
@@ -223,5 +226,5 @@ const interactionSlice = createSlice({
       });
   },
 });
-export const { setUserInteraction } = interactionSlice.actions;
-export default interactionSlice.reducer;
+export const { setUserActivity } = activitySlice.actions;
+export default activitySlice.reducer;
