@@ -32,7 +32,7 @@ const useGetImageDownloadUrl = () => {
       size = 900;
     }
     const canvas = await getResizeImage(imageUrl, size, size);
-    const resizedImageUrl = canvas.toDataURL();
+    const resizedImageUrl = canvas.toDataURL("image/jpeg", 0.8); // JPEG로 변환 및 품질 설정
 
     const storageRef = ref(storage, `${category}/${id}/${Date.now()}`);
     await uploadString(storageRef, resizedImageUrl, "data_url");
