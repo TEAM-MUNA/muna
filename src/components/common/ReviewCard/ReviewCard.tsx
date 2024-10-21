@@ -13,7 +13,6 @@ interface ReviewCardProps extends UserType, ReviewPropType {
 }
 
 export default function ReviewCard({
-  // userLink = defaultUserType.userLink,
   reviewLink = defaultReviewType.reviewLink,
   profileImage = defaultUserType.profileImage,
   nickname = defaultUserType.nickname,
@@ -21,7 +20,7 @@ export default function ReviewCard({
   title = defaultReviewType.title,
   content = defaultReviewType.content,
   date = defaultReviewType.date,
-  thumbnail = defaultReviewType.thumbnail || undefined,
+  thumbnail = undefined,
   starRate = defaultReviewType.starRate || 0,
   likeCount = defaultReviewType.likeCount,
   hasAvatar = true,
