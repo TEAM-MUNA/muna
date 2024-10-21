@@ -63,8 +63,9 @@ export default function ImageSlider({
         centerMode
         autoplay
         infinite
+        autoplaySpeed={5000}
+        speed={1000}
         centerPadding={centerPadding}
-        speed={500}
         beforeChange={(current: number, next: number) => {
           if (next === -1) {
             setCurrentPosterIndex(0);
