@@ -102,21 +102,21 @@
     flex-direction: column;
     justify-content: center;
     margin-top: -42px; // -26px
-    // padding: 50px 23.5px 24px 23.5px;
-    padding: 20px 24px 0px 24px;
+    padding: 20px 24px 0 24px;
     letter-spacing: -0.02em;
-
+    line-height: 1.5;
     .reviews {
       animation: slideUp 0.5s ease-out;
 
       .review {
-        @include text_ellipsis(2);
+        @include text_ellipsis(4);
+        padding: 0px;
         font-size: $font-md;
         margin: 0;
         color: $white;
 
         &.two_lines {
-          @include text_ellipsis(1);
+          @include text_ellipsis(2);
         }
       }
       .nickname {
@@ -134,7 +134,6 @@
 
   .share_your_experience {
     @include full_width;
-    // border-radius: 8px;
     background-color: $primary-lighter;
     padding: 20px 8px;
     margin-top: 36px;
@@ -145,7 +144,6 @@
     margin-bottom: 12px;
   }
 }
-// Main.module.scss
 
 .poster {
   transition:

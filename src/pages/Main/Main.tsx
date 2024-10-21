@@ -105,15 +105,14 @@ export default function Main() {
                 }
               />
             </div>
-            <Button
-              className={styles.main_showing_concert_title}
-              onClick={() =>
-                navigate(
-                  `/concert/${mainReviews[currentPosterIndex].concert.id}`
-                )
-              }
-              label={mainReviews[currentPosterIndex].concert.title}
-            />
+            <div className={styles.wrapper_concert_title}>
+              <Link
+                className={styles.main_showing_concert_title}
+                to={`/concert/${mainReviews[currentPosterIndex].concert.id}`}
+              >
+                {mainReviews[currentPosterIndex].concert.title}
+              </Link>
+            </div>
           </>
         )}
       {isMainShowingReviewListLoading ? (
