@@ -92,7 +92,7 @@ export default function ImageSlider({
             to={currentSlide === index ? `/concert/${image.id}` : "/"}
             onClick={(e) => {
               if (currentSlide === index) {
-                navigate(`/concert${image.id}`);
+                navigate(`/concert/${image.id}`);
               } else {
                 e.preventDefault();
               }
