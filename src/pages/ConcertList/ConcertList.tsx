@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { HeartSpinner } from "react-spinners-kit";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -41,10 +41,6 @@ export default function ConcertList() {
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
   // FireBase ConcertList
   const [fbConcertList, setFbConcertList] = useState<ConcertType[]>([]);
-  // 정렬된 FireBase ConcertList
-  const [sortedFbConcertList, setSortedFbConcertList] = useState<ConcertType[]>(
-    []
-  );
 
   const [genreCode, setGenreCode] = useState<string>("");
   const [pfStateCode, setPfStateCode] = useState<string>("");
@@ -79,18 +75,18 @@ export default function ConcertList() {
       const allConcerts = await fetchConcertsFromFirebase();
       setFbConcertList(allConcerts);
       // 초기 정렬 설정
-      setSortedFbConcertList(sortConcerts(allConcerts, sortOrder));
     };
     fetchAllConcerts(); // 처음 한번 호출
   }, []); // 빈 배열이므로 처음에만 실행
 
   // sortOrder가 변경될 때마다 정렬만 수행
-  useEffect(() => {
+  // 정렬된 FireBase ConcertList를 useMemo로 관리
+  const sortedFbConcertList: ConcertType[] = useMemo(() => {
     if (fbConcertList.length > 0) {
-      // 최신의 sortOrder를 참조하여 정렬
-      setSortedFbConcertList((prevList) => sortConcerts(prevList, sortOrder));
+      return sortConcerts(fbConcertList, sortOrder);
     }
-  }, [sortOrder, fbConcertList]);
+    return [];
+  }, [fbConcertList, sortOrder]);
 
   // 컴포넌트가 언마운트될 때 검색어 초기화
   useEffect(
@@ -115,7 +111,7 @@ export default function ConcertList() {
     };
 
     fetchData();
-  }, [page, keyword, genreCode]);
+  }, [page, keyword, genreCode, pfStateCode, regionCodes]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
@@ -231,8 +227,14 @@ export default function ConcertList() {
         </p>
       ) : (
         <ul className={isLoading ? styles.faded : ""}>
-          {sortedFbConcertList.map(renderConcertItem)}
-          {concertList.map(renderConcertItem)}
+          {["북마크순", "리뷰순", "평점순"].includes(sortOrder) ? (
+            <>
+              {sortedFbConcertList.map(renderConcertItem)}
+              {concertList.map(renderConcertItem)}
+            </>
+          ) : (
+            concertList.map(renderConcertItem)
+          )}
         </ul>
       )}
     </>
