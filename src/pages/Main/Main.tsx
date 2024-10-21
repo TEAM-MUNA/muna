@@ -110,9 +110,15 @@ export default function Main() {
                 }
               />
             </div>
-            <p className={styles.main_showing_concert_title}>
-              {mainReviews[currentPosterIndex].concert.title}
-            </p>
+            <Button
+              className={styles.main_showing_concert_title}
+              onClick={() =>
+                navigate(
+                  `/concert/${mainReviews[currentPosterIndex].concert.id}`
+                )
+              }
+              label={mainReviews[currentPosterIndex].concert.title}
+            />
           </>
         )}
       {isMainShowingReviewListLoading ? (
