@@ -93,6 +93,7 @@ export default function ReviewDetail() {
         <div className={styles.review_title}>
           {review && (
             <ReviewTitle
+              nickname={review.author.nickname}
               title={review.concert.title}
               isMine={review.author.id === userId}
               concertId={review.concert.id}
