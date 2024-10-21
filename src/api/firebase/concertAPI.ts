@@ -7,6 +7,7 @@ import {
   DocumentData,
   getDoc,
   getDocs,
+  runTransaction,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -115,7 +116,40 @@ export const updateConcertReview = async (
   });
 };
 
-export const a = () => 0;
+export const updateConcertRating = async (
+  concertId: string,
+  rating: number | undefined
+) => {
+  const concertsDocRef = doc(db, "concerts", concertId);
+
+  if (!rating) {
+    // 평점 없으면 리턴
+    return;
+  }
+  await runTransaction(db, async (transaction) => {
+    const concertDoc = await transaction.get(concertsDocRef);
+
+    if (!concertDoc.exists()) {
+      return;
+    }
+
+    const existingData = concertDoc.data();
+    const existingRatings = existingData.ratings || [];
+
+    // 1. 평점 배열에 추가
+    const updatedRatings = [...existingRatings, rating];
+
+    // 2. 평점 계산
+    const averageRating =
+      updatedRatings.reduce((total, rate) => total + rate, 0) /
+      updatedRatings.length;
+
+    transaction.update(concertsDocRef, {
+      ratings: updatedRatings,
+      averageRating,
+    });
+  });
+};
 
 // 콘서트 아이디 배열로 콘서트의 title과 poster 정보만 가져오기
 export const getConcertsForBookmarkList = async (

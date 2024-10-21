@@ -10,6 +10,7 @@ import {
   addConcert,
   getConcertFromFirebase,
   updateConcertBookmark,
+  updateConcertRating,
   updateConcertReview,
 } from "../api/firebase/concertAPI";
 import { UserInteractionType } from "../types/userType";
@@ -149,6 +150,8 @@ export const uploadReviewAsync = createAsyncThunk<
         await updateUserReview(userId, review.reviewId),
         // 4. 공연에 리뷰 추가
         await updateConcertReview(concertId!, review.reviewId),
+        // 5. 공연에 평점 추가
+        await updateConcertRating(concertId!, review.rating),
       ]);
       // 유저 정보에 리뷰를 저장해야됨
       const updatedUser = await getUserFromFirebase(userId);
