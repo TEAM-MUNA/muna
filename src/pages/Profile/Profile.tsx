@@ -300,7 +300,7 @@ export default function Profile() {
               iconOnly={<QueueListIcon />}
               onClick={handleViewButton}
               className={
-                activeView === "list" ? "text_black" : "text_black_lighter"
+                activeView === "list" ? "text_primary" : "text_black_lighter"
               }
             />
             <Button
@@ -309,7 +309,7 @@ export default function Profile() {
               iconOnly={<GalleryIcon />}
               onClick={handleViewButton}
               className={
-                activeView === "grid" ? "text_black" : "text_black_lighter"
+                activeView === "grid" ? "text_primary" : "text_black_lighter"
               }
             />
           </div>
