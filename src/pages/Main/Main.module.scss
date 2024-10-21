@@ -103,7 +103,7 @@
     justify-content: center;
     margin-top: -42px; // -26px
     // padding: 50px 23.5px 24px 23.5px;
-    padding: 20px 24px 12px 24px;
+    padding: 20px 24px 0px 24px;
     letter-spacing: -0.02em;
 
     .reviews {
@@ -114,6 +114,10 @@
         font-size: $font-md;
         margin: 0;
         color: $white;
+
+        &.two_lines {
+          @include text_ellipsis(1);
+        }
       }
       .nickname {
         color: $white-lighter;

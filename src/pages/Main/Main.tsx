@@ -130,9 +130,12 @@ export default function Main() {
           {mainReviews &&
           mainReviews.length > 0 &&
           mainReviews[currentPosterIndex]
-            ? mainReviews[currentPosterIndex].reviews
-                .slice(0, 2)
-                .map((review) => (
+            ? (() => {
+                const reviews = mainReviews[currentPosterIndex].reviews.slice(
+                  0,
+                  2
+                );
+                return reviews.map((review) => (
                   <Link
                     to={`/review/${review.id}`}
                     key={review.contents}
@@ -140,7 +143,7 @@ export default function Main() {
                   >
                     <blockquote
                       id={`review-${review.id}`}
-                      className={styles.review}
+                      className={`${styles.review} ${reviews.length === 2 ? styles.two_lines : ""}`}
                     >
                       {review.contents}
                     </blockquote>
@@ -152,7 +155,8 @@ export default function Main() {
                       {review.nickname}
                     </cite>
                   </Link>
-                ))
+                ));
+              })()
             : null}
         </div>
       </div>
