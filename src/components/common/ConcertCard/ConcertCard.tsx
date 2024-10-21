@@ -68,10 +68,12 @@ export default function ConcertCard({ concert, fbConcert }: ConcertCardProps) {
             {(fbConcert?.averageRating || fbData.averageRating) && (
               <div className={styles.tag}>
                 <StarIcon size='14' />
-                <span>{fbConcert?.averageRating || fbData.averageRating}</span>
+                <span>
+                  {fbConcert?.averageRating || fbData.averageRating || null}
+                </span>
               </div>
             )}
-            {(fbConcert?.bookmarkedBy || fbData.bookmarkedBy) && (
+            {(fbConcert?.bookmarkedBy || fbData.bookmarkedBy || null) && (
               <div className={styles.tag}>
                 <BookmarkIcon size='14' />
                 <span>
@@ -80,7 +82,7 @@ export default function ConcertCard({ concert, fbConcert }: ConcertCardProps) {
                 </span>
               </div>
             )}
-            {(fbConcert?.reviews || fbData.reviews) && (
+            {(fbConcert?.reviews || fbData.reviews || null) && (
               <div className={styles.tag}>
                 <ReviewIcon size='14' />
                 <span>
