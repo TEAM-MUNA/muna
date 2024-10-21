@@ -32,18 +32,6 @@ export default function ReviewDetail() {
   const [translate, setTranslate] = useState(0);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (review && review.author.id !== userId) {
-      navigate(`/some-other-page`);
-    }
-    if (review && review.author.nickname !== nickname) {
-      navigate(`/some-other-page`);
-    }
-    if (review && review.author.profileImage !== profileImage) {
-      navigate(`/some-other-page`);
-    }
-  }, [review, userId, navigate]);
-
   // 후기 이미지 슬라이드
   const handleDotClick = (index: number) => {
     setCurrentImageIndex(index);
@@ -120,7 +108,7 @@ export default function ReviewDetail() {
             nickname={review?.author.nickname}
             userId={review?.author.id}
             profileImage={review?.author.profileImage}
-            watchDate={review?.date}
+            watchDate={review?.date.replace(/-/g, ".")}
             userLink={`/profile/${review?.author.id}`}
           />
           <StarTag rating={review?.rating} />
