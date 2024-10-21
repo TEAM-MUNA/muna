@@ -265,7 +265,7 @@ export default function ConcertDetail() {
                   <>
                     <StarScoreOnlyIcon rating={concert.averageRating} />
                     <p className={styles.rating_text}>
-                      평점 {concert.averageRating}
+                      평점 {concert.averageRating.toFixed(1)}
                     </p>
                   </>
                 ) : (
