@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { bookmarkConcertAsync } from "../../slices/interactionSlice";
@@ -264,10 +264,14 @@ export default function ConcertDetail() {
                     </p>
                   </>
                 ) : (
-                  <Link to='/review' className={styles.review_link}>
+                  <button
+                    onClick={goToReviewEditPage}
+                    className={styles.review_link}
+                    type='button'
+                  >
                     <StarScoreOnlyIcon rating={null} />
                     <p className={styles.rating_text_gray}>평점 주기</p>
-                  </Link>
+                  </button>
                 )}
               </span>
             </div>
