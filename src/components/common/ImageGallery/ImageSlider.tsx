@@ -62,8 +62,9 @@ export default function ImageSlider({
         centerMode
         autoplay
         infinite
-        centerPadding={centerPadding}
+        autoplaySpeed={5000}
         speed={1000}
+        centerPadding={centerPadding}
         beforeChange={(current: number, next: number) => {
           if (next === -1) {
             setCurrentPosterIndex(0);
@@ -91,7 +92,7 @@ export default function ImageSlider({
             to={currentSlide === index ? `/concert/${image.id}` : "/"}
             onClick={(e) => {
               if (currentSlide === index) {
-                navigate(`/concert${image.id}`);
+                navigate(`/concert/${image.id}`);
               } else {
                 e.preventDefault();
               }

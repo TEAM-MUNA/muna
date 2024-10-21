@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
 
@@ -8,6 +8,7 @@ import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
 import GenreButtons from "../../components/common/GenreButtons/GenreButtons";
+import Button from "../../components/common/Button/Button";
 
 interface MainReviewType {
   concert: {
@@ -19,6 +20,7 @@ interface MainReviewType {
 }
 
 export default function Main() {
+  const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
@@ -103,11 +105,15 @@ export default function Main() {
                 }
               />
             </div>
-            <div className={styles.wrapper_concert_title}>
-              <h3 className={styles.main_showing_concert_title}>
-                {mainReviews[currentPosterIndex].concert.title}
-              </h3>
-            </div>
+            <Button
+              className={styles.main_showing_concert_title}
+              onClick={() =>
+                navigate(
+                  `/concert/${mainReviews[currentPosterIndex].concert.id}`
+                )
+              }
+              label={mainReviews[currentPosterIndex].concert.title}
+            />
           </>
         )}
       {isMainShowingReviewListLoading ? (
