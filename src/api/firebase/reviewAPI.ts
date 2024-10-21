@@ -106,6 +106,7 @@ export const addReviewToFirebase = async (review: ReviewType) => {
 // 프로필 변경시, 작성한 리뷰의 author 정보 업데이트
 export const updateAuthorProfileInReviews = async (
   reviewIds: string[] | undefined,
+  userId: string,
   nickname: string,
   profileImage: string | null
 ) => {
@@ -120,6 +121,7 @@ export const updateAuthorProfileInReviews = async (
     // 파이어베이스에서 리뷰 업데이트
     await updateDoc(reviewDocRef, {
       author: {
+        id: userId,
         nickname,
         profileImage: profileImage || "",
       },

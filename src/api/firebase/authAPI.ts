@@ -89,6 +89,7 @@ export const updateUserOnDoc = async (
 ) => {
   const userRef = doc(db, "users", user.uid);
   await updateDoc(userRef, {
+    userId: user.uid,
     nickname,
     profileImage,
   });
