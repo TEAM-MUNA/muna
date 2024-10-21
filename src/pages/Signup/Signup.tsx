@@ -70,11 +70,11 @@ export default function Signup() {
 
     try {
       incrementRequestCount("Signup handleSignup");
+      navigate("/");
       await dispatch(
         signupAsync({ email, password, nickname, profileImage })
       ).unwrap();
       toast.success("회원가입에 성공하였습니다.", { id: loadingToastId });
-      navigate("/");
     } catch (error) {
       if (typeof error === "string") {
         if (error.includes("email-already-in-use")) {
