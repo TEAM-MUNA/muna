@@ -10,7 +10,7 @@ import styles from "./Login.module.scss";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
-import { emailRegex, passwordRegex } from "../../utils/validations";
+import { emailRegex } from "../../utils/validations";
 import { placeholder } from "../../utils/constants/placeholder";
 import { useRequestContext } from "../../context/RequestContext";
 import useUserRedirect from "../../hooks/useUserRedirect";
@@ -21,7 +21,9 @@ export default function Login() {
     value: email,
     onChange: onEmailChange,
     error: emailError,
-  } = useInput("");
+  } = useInput("", (value) =>
+    emailRegex.test(value) ? null : "유효한 이메일을 입력해 주세요."
+  );
   const {
     value: password,
     onChange: onPasswordChange,
