@@ -14,7 +14,7 @@ function StarTag({ rating }: StarTagProps) {
 
   return (
     <div className={styles.star_tag}>
-      <StarIcon />
+      <StarIcon size='14' />
       <span>{fixedRating}</span>
     </div>
   );
