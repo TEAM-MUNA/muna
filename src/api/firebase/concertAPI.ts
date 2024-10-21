@@ -61,9 +61,7 @@ export const getConcertsFromFirebase = async (
 // Firebase concerts 컬렉션에 공연 추가
 export const addConcert = async (concert: ConcertType) => {
   const docRef = doc(db, "concerts", concert.concertId!);
-  await setDoc(docRef, {
-    ...concert,
-  });
+  await setDoc(docRef, concert);
   return concert.concertId;
 };
 
@@ -106,6 +104,16 @@ export const updateConcertBookmark = async (
     await deleteInactiveConcert(concertId);
   });
 };
+// TODO: update 함수 합치기(refactor)
+export const updateConcertReview = async (
+  concertId: string,
+  reviewId: string
+) => {
+  const concertsDocRef = doc(db, "concerts", concertId);
+  await updateDoc(concertsDocRef, {
+    reviews: arrayUnion(reviewId),
+  });
+};
 
 export const a = () => 0;
 
@@ -143,4 +151,48 @@ export const getConcertsForBookmarkList = async (
     // console.error("콘서트 타이틀, 포스터 정보를 가져오는데 실패함:", error);
     return {};
   }
+};
+
+// Firebase에서 공연 데이터를 불러오는 함수
+export const fetchConcertsFromFirebase = async (): Promise<ConcertType[]> => {
+  const querySnapshot = await getDocs(collection(db, "concerts"));
+  const concertList: ConcertType[] = [];
+
+  querySnapshot.forEach((fbdoc) => {
+    const data = fbdoc.data() as ConcertType;
+    concertList.push(data);
+  });
+
+  return concertList;
+};
+
+// 파이어 베이스에서 불러온 공연 리스트 정렬하는 함수
+export const sortConcerts = (
+  list: ConcertType[],
+  sortOrder: string
+): ConcertType[] => {
+  // 리스트가 없거나 비어 있으면 그대로 반환
+  if (!list || list.length === 0) return list;
+
+  // 정렬 조건에 따라 정렬
+  const sortedConcerts = list.sort((A, B) => {
+    if (sortOrder === "북마크순") {
+      const aBookmarks = A.bookmarkedBy?.length || 0;
+      const bBookmarks = B.bookmarkedBy?.length || 0;
+      return bBookmarks - aBookmarks;
+    }
+    if (sortOrder === "리뷰순") {
+      const aReviews = A.reviews?.length || 0;
+      const bReviews = B.reviews?.length || 0;
+      return bReviews - aReviews;
+    }
+    if (sortOrder === "평점순") {
+      const aRating = A.averageRating || 0;
+      const bRating = B.averageRating || 0;
+      return bRating - aRating;
+    }
+    return 0; // 기본 정렬은 없음
+  });
+
+  return sortedConcerts;
 };

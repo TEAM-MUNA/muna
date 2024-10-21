@@ -12,9 +12,9 @@
   position: relative;
   flex: 1;
   .review_title {
-    width: calc(100% + 40px);
+    @include full_width;
+    position: -webkit-sticky;
     position: sticky;
-    margin: 0 -20px;
   }
 }
 .review_avatar {
@@ -57,6 +57,7 @@
   }
   .review_imageBox {
     display: flex;
+    width: fit-content;
     .review_images {
       display: flex;
       align-items: center;
@@ -87,11 +88,4 @@
     letter-spacing: -2%;
     color: $black;
   }
-}
-.review_bar {
-  position: sticky;
-  width: calc(100% + 40px);
-  bottom: 0;
-  background-color: $white;
-  @include fixed_bottom;
 }

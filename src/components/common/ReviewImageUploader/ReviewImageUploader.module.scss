@@ -1,6 +1,22 @@
 @import "../../../styles/_variables";
 @import "../../../styles/_mixin";
 
+@mixin scroll-bar {
+  &::-webkit-scrollbar {
+    height: 20px;
+    &-track {
+      background: none;
+    }
+    &-thumb {
+      border-radius: 9999px;
+      background-clip: padding-box;
+      border: 6px solid transparent;
+
+      background-color: $line-lighter;
+    }
+  }
+}
+
 @mixin image-box {
   width: 120px;
   height: 120px;
@@ -22,10 +38,12 @@
   }
 
   .preview_list_container {
+    @include scroll-bar;
+
     display: flex;
     gap: 12px;
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
 
     .preview_container {
       @include image-box;
@@ -37,6 +55,7 @@
       position: relative;
 
       .remove {
+        color: $white;
         background-color: transparent !important;
         position: absolute;
         right: 0;

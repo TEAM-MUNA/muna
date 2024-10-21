@@ -21,7 +21,7 @@ body {
   background: $white;
   // height: 100%;
   max-width: $page-x-max;
-  padding: 0 20px 40px;
+  padding: 0 16px 40px;
   margin: 0 auto;
   border: 1px solid transparent;
   // overflow-y: auto; // 설정금지 - sticky 작동 안함
@@ -122,6 +122,13 @@ dd {
     gap: 10px;
     justify-content: center;
   }
+}
+
+span.divider {
+  display: inline-flex;
+  margin: 2px 0.4em -2px;
+  border-right: 1px solid $line-light;
+  height: 1em;
 }
 
 button.btn_link,

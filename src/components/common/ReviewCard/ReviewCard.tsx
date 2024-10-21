@@ -21,14 +21,16 @@ export default function ReviewCard({
   title = defaultReviewType.title,
   content = defaultReviewType.content,
   date = defaultReviewType.date,
-  thumbnail = defaultReviewType.thumbnail,
-  starRate = defaultReviewType.starRate,
+  thumbnail = defaultReviewType.thumbnail || undefined,
+  starRate = defaultReviewType.starRate || 0,
   likeCount = defaultReviewType.likeCount,
   hasAvatar = true,
 }: ReviewCardProps) {
   const location = useLocation();
   const pathname = location.pathname;
   const page = pathname.split("/")[1] || "main";
+
+  const dateOnly = new Date(date).toISOString().split("T")[0];
 
   return (
     <div className={`${styles.card} card_review page_${page}`}>
@@ -54,16 +56,22 @@ export default function ReviewCard({
             {page !== "main" && (
               <div className={styles.info}>
                 <div className={styles.wrap_icon}>
-                  <span className={styles.icon}>
-                    <StarIcon size='14' />
-                    {starRate.toFixed(1)}
-                  </span>
-                  <span className={styles.icon}>
-                    <LikeIcon size='14' />
-                    {likeCount}
-                  </span>
+                  {typeof starRate === "number" ? (
+                    <span className={styles.icon}>
+                      <StarIcon size='14' />
+                      {starRate.toFixed(1)}
+                    </span>
+                  ) : null}
+                  {likeCount > 0 ? (
+                    <span className={styles.icon}>
+                      <LikeIcon size='14' />
+                      {likeCount}
+                    </span>
+                  ) : null}
                 </div>
-                <span className={styles.date}>{date}</span>
+                <span className={styles.date}>
+                  {dateOnly.replace(/-/g, ".")}
+                </span>
               </div>
             )}
           </div>

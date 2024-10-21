@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { HeartSpinner } from "react-spinners-kit";
+import { Link } from "react-router-dom";
 import styles from "./Main.module.scss";
 import StarScoreOnlyIcon from "../../components/common/StarScoreOnlyIcon/StarScoreOnlyIcon";
-import Button from "../../components/common/Button/Button";
+
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewCard from "../../components/common/ReviewCard/ReviewCard";
-import { genreMap } from "../../utils/constants/genreData";
 import useGetReviewList from "../../hooks/useGetReviewList";
 import ImageSlider from "../../components/common/ImageGallery/ImageSlider";
+import GenreButtons from "../../components/common/GenreButtons/GenreButtons";
 
 interface MainReviewType {
   concert: {
@@ -19,7 +19,6 @@ interface MainReviewType {
 }
 
 export default function Main() {
-  const navigate = useNavigate();
   const {
     reviewList: popularReviewList,
     isLoading: isPopularReviewListLoading,
@@ -82,12 +81,6 @@ export default function Main() {
     }
   }, [isMainShowingReviewListLoading, mainShowingReviewList]);
 
-  const goToConcertList = (code: string) => {
-    const navigateUrl =
-      code.length === 0 ? `/concert` : `/concert?genre=${code}`;
-    navigate(navigateUrl);
-  };
-
   return (
     <section className={styles.main}>
       <h2 className='sr_only'>메인</h2>
@@ -110,15 +103,15 @@ export default function Main() {
                 }
               />
             </div>
-            <p className={styles.main_showing_concert_title}>
-              {mainReviews[currentPosterIndex].concert.title}
-            </p>
+            <div className={styles.wrapper_concert_title}>
+              <h3 className={styles.main_showing_concert_title}>
+                {mainReviews[currentPosterIndex].concert.title}
+              </h3>
+            </div>
           </>
         )}
       {isMainShowingReviewListLoading ? (
-        <div className={styles.loading_imageSlider}>
-          <HeartSpinner size={40} color='#c9a8ff' />
-        </div>
+        <LoadingSpinner />
       ) : (
         <ImageSlider
           images={mainReviews.map((reviews) => reviews.concert)}
@@ -126,53 +119,45 @@ export default function Main() {
         />
       )}
 
-      <div className={styles.main_showing_concert_reviews}>
-        {mainReviews &&
-        mainReviews.length > 0 &&
-        mainReviews[currentPosterIndex]
-          ? mainReviews[currentPosterIndex].reviews.map((review) => (
-              <Link
-                to={`/review/${review.id}`}
-                key={review.contents}
-                className={styles.reviews}
-              >
-                <blockquote
-                  id={`review-${review.id}`}
-                  className={styles.review}
-                >
-                  {review.contents}
-                </blockquote>
-                <cite
-                  id={`review-author-${review.id}`}
-                  className={styles.nickname}
-                  aria-labelledby={`review-${review.id} review-author-${review.id}`}
-                >
-                  {review.nickname}
-                </cite>
-              </Link>
-            ))
-          : null}
+      <div className={styles.wrapper_main_showing}>
+        <div className={styles.main_showing_concert_reviews}>
+          {mainReviews &&
+          mainReviews.length > 0 &&
+          mainReviews[currentPosterIndex]
+            ? mainReviews[currentPosterIndex].reviews
+                .slice(0, 2)
+                .map((review) => (
+                  <Link
+                    to={`/review/${review.id}`}
+                    key={review.contents}
+                    className={styles.reviews}
+                  >
+                    <blockquote
+                      id={`review-${review.id}`}
+                      className={styles.review}
+                    >
+                      {review.contents}
+                    </blockquote>
+                    <cite
+                      id={`review-author-${review.id}`}
+                      className={styles.nickname}
+                      aria-labelledby={`review-${review.id} review-author-${review.id}`}
+                    >
+                      {review.nickname}
+                    </cite>
+                  </Link>
+                ))
+            : null}
+        </div>
       </div>
-      <div className={styles.category_nav}>
-        {Object.entries(genreMap).map(([genre, code]) => (
-          <Button
-            key={code}
-            label={genre === "전체" ? "모든 공연 보기" : genre}
-            color='default'
-            size='md'
-            className={code === "" ? styles.fullWidth : ""}
-            onClick={() => {
-              goToConcertList(code);
-            }}
-          />
-        ))}
-      </div>
+
+      <GenreButtons />
       <div className={styles.share_your_experience}>
         최근 관람한 공연이 있나요?
         <br />
         후기를 공유하고 감동을 나눠보세요!
       </div>
-      {isPopularReviewListLoading && <HeartSpinner />}
+      {isPopularReviewListLoading && <LoadingSpinner />}
       {popularReviewListError && (
         <p className={styles.error}>리뷰를 불러오는 중 문제가 발생했습니다.</p>
       )}

@@ -1,0 +1,30 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.category_nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 8px;
+  column-gap: 12px;
+
+  &.main {
+    margin-top: 36px;
+  }
+
+  // 서치페이지에 있는 장르버튼
+  &.search {
+    margin-bottom: 24px;
+    border-bottom: 1px solid $line-light;
+    padding: 20px 0;
+
+    // 최근검색어 없을때
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:not(:first-child) {
+      margin-top: 16px;
+      border-top: 1px solid $line-light;
+    }
+  }
+}

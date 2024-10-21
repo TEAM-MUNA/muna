@@ -20,14 +20,15 @@ export const getReviewListFromFirebase = async (
   criteria?: string // 정렬 기준
 ): Promise<DocumentData | undefined> => {
   const docRef = collection(db, "reviews");
-  let q;
+  let q = query(docRef);
 
   if (criteria) {
     // 인기 리뷰 (메인 페이지에서 보여줌)
     q = query(docRef, orderBy(criteria, "desc"), limit(10)); // length도 옵션으로 받기
-  } else {
+  }
+  if (concertId) {
     // 특정 공연에 해당하는 리뷰
-    q = query(docRef, where("concertId", "==", concertId));
+    q = query(docRef, where("concert.id", "==", concertId));
   }
 
   const querySnapshot = await getDocs(q);

@@ -2,6 +2,7 @@
 @import "../../../styles/_mixin";
 
 .container {
+  @include fixed_bottom;
   width: 100%;
   padding: 4px 10px;
   border-top: 1px solid $line-light;

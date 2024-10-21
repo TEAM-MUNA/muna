@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
 import {
   useLocation,
   BrowserRouter as Router,
@@ -7,6 +6,7 @@ import {
   Routes,
 } from "react-router-dom";
 import RequestProvider from "./context/RequestContext";
+import ToastPortal from "./components/common/ToastPortal/ToastPortal";
 
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
@@ -45,26 +45,28 @@ function App() {
   }, []);
 
   return (
-    <RequestProvider>
-      <Router>
-        <AppHeader />
-        <Routes>
-          <Route path='/' element={<Main />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/search' element={<Search />} />
-          <Route path='/concert' element={<ConcertList />} />
-          <Route path='/concert/:id' element={<ConcertDetail />} />
-          <Route path='/review/edit/:id' element={<ReviewEdit />} />
-          <Route path='/review/:id' element={<ReviewDetail />} />
-          <Route path='/profile/:userId' element={<Profile />} />
-          <Route path='/settings' element={<Settings />} />
-          <Route path='/settings-profile' element={<SettingsProfile />} />
-          <Route path='/settings-password' element={<SettingsPassword />} />
-        </Routes>
-      </Router>
-      <Toaster />
-    </RequestProvider>
+    <>
+      <RequestProvider>
+        <Router>
+          <AppHeader />
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/search' element={<Search />} />
+            <Route path='/concert' element={<ConcertList />} />
+            <Route path='/concert/:id' element={<ConcertDetail />} />
+            <Route path='/review/edit/:id' element={<ReviewEdit />} />
+            <Route path='/review/:id' element={<ReviewDetail />} />
+            <Route path='/profile/:userId' element={<Profile />} />
+            <Route path='/settings' element={<Settings />} />
+            <Route path='/settings-profile' element={<SettingsProfile />} />
+            <Route path='/settings-password' element={<SettingsPassword />} />
+          </Routes>
+        </Router>
+      </RequestProvider>
+      <ToastPortal />
+    </>
   );
 }
 

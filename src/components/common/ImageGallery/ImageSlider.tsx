@@ -4,6 +4,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import "./ImageSlider.scss";
 import { Link, useNavigate } from "react-router-dom";
+import ArrowLeftIcon from "../../../assets/svg/ArrowLeftIcon";
+import ArrowRightIcon from "../../../assets/svg/ArrowRightIcon";
 
 export interface SliderPosterType {
   id: string;
@@ -37,7 +39,6 @@ export default function ImageSlider({
 
   const goToSlide = () => {
     if (sliderRef.current) {
-      // console.log("go to slide");
       sliderRef.current.slickGoTo(0);
     }
   };
@@ -62,7 +63,7 @@ export default function ImageSlider({
         autoplay
         infinite
         centerPadding={centerPadding}
-        speed={500}
+        speed={1000}
         beforeChange={(current: number, next: number) => {
           if (next === -1) {
             setCurrentPosterIndex(0);
@@ -72,6 +73,16 @@ export default function ImageSlider({
           setCurrentPosterIndex(next);
           setCurrentSlide(next);
         }}
+        nextArrow={
+          <span>
+            <ArrowRightIcon size='24' />
+          </span>
+        }
+        prevArrow={
+          <div>
+            <ArrowLeftIcon size='24' />
+          </div>
+        }
       >
         {images.map((image, index) => (
           <Link

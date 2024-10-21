@@ -10,12 +10,14 @@ import Button from "../../components/common/Button/Button";
 import { signupAsync } from "../../slices/authSlice";
 import { emailRegex, passwordRegex } from "../../utils/validations";
 import useInput from "../../hooks/useInput";
-import { uploadProfileImage } from "../../slices/imageSlice";
+// import { uploadProfileImage } from "../../slices/imageSlice";
 import { errorMessages } from "../../utils/constants/errorMessages";
 import { placeholder } from "../../utils/constants/placeholder";
 import { useRequestContext } from "../../context/RequestContext";
+import useUserRedirect from "../../hooks/useUserRedirect";
 
 export default function Signup() {
+  useUserRedirect();
   const dispatch = useDispatch<AppDispatch>();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const navigate = useNavigate();
