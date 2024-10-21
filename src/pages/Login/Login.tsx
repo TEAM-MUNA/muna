@@ -5,16 +5,18 @@ import { FirebaseError } from "firebase/app";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { loginAsync } from "../../slices/authSlice";
-import logo from "../../assets/img/logo.png";
+import Logo from "../../assets/img/logo";
 import styles from "./Login.module.scss";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
 import useInput from "../../hooks/useInput";
-import { emailRegex, passwordRegex } from "../../utils/validations";
+import { emailRegex } from "../../utils/validations";
 import { placeholder } from "../../utils/constants/placeholder";
 import { useRequestContext } from "../../context/RequestContext";
+import useUserRedirect from "../../hooks/useUserRedirect";
 
 export default function Login() {
+  useUserRedirect();
   const {
     value: email,
     onChange: onEmailChange,
@@ -26,11 +28,7 @@ export default function Login() {
     value: password,
     onChange: onPasswordChange,
     error: passwordError,
-  } = useInput("", (value) =>
-    passwordRegex.test(value)
-      ? null
-      : "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다."
-  );
+  } = useInput("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { incrementRequestCount } = useRequestContext();
@@ -71,7 +69,8 @@ export default function Login() {
     <article className={styles.login}>
       <header className={styles.header}>
         <h1>
-          <img width={107} src={logo} alt='muna 로고' />
+          {/* <img width={107} src={logo} alt='muna 로고' /> */}
+          <Logo height={34} />
         </h1>
         <p className={styles.slogan}>우리들의 문화생활, 무나</p>
       </header>

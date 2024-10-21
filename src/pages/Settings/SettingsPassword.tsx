@@ -69,23 +69,24 @@ export default function SettingsPassword() {
       return;
     }
 
-    const loadingToastId = toast.loading("비밀번호 변경 중...");
+    // 로딩 중임을 알리는 토스트
+    toast.loading("비밀번호 변경 중...");
 
     try {
       const isReauthenticated = await ReauthenticateFromFirebase(password);
       if (isReauthenticated) {
         await dispatch(updatePasswordAsync({ newPassword })).unwrap();
-
-        toast.success("비밀번호가 변경되었습니다.", { id: loadingToastId });
+        toast.dismiss();
+        toast.success("비밀번호가 변경되었습니다.");
         navigate("/settings");
       }
     } catch (error) {
       if (typeof error === "string") {
-        toast.error(error, { id: loadingToastId });
+        toast.dismiss();
+        toast.error(error);
       } else {
-        toast.error("비밀번호 변경 중 에러가 발생했습니다.", {
-          id: loadingToastId,
-        });
+        toast.dismiss();
+        toast.error("비밀번호 변경 중 에러가 발생했습니다.");
       }
     }
   };

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import LikeButton from "../Button/LikeButton";
 import styles from "./ReviewBar.module.scss";
-import { ReviewPropType } from "../../../types/reviewType";
+import { ReviewType } from "../../../types/reviewType";
 
 interface ReviewBarProps {
-  review: ReviewPropType;
+  review: ReviewType | null;
 }
 
 export default function ReviewBar({ review }: ReviewBarProps) {
@@ -16,7 +16,7 @@ export default function ReviewBar({ review }: ReviewBarProps) {
 
   return (
     <div className={styles.container}>
-      <LikeButton likeCount={review.likeCount} />
+      <LikeButton likeCount={review?.likeCount} />
     </div>
   );
 }

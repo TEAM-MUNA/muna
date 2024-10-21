@@ -213,6 +213,7 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
 }
 
 export default function Profile() {
+  const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
   const currentUserId = useCurrentUser().userId;
   const { profile, isLoading } = useProfile(userId);
@@ -265,8 +266,9 @@ export default function Profile() {
     return <LoadingSpinner />;
   }
   if (!profile) {
-    // TODO: 리다이렉트 처리할지?
-    return <p>Error: 존재하지 않는 회원</p>;
+    // TODO: 404 페이지 or 토스트
+    navigate("/");
+    return null;
   }
   return (
     <div>

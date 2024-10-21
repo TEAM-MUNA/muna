@@ -39,7 +39,6 @@ export default function ImageSlider({
 
   const goToSlide = () => {
     if (sliderRef.current) {
-      // console.log("go to slide");
       sliderRef.current.slickGoTo(0);
     }
   };

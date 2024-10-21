@@ -2,10 +2,9 @@
 @import "../../../styles/_mixin";
 
 .header {
-  width: calc(100% + 40px);
+  @include full_width;
   height: 54px;
-  margin: 0 -20px;
-  padding: 5px 20px;
+  padding: 5px 16px;
   display: flex;
   position: -webkit-sticky;
   position: sticky;

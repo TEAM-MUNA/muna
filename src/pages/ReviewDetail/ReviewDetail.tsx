@@ -4,24 +4,27 @@ import React, {
   useEffect,
   MouseEvent as ReactMouseEvent,
 } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import useCurrentUser from "../../hooks/useCurrentUser";
 import styles from "./ReviewDetail.module.scss";
 import ReviewTitle from "../../components/common/ReviewTitle/ReviewTitle";
 import ReviewAvatar from "../../components/common/Avatar/ReviewAvatar";
 import StarTag from "../../components/common/StarTag/StarTag";
 import ReviewBar from "../../components/common/ReviewBar/ReviewBar";
-import { ReviewPropType, defaultReviewType } from "../../types/reviewType";
+import useGetReview from "../../hooks/useGetReview";
 
 export default function ReviewDetail() {
-  const reviewData: ReviewPropType = {
-    title: defaultReviewType.title,
-    content: defaultReviewType.content,
-    date: defaultReviewType.date,
-    starRate: defaultReviewType.starRate,
-    likeCount: defaultReviewType.likeCount,
-    thumbnail: defaultReviewType.thumbnail,
-    images: defaultReviewType.images,
-    reviewLink: "#",
-  };
+  const location = useLocation();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const { userId, nickname, profileImage } = useCurrentUser();
+
+  const {
+    review,
+    // isLoading: isReviewLoading,
+    // error: reviewError,
+  } = useGetReview(id);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [startX, setStartX] = useState(0);
@@ -29,6 +32,19 @@ export default function ReviewDetail() {
   const [translate, setTranslate] = useState(0);
   const imageRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (review && review.author.id !== userId) {
+      navigate(`/some-other-page`);
+    }
+    if (review && review.author.nickname !== nickname) {
+      navigate(`/some-other-page`);
+    }
+    if (review && review.author.profileImage !== profileImage) {
+      navigate(`/some-other-page`);
+    }
+  }, [review, userId, navigate]);
+
+  // 후기 이미지 슬라이드
   const handleDotClick = (index: number) => {
     setCurrentImageIndex(index);
   };
@@ -52,7 +68,7 @@ export default function ReviewDetail() {
         setCurrentImageIndex(currentImageIndex - 1);
       } else if (
         translate < 0 &&
-        currentImageIndex < (reviewData.images?.length || 0) - 1
+        currentImageIndex < (review?.images?.length || 0) - 1
       ) {
         setCurrentImageIndex(currentImageIndex + 1);
       }
@@ -89,70 +105,86 @@ export default function ReviewDetail() {
       <section className={styles.review_form}>
         <h2 className='sr_only'>공연 후기</h2>
         <div className={styles.review_title}>
-          <ReviewTitle
-            title='어마무시하게 긴 제목의 콘서트같은 느낌이지만 더 어마무시한 느낌'
-            isMine
-            genre='콘서트'
-            concertId={1}
-          />
+          {review && (
+            <ReviewTitle
+              title={review.concert.title}
+              isMine={review.author.id === userId}
+              concertId={review.concert.id}
+            />
+          )}
         </div>
+
+        {/* 프로필 설정 */}
         <div className={styles.review_avatar}>
-          <ReviewAvatar />
-          <StarTag rating={5} />
+          <ReviewAvatar
+            nickname={review?.author.nickname}
+            userId={review?.author.id}
+            profileImage={review?.author.profileImage}
+            watchDate={review?.date}
+            userLink={`/profile/${review?.author.id}`}
+          />
+          <StarTag rating={review?.rating} />
         </div>
-        <div className={styles.review_imageForm}>
-          <div className={styles.review_dot}>
-            <ul>
-              {defaultReviewType.images?.map((imageUrl, index) => (
-                <li
-                  key={`image-${imageUrl}`}
-                  aria-label={`Image ${index + 1}`}
-                  className={`${styles.review_dotList} ${currentImageIndex === index ? styles.active : ""}`}
-                  role='tab'
-                  aria-selected={currentImageIndex === index}
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      handleDotClick(index);
-                    }
-                  }}
-                  onClick={() => handleDotClick(index)}
-                />
-              ))}
-            </ul>
+
+        {/* images가 있으면 imageForm 없으면 숨김(null) */}
+        {review?.images && review.images.length > 0 ? (
+          <div className={styles.review_imageForm}>
+            <div className={styles.review_dot}>
+              <ul>
+                {review.images.map((imageUrl, index) => (
+                  <li
+                    key={`image-${imageUrl}`}
+                    aria-label={`Image ${index + 1}`}
+                    className={`${styles.review_dotList} ${currentImageIndex === index ? styles.active : ""}`}
+                    role='tab'
+                    aria-selected={currentImageIndex === index}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        handleDotClick(index);
+                      }
+                    }}
+                    onClick={() => handleDotClick(index)}
+                  />
+                ))}
+              </ul>
+            </div>
+            <div
+              className={styles.review_imageBox}
+              ref={imageRef}
+              onMouseDown={handleMouseDown}
+              role='button'
+              tabIndex={0}
+              onKeyDown={(e) => {
+                handleMouseDown(e as unknown as React.MouseEvent);
+              }}
+            >
+              {review.images.map((imageUrl, index) =>
+                imageUrl ? (
+                  <div
+                    key={`image-${imageUrl}`}
+                    className={`${styles.review_images} ${styles[`review_image_${index}`]} ${currentImageIndex === index ? styles.selected : ""}`}
+                    style={{ left: `${(index - currentImageIndex) * 100}%` }}
+                  >
+                    <img
+                      key={`img-${imageUrl}`}
+                      src={imageUrl}
+                      alt={`Review visual ${index + 1}`}
+                      className={styles[`review_image_${index}`]}
+                    />
+                  </div>
+                ) : null
+              )}
+            </div>
           </div>
-          <div
-            className={styles.review_imageBox}
-            ref={imageRef}
-            onMouseDown={handleMouseDown}
-            role='button'
-            tabIndex={0}
-            onKeyDown={(e) => {
-              handleMouseDown(e as unknown as React.MouseEvent);
-            }}
-          >
-            {reviewData.images?.map((imageUrl, index) => (
-              <div
-                key={`image-${imageUrl}`}
-                className={`${styles.review_images} ${styles[`review_image_${index}`]} ${currentImageIndex === index ? styles.selected : ""}`}
-                style={{ left: `${(index - currentImageIndex) * 100}%` }}
-              >
-                <img
-                  key={`img-${imageUrl}`}
-                  src={imageUrl}
-                  alt={`Review visual ${index + 1}`}
-                  className={styles[`review_image_${index}`]}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        ) : null}
+
         <div className={styles.review_content}>
-          <p className={styles.review_text}>{reviewData.content}</p>
+          <p className={styles.review_text}>{review?.contents}</p>
         </div>
       </section>
       <div className={styles.review_bar}>
-        <ReviewBar review={reviewData} />
+        <ReviewBar review={review} />
       </div>
     </div>
   );

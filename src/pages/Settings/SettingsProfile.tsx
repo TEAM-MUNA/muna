@@ -59,7 +59,8 @@ export default function SettingsProfile() {
       return;
     }
 
-    const loadingToastId = toast.loading("프로필 변경 중...");
+    // 로딩 중임을 알리는 토스트
+    toast.loading("프로필 변경 중...");
 
     try {
       // 닉네임과 프로필 이미지 URL로 업데이트 호출
@@ -77,15 +78,19 @@ export default function SettingsProfile() {
         profileImage
       );
 
-      toast.success("프로필 변경이 완료되었습니다.", { id: loadingToastId });
+      toast.dismiss(); // 이전 로딩 토스트 제거
+      toast.success("프로필 변경이 완료되었습니다.");
       navigate("/settings");
     } catch (error) {
       if (typeof error === "string") {
-        toast.error(error, { id: loadingToastId });
+        toast.dismiss();
+        toast.error(error);
       } else {
-        toast.error("프로필 변경 중 에러가 발생했습니다.", {
-          id: loadingToastId,
-        });
+        toast.dismiss();
+        const errorMessage =
+          (error as { message?: string }).message ||
+          "프로필 변경 중 에러가 발생했습니다.";
+        toast.error(errorMessage);
       }
     }
   };

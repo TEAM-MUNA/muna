@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { bookmarkConcertAsync } from "../../slices/interactionSlice";
@@ -213,18 +213,23 @@ export default function ConcertDetail() {
             />
           </Dialog>
         ) : null}
-        {isReservationLinkModalOpen ? (
+        {isReservationLinkModalOpen && concertDetail.relates && (
           <Dialog isOpen onClose={closeReservationModal} title='예매하러 가기'>
-            {concertDetail.relates.relate.map((relate) => (
-              <Button
-                key={relate.relateurl}
-                label={relate.relatenm}
-                color='default'
-                onClick={() => window.open(relate.relateurl)}
-              />
-            ))}
+            {Array.isArray(concertDetail.relates.relate) ? (
+              concertDetail.relates.relate.map((relate) => (
+                <Button
+                  key={relate.relateurl}
+                  label={relate.relatenm}
+                  color='default'
+                  onClick={() => window.open(relate.relateurl)}
+                />
+              ))
+            ) : (
+              <p>예매 정보가 없습니다.</p>
+            )}
           </Dialog>
-        ) : null}
+        )}
+
         <Toaster />
         <h2 className='sr_only'>공연 상세</h2>
         <small className={styles.info_update}>
@@ -264,17 +269,24 @@ export default function ConcertDetail() {
                     </p>
                   </>
                 ) : (
-                  <Link to='/review' className={styles.review_link}>
+                  <button
+                    onClick={goToReviewEditPage}
+                    className={styles.review_link}
+                    type='button'
+                  >
                     <StarScoreOnlyIcon rating={null} />
                     <p className={styles.rating_text_gray}>평점 주기</p>
-                  </Link>
+                  </button>
                 )}
               </span>
             </div>
 
             <div>
               <p className={styles.concert_info}>
-                {concertDetail.genrenm} | {concertDetail.prfruntime} |{" "}
+                {concertDetail.genrenm}
+                <span className='divider' />
+                {concertDetail.prfruntime}
+                <span className='divider' />
                 {concertDetail.prfage}
               </p>
               <Button
@@ -289,15 +301,21 @@ export default function ConcertDetail() {
         </div>
         <div className={styles.date_location}>
           <span className={styles.icon_text_container}>
-            <CalendarIcon size='16' />
+            <span className={styles.wrapper_icon}>
+              <CalendarIcon size='16' />
+            </span>
             <p aria-label='공연 기간'>
               {concertDetail.prfpdfrom} ~ {concertDetail.prfpdto}
             </p>
           </span>
           <span className={styles.icon_text_container}>
-            <LocationIcon size='16' />
+            <span className={styles.wrapper_icon}>
+              <LocationIcon size='16' />
+            </span>
             <p aria-label='공연장'>
-              {concertDetail.area} | {concertDetail.fcltynm}
+              {concertDetail.area}
+              <span className='divider' />
+              {concertDetail.fcltynm}
             </p>
           </span>
         </div>
@@ -331,6 +349,8 @@ export default function ConcertDetail() {
                   likeCount={review.likedBy?.length || 0}
                   date={review.createdAt}
                   starRate={review.rating}
+                  reviewLink={`/review/${review.reviewId}`}
+                  thumbnail={review.images ? review.images[0] : undefined}
                 />
               ))}
             {!isReviewListLoading &&

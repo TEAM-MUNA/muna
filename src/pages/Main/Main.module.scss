@@ -19,12 +19,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 35px;
+    margin-top: 40px;
+  }
+
+  .wrapper_concert_title {
+    display: flex;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .main_showing_concert_title {
+    @include text_ellipsis(2);
     font-size: $font-xl;
-    letter-spacing: -0.02em;
+    word-break: keep-all;
+    // letter-spacing: -0.02em;
     color: $black;
     line-height: $font-height-lg;
     margin: 0 auto;
@@ -85,21 +97,20 @@
     @include full-width;
     background-color: $primary;
     color: $white;
-    height: 155px;
+    height: 172px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: -43px; // -26px
+    margin-top: -42px; // -26px
     // padding: 50px 23.5px 24px 23.5px;
-    padding: 0 24px;
-    padding-top: 15px;
+    padding: 20px 24px 12px 24px;
     letter-spacing: -0.02em;
 
     .reviews {
       animation: slideUp 0.5s ease-out;
 
       .review {
-        @include text_ellipsis(1);
+        @include text_ellipsis(2);
         font-size: $font-md;
         margin: 0;
         color: $white;
@@ -116,24 +127,17 @@
       }
     }
   }
-  .category_nav {
-    margin-top: 36px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    row-gap: 8px;
-    column-gap: 12px;
 
-    .fullWidth {
-      grid-column: span 3;
-      margin-top: 4px;
-    }
-  }
   .share_your_experience {
-    background-color: $box-light;
-    padding: 16px 0;
+    @include full_width;
+    // border-radius: 8px;
+    background-color: $primary-lighter;
+    padding: 20px 8px;
     margin-top: 36px;
+    font-size: $font-lg;
+    line-height: $font-height-lg;
     font-weight: $font-medium;
-    color: $black;
+    color: $primary;
     margin-bottom: 12px;
   }
 }
