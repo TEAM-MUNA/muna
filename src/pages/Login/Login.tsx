@@ -21,18 +21,12 @@ export default function Login() {
     value: email,
     onChange: onEmailChange,
     error: emailError,
-  } = useInput("", (value) =>
-    emailRegex.test(value) ? null : "유효한 이메일을 입력해 주세요."
-  );
+  } = useInput("");
   const {
     value: password,
     onChange: onPasswordChange,
     error: passwordError,
-  } = useInput("", (value) =>
-    passwordRegex.test(value)
-      ? null
-      : "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다."
-  );
+  } = useInput("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { incrementRequestCount } = useRequestContext();
