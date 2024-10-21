@@ -6,7 +6,7 @@ import { ConcertReturnType } from "../types/concertType";
 // axios.defaults.baseURL = "/openApi/restful/pblprfr";
 axios.defaults.baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://www.kopis.or.kr/openApi/restful/pblprfr"
+    ? "/openApi/restful/pblprfr"
     : "/openApi/restful/pblprfr";
 
 // 공연 상세 정보 조회
