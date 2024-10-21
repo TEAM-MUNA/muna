@@ -175,22 +175,19 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
               position='right'
             />
           </div> */}
-        <ul>
-          {reviews.map((i) => (
-            <li key={i.reviewId}>
-              <ReviewCard
-                hasAvatar={false}
-                reviewLink={`/review/${i.reviewId}`}
-                title={i.concert?.title || "제목 없음"}
-                likeCount={i.likeCount}
-                starRate={i.rating}
-                thumbnail={i.thumbnail || ""}
-                date={i.date}
-                content={i.contentsPreview}
-              />
-            </li>
-          ))}
-        </ul>
+        {reviews.map((i) => (
+          <ReviewCard
+            key={i.reviewId}
+            hasAvatar={false}
+            reviewLink={`/review/${i.reviewId}`}
+            title={i.concert?.title || "제목 없음"}
+            likeCount={i.likeCount}
+            starRate={i.rating}
+            thumbnail={i.thumbnail || ""}
+            date={i.date}
+            content={i.contentsPreview}
+          />
+        ))}
       </section>
     );
   }
