@@ -219,7 +219,7 @@ export default function ConcertList() {
           <HeartSpinner size={65} color='#7926ff' />
         </div>
       )}
-      {!isLoading && concertList[1] === undefined ? (
+      {!isLoading && concertList.length === 0 ? (
         <p className={styles.emptyMessage}>
           조건에 맞는 공연이 없습니다.
           <br />
