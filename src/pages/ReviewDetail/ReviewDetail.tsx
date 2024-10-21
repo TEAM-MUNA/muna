@@ -111,7 +111,7 @@ export default function ReviewDetail() {
             watchDate={review?.date.replace(/-/g, ".")}
             userLink={`/profile/${review?.author.id}`}
           />
-          <StarTag rating={review?.rating} />
+          <StarTag rating={review?.rating ?? 0} />
         </div>
 
         {/* images가 있으면 imageForm 없으면 숨김(null) */}
