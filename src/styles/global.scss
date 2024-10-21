@@ -168,10 +168,10 @@ ul:has(.card_review) {
   }
 }
 ul:has(.card_review_gallery) {
+  @include full_width;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
-  margin: 0 -20px;
   li {
     display: flex;
   }
