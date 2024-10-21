@@ -3,7 +3,7 @@
 공연 정보 제공 및 관람 후기 작성과 공유를 위한 모바일 웹 플랫폼 (24.09.23 ~
 24.10.21)
 
-<img src="./public/muna_intro.jpg" alt="MUNA 커버이미지" width="480" />
+<img src="./public/muna_intro.png" alt="MUNA 커버이미지" width="480" />
 
 ### 배포 링크, 테스트 계정
 
