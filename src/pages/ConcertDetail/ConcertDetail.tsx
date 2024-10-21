@@ -350,6 +350,7 @@ export default function ConcertDetail() {
                   date={review.createdAt}
                   starRate={review.rating}
                   reviewLink={`/review/${review.reviewId}`}
+                  thumbnail={review.images ? review.images[0] : undefined}
                 />
               ))}
             {!isReviewListLoading &&

@@ -21,7 +21,7 @@ export default function ReviewCard({
   title = defaultReviewType.title,
   content = defaultReviewType.content,
   date = defaultReviewType.date,
-  thumbnail = defaultReviewType.thumbnail,
+  thumbnail = defaultReviewType.thumbnail || undefined,
   starRate = defaultReviewType.starRate || 0,
   likeCount = defaultReviewType.likeCount,
   hasAvatar = true,
@@ -29,6 +29,8 @@ export default function ReviewCard({
   const location = useLocation();
   const pathname = location.pathname;
   const page = pathname.split("/")[1] || "main";
+
+  const dateOnly = new Date(date).toISOString().split("T")[0];
 
   return (
     <div className={`${styles.card} card_review page_${page}`}>
@@ -67,7 +69,9 @@ export default function ReviewCard({
                     </span>
                   ) : null}
                 </div>
-                <span className={styles.date}>{date.replace(/-/g, ".")}</span>
+                <span className={styles.date}>
+                  {dateOnly.replace(/-/g, ".")}
+                </span>
               </div>
             )}
           </div>
