@@ -3,17 +3,17 @@ import { RootState } from "../app/store";
 
 const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const userInteraction = useSelector(
-    (state: RootState) => state.interaction.userInteraction
+  const userActivity = useSelector(
+    (state: RootState) => state.activity.userActivity
   );
   return {
     userId: user?.userId,
     email: user?.email,
     nickname: user?.nickname,
     profileImage: user?.profileImage,
-    bookmarkedConcerts: userInteraction?.bookmarkedConcerts,
-    reviews: userInteraction?.reviews,
-    likedReviews: userInteraction?.likedReviews,
+    bookmarkedConcerts: userActivity?.bookmarkedConcerts,
+    reviews: userActivity?.reviews,
+    likedReviews: userActivity?.likedReviews,
   };
 };
 

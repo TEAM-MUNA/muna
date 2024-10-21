@@ -12,7 +12,7 @@ import useGetConcertDetail from "../../hooks/useGetConcertDetail";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner";
 import ReviewImageUploader from "../../components/common/ReviewImageUploader/ReviewImageUploader";
 import { ReviewType } from "../../types/reviewType";
-import { uploadReviewAsync } from "../../slices/interactionSlice";
+import { uploadReviewAsync } from "../../slices/activitySlice";
 import useGetReview from "../../hooks/useGetReview";
 
 export default function ReviewEdit() {
@@ -60,7 +60,7 @@ export default function ReviewEdit() {
     }
   }, [isReviewLoading, review]);
 
-  const status = useSelector((state: RootState) => state.interaction.status);
+  const status = useSelector((state: RootState) => state.activity.status);
   const isLoading = status === "loading";
 
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

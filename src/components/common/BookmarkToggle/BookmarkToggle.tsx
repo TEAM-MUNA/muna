@@ -1,6 +1,6 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { bookmarkConcertAsync } from "../../../slices/interactionSlice";
+import { bookmarkConcertAsync } from "../../../slices/activitySlice";
 import useGetConcert from "../../../hooks/useGetConcert";
 import useGetConcertDetail from "../../../hooks/useGetConcertDetail";
 import { useAppDispatch } from "../../../app/hooks";

@@ -11,7 +11,7 @@ export interface UserType {
   likedReviews?: string[];
 }
 
-export interface UserInteractionType {
+export interface UserActivityType {
   bookmarkedConcerts?: string[];
   reviews?: string[];
   likedReviews?: string[];

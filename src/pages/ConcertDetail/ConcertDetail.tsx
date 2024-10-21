@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { bookmarkConcertAsync } from "../../slices/interactionSlice";
+import { bookmarkConcertAsync } from "../../slices/activitySlice";
 import styles from "./ConcertDetail.module.scss";
 import Tag from "../../components/common/Tag/Tag";
 import Button from "../../components/common/Button/Button";
