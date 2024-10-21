@@ -28,8 +28,13 @@ export default function ReviewCard({
   const location = useLocation();
   const pathname = location.pathname;
   const page = pathname.split("/")[1] || "main";
-
-  const dateOnly = new Date(date).toISOString().split("T")[0];
+  let dateOnly = "";
+  if (date) {
+    const tempDate = new Date(date);
+    if (!Number.isNaN(tempDate.getTime())) {
+      dateOnly = new Date(date).toISOString().split("T")[0];
+    }
+  }
 
   return (
     <div className={`${styles.card} card_review page_${page}`}>
