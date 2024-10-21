@@ -4,9 +4,9 @@ export const DefaultConcertType = {
   concertId: "임시 공연 아이디",
   title: "공연명",
   poster: posterDefault,
-  averageRating: 999,
-  bookmarkedBy: ["999"],
-  reviews: ["999"],
+  averageRating: null,
+  bookmarkedBy: null,
+  reviews: null,
 };
 
 export const defaultConcertType = {
@@ -34,9 +34,9 @@ export interface ConcertType {
   state?: string;
   // user 활동
   ratings?: number[];
-  averageRating?: number;
-  bookmarkedBy?: string[];
-  reviews?: string[];
+  averageRating?: number | null;
+  bookmarkedBy?: string[] | null;
+  reviews?: string[] | null;
   reviewCount?: number;
   bookmarkCount?: number;
 }
