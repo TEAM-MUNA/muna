@@ -47,7 +47,9 @@ function BookmarkList() {
             const bookmarkedConcertData = await getConcertsForBookmarkList(
               bookmarkedConcertsIds
             );
-            setBookmarkedConcerts(Object.values(bookmarkedConcertData));
+            setBookmarkedConcerts(
+              Object.values(bookmarkedConcertData).reverse()
+            );
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -81,7 +83,7 @@ function BookmarkList() {
             />
           </div> */}
         <ul>
-          {bookmarkedConcerts.reverse().map((i) => (
+          {bookmarkedConcerts.map((i) => (
             <li key={i.concertId}>
               <PosterCard
                 concertId={i.concertId}
@@ -128,7 +130,7 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
         const reviewIds = (await getReviewIdsByUserId(userId)) || [];
         // 2. 리뷰 아이디 배열로 리뷰리스트에 필요한 데이터 가져오기
         const reviewData = (await getReviewListById(reviewIds)) || [];
-        setReviews(reviewData);
+        setReviews(reviewData.reverse());
       }
       // } catch (error) {
       //   console.error("리뷰 데이터 가져오기 실패:", error);
@@ -174,7 +176,7 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
             />
           </div> */}
         <ul>
-          {reviews.reverse().map((i) => (
+          {reviews.map((i) => (
             <li key={i.reviewId}>
               <ReviewCard
                 hasAvatar={false}
@@ -195,7 +197,7 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
   return (
     <section className={`${styles.tab_content} ${styles.review_gallery}`}>
       <ul>
-        {reviews.reverse().map((i) => (
+        {reviews.map((i) => (
           <li key={i.reviewId}>
             <ReviewGalleryCard
               reviewLink={`/review/${i.reviewId}`}
