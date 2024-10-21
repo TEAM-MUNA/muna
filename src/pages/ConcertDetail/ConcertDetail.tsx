@@ -213,18 +213,23 @@ export default function ConcertDetail() {
             />
           </Dialog>
         ) : null}
-        {isReservationLinkModalOpen ? (
+        {isReservationLinkModalOpen && concertDetail.relates && (
           <Dialog isOpen onClose={closeReservationModal} title='예매하러 가기'>
-            {concertDetail.relates.relate.map((relate) => (
-              <Button
-                key={relate.relateurl}
-                label={relate.relatenm}
-                color='default'
-                onClick={() => window.open(relate.relateurl)}
-              />
-            ))}
+            {Array.isArray(concertDetail.relates.relate) ? (
+              concertDetail.relates.relate.map((relate) => (
+                <Button
+                  key={relate.relateurl}
+                  label={relate.relatenm}
+                  color='default'
+                  onClick={() => window.open(relate.relateurl)}
+                />
+              ))
+            ) : (
+              <p>예매 정보가 없습니다.</p>
+            )}
           </Dialog>
-        ) : null}
+        )}
+
         <Toaster />
         <h2 className='sr_only'>공연 상세</h2>
         <small className={styles.info_update}>
@@ -345,6 +350,7 @@ export default function ConcertDetail() {
                   date={review.createdAt}
                   starRate={review.rating}
                   reviewLink={`/review/${review.reviewId}`}
+                  thumbnail={review.images ? review.images[0] : undefined}
                 />
               ))}
             {!isReviewListLoading &&
