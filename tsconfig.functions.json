@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2018", // 최신 기능 사용
+    "module": "CommonJS", // Node.js 환경에 적합
+    "outDir": "./built/functions", // 빌드 결과물 디렉터리
+    "rootDir": "./netlify/functions", // 함수 소스 코드 디렉터리
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "include": ["netlify/functions/**/*.ts"],
+  "exclude": ["node_modules"]
+}

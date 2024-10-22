@@ -1,14 +1,7 @@
 [[redirects]]
-  from = "/openApi/*"
-  to = "https://www.kopis.or.kr/:splat"
+  from = "/api/kopis/*"
+  to = "/.netlify/functions/kopis/:splat"
   status = 200
-  force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-	force = false
 
 [build]
   publish = "build"
