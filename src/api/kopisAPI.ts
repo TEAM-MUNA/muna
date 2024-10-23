@@ -6,8 +6,8 @@ import { ConcertReturnType } from "../types/concertType";
 // axios.defaults.baseURL = "/openApi/restful/pblprfr";
 axios.defaults.baseURL =
   process.env.NODE_ENV === "production"
-    ? "/openApi/restful/pblprfr"
-    : "/openApi/restful/pblprfr";
+    ? "api/openApi/restful/pblprfr"
+    : "api/openApi/restful/pblprfr";
 
 // 공연 상세 정보 조회
 export const fetchConcertDetail = async (mt20id: string) => {
