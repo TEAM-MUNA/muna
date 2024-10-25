@@ -10,6 +10,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { ReviewListType, ReviewType } from "../../types/reviewType";
 import { db } from "../../firebase";
@@ -101,6 +102,12 @@ export const addReviewToFirebase = async (review: ReviewType) => {
   };
   await setDoc(docRef, updateReview);
   return review.reviewId;
+};
+
+// reviews에서 리뷰 삭제하기
+export const removeReviewFromFirebase = async (reviewId: string) => {
+  const docRef = doc(db, "reviews", reviewId);
+  await deleteDoc(docRef);
 };
 
 // 프로필 변경시, 작성한 리뷰의 author 정보 업데이트
