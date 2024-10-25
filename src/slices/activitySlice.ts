@@ -2,23 +2,30 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 
 import {
+  addUserReview,
   getUserFromFirebase,
+  removeUserReview,
   updateUserBookmark,
-  updateUserReview,
 } from "../api/firebase/authAPI";
 import {
   addConcert,
+  addConcertReview,
   getConcertFromFirebase,
+  removeConcertReview,
   updateConcertBookmark,
   updateConcertRating,
-  updateConcertReview,
 } from "../api/firebase/concertAPI";
 import { UserActivityType } from "../types/userType";
 import { ConcertType } from "../types/concertType";
 import { ReviewType } from "../types/reviewType";
-import { addReviewToFirebase } from "../api/firebase/reviewAPI";
+import {
+  addReviewToFirebase,
+  getReviewFromFirebase,
+  removeReviewFromFirebase,
+} from "../api/firebase/reviewAPI";
 
 import { uploadReviewImages } from "./imageSlice";
+import { deleteImageFromFireStorage } from "../api/firebase/storageAPI";
 
 // 사용자 인터렉션
 
@@ -44,25 +51,22 @@ export const fetchUserActivity = createAsyncThunk<
   UserActivityType | null,
   string,
   { rejectValue: string }
->(
-  "activity/fetchUserActivity",
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const user = await getUserFromFirebase(userId);
-      return {
-        bookmarkedConcerts: user?.bookmarkedConcerts || [],
-        likedReviews: user?.likedReviews || [],
-        reviews: user?.reviews || [],
-      };
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        // console.log("파이어베이스 에러:", error.message);
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue("사용자 데이터를 불러오는 데 실패했습니다.");
+>("activity/fetchUserActivity", async (userId: string, { rejectWithValue }) => {
+  try {
+    const user = await getUserFromFirebase(userId);
+    return {
+      bookmarkedConcerts: user?.bookmarkedConcerts || [],
+      likedReviews: user?.likedReviews || [],
+      reviews: user?.reviews || [],
+    };
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      // console.log("파이어베이스 에러:", error.message);
+      return rejectWithValue(error.message);
     }
+    return rejectWithValue("사용자 데이터를 불러오는 데 실패했습니다.");
   }
-);
+});
 
 // 북마크
 export const bookmarkConcertAsync = createAsyncThunk<
@@ -118,7 +122,7 @@ export const uploadReviewAsync = createAsyncThunk<
   string[] | undefined,
   { userId: string; review: ReviewType; concert: ConcertType }
 >(
-  "activity/review",
+  "activity/uploadReview",
   async ({ userId, review, concert }, { dispatch, rejectWithValue }) => {
     let downloadUrls: string[] = [];
     let concertId: string | undefined = concert.concertId!;
@@ -147,9 +151,9 @@ export const uploadReviewAsync = createAsyncThunk<
         // 2. 리뷰 컬렉션에 추가
         await addReviewToFirebase({ ...review, images: downloadUrls }),
         // 3. 유저에 리뷰 추가
-        await updateUserReview(userId, review.reviewId),
+        await addUserReview(userId, review.reviewId),
         // 4. 공연에 리뷰 추가
-        await updateConcertReview(concertId!, review.reviewId),
+        await addConcertReview(concertId!, review.reviewId),
         // 5. 공연에 평점 추가
         await updateConcertRating(concertId!, review.rating),
       ]);
@@ -157,6 +161,46 @@ export const uploadReviewAsync = createAsyncThunk<
       const updatedUser = await getUserFromFirebase(userId);
       return updatedUser?.reviews; // 유저 정보의 리뷰 리스트 반환
     } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteReviewAsync = createAsyncThunk<string[] | undefined, string>(
+  "activity/deleteReview",
+
+  async (reviewId, { rejectWithValue }) => {
+    try {
+      try {
+        // 지워질 리뷰 정보 가져오기
+        const targetReview = (await getReviewFromFirebase(
+          reviewId
+        )) as ReviewType;
+
+        await Promise.all([
+          // 4. 리뷰 이미지 리스트 삭제
+          await deleteImageFromFireStorage(`reviews/${targetReview.reviewId}/`),
+
+          // 1. 리뷰 컬렉션에서 제거
+          await removeReviewFromFirebase(targetReview.reviewId),
+          // 2. 유저 컬렉션에서 리뷰 제거
+          await removeUserReview(targetReview.author.id, targetReview.reviewId),
+          // 3. 공연 컬렉션에서 리뷰 제거
+          await removeConcertReview(
+            targetReview.concert.id,
+            targetReview.reviewId
+          ),
+        ]);
+        // 유저 정보에서 리뷰 삭제
+        const updatedUser = await getUserFromFirebase(targetReview.author.id);
+        return updatedUser?.reviews;
+      } catch (e) {
+        // 지워질 리뷰를 찾을 수 없는 경우
+        console.error("지워질 리뷰를 찾을 수 없는 경우", e);
+        return rejectWithValue(e);
+      }
+    } catch (error) {
+      console.error("흠", error);
       return rejectWithValue(error);
     }
   }
@@ -221,6 +265,24 @@ const activitySlice = createSlice({
         state.error = null;
       })
       .addCase(uploadReviewAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
+
+    // 리뷰 삭제
+    builder
+      .addCase(deleteReviewAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(deleteReviewAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (state.userActivity) {
+          state.userActivity.reviews = action.payload;
+        }
+        state.error = null;
+      })
+      .addCase(deleteReviewAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

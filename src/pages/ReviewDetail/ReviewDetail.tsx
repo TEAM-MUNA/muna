@@ -98,6 +98,7 @@ export default function ReviewDetail() {
               isMine={review.author.id === userId}
               concertId={review.concert.id}
               reviewId={review.reviewId}
+              userId={review.author.id}
             />
           )}
         </div>

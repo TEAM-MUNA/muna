@@ -147,11 +147,17 @@ export const updateUserBookmark = async (
   });
 };
 
-// TODO: refactor - 함수 하나로 합치기
-export const updateUserReview = async (userId: string, reviewId: string) => {
+export const addUserReview = async (userId: string, reviewId: string) => {
   const userDocRef = doc(db, "users", userId);
   await updateDoc(userDocRef, {
     reviews: arrayUnion(reviewId),
+  });
+};
+
+export const removeUserReview = async (userId: string, reviewId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    reviews: arrayRemove(reviewId),
   });
 };
 
