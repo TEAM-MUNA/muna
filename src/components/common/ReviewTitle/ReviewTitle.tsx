@@ -53,8 +53,8 @@ export default function ReviewTitle({
       await dispatch(deleteReviewAsync(reviewId)).unwrap();
       toast.success("리뷰가 삭제되었습니다.");
       navigate(`/profile/${userId}`);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
       toast.error("리뷰를 삭제하지 못했습니다.");
     }
   };

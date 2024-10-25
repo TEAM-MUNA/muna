@@ -196,11 +196,9 @@ export const deleteReviewAsync = createAsyncThunk<string[] | undefined, string>(
         return updatedUser?.reviews;
       } catch (e) {
         // 지워질 리뷰를 찾을 수 없는 경우
-        console.error("지워질 리뷰를 찾을 수 없는 경우", e);
         return rejectWithValue(e);
       }
     } catch (error) {
-      console.error("흠", error);
       return rejectWithValue(error);
     }
   }
