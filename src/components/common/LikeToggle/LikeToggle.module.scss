@@ -1,0 +1,19 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_mixin";
+
+.btn {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  background-color: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: $font-height-lg;
+  &:disabled {
+    opacity: 0.4;
+  }
+}

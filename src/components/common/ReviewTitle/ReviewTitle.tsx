@@ -97,14 +97,14 @@ export default function ReviewTitle({
         description='삭제된 후기는 되돌릴 수 없습니다. 그래도 계속 진행하시겠습니까?'
         onClose={closeModal}
       >
-        <Button label='취소' color='primary_line' onClick={closeModal} />
         <Button
           label='삭제'
-          color='primary'
+          color='danger_line'
           onClick={() => {
             setIsConfirmedDeletion(true);
           }}
         />
+        <Button label='취소' color='default' onClick={closeModal} />
       </Modal>
     </header>
   );

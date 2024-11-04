@@ -41,6 +41,12 @@
   background-color: $danger;
 }
 
+.danger_line {
+  color: $danger;
+  border-color: $danger;
+  background-color: $white;
+}
+
 .primary_line {
   color: $primary;
   border-color: $primary;

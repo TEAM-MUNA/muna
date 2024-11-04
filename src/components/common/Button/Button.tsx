@@ -12,6 +12,7 @@ interface ButtonProps {
     | "primary_line"
     | "primary_line_light"
     | "danger"
+    | "danger_line"
     | "black"
     | "black_line"
     | "underlined"
