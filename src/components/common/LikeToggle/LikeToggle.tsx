@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import styles from "./LikeToggle.module.scss";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import useToggle from "../../../hooks/useToggle";
@@ -26,7 +27,10 @@ export default function LikeToggle({
       type='button'
       className={`${styles.btn} text_danger`}
       disabled={disabled}
-      onClick={onToggle}
+      onClick={() => {
+        onToggle();
+        toast("좋아요 기능 개발중입니다.");
+      }}
     >
       <LikeIcon size={size === "md" ? "24" : "20"} active={isActive} />
       <span className='sr_only'>좋아요</span>
