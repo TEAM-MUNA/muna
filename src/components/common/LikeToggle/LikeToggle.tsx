@@ -29,7 +29,9 @@ export default function LikeToggle({
       disabled={disabled}
       onClick={() => {
         onToggle();
-        toast("좋아요 기능 개발중입니다.");
+        toast(
+          `좋아요 기능은 현재 개발 중입니다. \n이용에 불편을 드려 죄송합니다.`
+        );
       }}
     >
       <LikeIcon size={size === "md" ? "24" : "20"} active={isActive} />
