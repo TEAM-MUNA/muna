@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "./Button.module.scss";
+import styles from "./LikeToggle.module.scss";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import useToggle from "../../../hooks/useToggle";
 
-interface LikeButtonProps {
+interface LikeToggleProps {
   likeCount?: number;
   size?: "sm" | "md";
   active?: boolean;
@@ -11,13 +11,13 @@ interface LikeButtonProps {
   // onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function LikeButton({
+export default function LikeToggle({
   likeCount,
   size = "md",
   active = false,
   disabled = false,
   // onClick = () => {},
-}: LikeButtonProps) {
+}: LikeToggleProps) {
   const { isActive, onToggle } = useToggle(active);
   // TODO: 버튼 눌렸을 때 추가기능, 숫자 늘어나기
 
