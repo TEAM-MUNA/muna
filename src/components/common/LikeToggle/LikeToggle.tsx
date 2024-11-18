@@ -3,38 +3,75 @@ import toast from "react-hot-toast";
 import styles from "./LikeToggle.module.scss";
 import LikeIcon from "../../../assets/svg/LikeIcon";
 import useToggle from "../../../hooks/useToggle";
+import { useAppDispatch } from "../../../app/hooks";
+import useCurrentUser from "../../../hooks/useCurrentUser";
+import useGetReview from "../../../hooks/useGetReview";
 
 interface LikeToggleProps {
-  likeCount?: number;
+  reviewId: string | undefined;
+  // likeCount?: number;
   size?: "sm" | "md";
-  active?: boolean;
-  disabled?: boolean;
+  pageName: string; // Firebase 사용 추적
   // onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function LikeToggle({
-  likeCount,
+  reviewId,
+  // likeCount,
   size = "md",
-  active = false,
-  disabled = false,
+  pageName,
   // onClick = () => {},
 }: LikeToggleProps) {
-  const { isActive, onToggle } = useToggle(active);
+  const dispatch = useAppDispatch();
+  const userId = useCurrentUser().userId;
+
+  const likeCount = 100;
+
+  const {
+    review,
+    // isLoading: isReviewLoading,
+    // error: reviewError,
+  } = useGetReview(reviewId, pageName); // Firebase
+
+  const isLikedInitialState = false;
+  // concert?.bookmarkedBy?.some(
+  //   (bookmarkedUserId: string) => bookmarkedUserId === userId
+  // ) || false;
+  const { isActive: isLiked, onToggle: onLikeToggle } =
+    useToggle(isLikedInitialState);
+
+  const handleLike = async () => {
+    if (userId && review) {
+      onLikeToggle();
+
+      try {
+        // await dispatch (likeReviewAsync)
+      } catch (e) {
+        // console.error(e);
+        toast.error(
+          "후기 좋아요 추가하지 못했습니다. 잠시 후에 다시 시도해주세요."
+        );
+        onLikeToggle(); // 좋아요 해제
+      }
+    } else {
+      toast.error("로그인 후 이용 가능합니다.");
+    }
+  };
+
+  // if (!isLiked) {
+  //   return null;
+  // }
+
+  // const { isActive, onToggle } = useToggle(active);
   // TODO: 버튼 눌렸을 때 추가기능, 숫자 늘어나기
 
   return (
     <button
       type='button'
       className={`${styles.btn} text_danger`}
-      disabled={disabled}
-      onClick={() => {
-        onToggle();
-        toast(
-          `좋아요 기능은 현재 개발 중입니다. \n이용에 불편을 드려 죄송합니다.`
-        );
-      }}
+      onClick={handleLike}
     >
-      <LikeIcon size={size === "md" ? "24" : "20"} active={isActive} />
+      <LikeIcon size={size === "md" ? "24" : "20"} active={isLiked} />
       <span className='sr_only'>좋아요</span>
       <span className={`font_${size}`}>{likeCount}</span>
     </button>

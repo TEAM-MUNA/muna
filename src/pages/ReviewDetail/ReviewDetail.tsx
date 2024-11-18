@@ -22,7 +22,7 @@ export default function ReviewDetail() {
     review,
     // isLoading: isReviewLoading,
     // error: reviewError,
-  } = useGetReview(id);
+  } = useGetReview(id, "ReviewDetail");
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [startX, setStartX] = useState(0);

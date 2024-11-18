@@ -16,7 +16,7 @@ export default function ReviewBar({ review }: ReviewBarProps) {
 
   return (
     <div className={styles.container}>
-      <LikeToggle likeCount={review?.likeCount} />
+      <LikeToggle reviewId={review?.reviewId} pageName='ReviewDetail' />
     </div>
   );
 }

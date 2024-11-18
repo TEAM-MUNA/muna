@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { ReviewType } from "../types/reviewType";
 import { getReviewFromFirebase } from "../api/firebase/reviewAPI";
+import { useRequestContext } from "../context/RequestContext";
 
-const useGetReview = (reviewId?: string) => {
+const useGetReview = (reviewId: string | undefined, pageName: string) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<ReviewType | null>(null);
+  const { incrementRequestCount } = useRequestContext();
 
   useEffect(() => {
     const getData = async () => {
@@ -17,6 +19,7 @@ const useGetReview = (reviewId?: string) => {
         return;
       }
       try {
+        incrementRequestCount(`${pageName} useGetReview`);
         const data = await getReviewFromFirebase(reviewId);
         setReview(data as ReviewType);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,6 +31,6 @@ const useGetReview = (reviewId?: string) => {
     };
     getData();
   }, []);
-  return { isLoading, error, review };
+  return { review, isLoading, error };
 };
 export default useGetReview;
