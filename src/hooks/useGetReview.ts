@@ -30,7 +30,7 @@ const useGetReview = (reviewId: string | undefined, pageName: string) => {
       }
     };
     getData();
-  }, []);
-  return { review, isLoading, error };
+  }, [reviewId, pageName, incrementRequestCount]);
+  return { review, isLoading, error, setReview };
 };
 export default useGetReview;

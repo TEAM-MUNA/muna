@@ -8,6 +8,8 @@ import { useAppDispatch } from "../../../app/hooks";
 import useCurrentUser from "../../../hooks/useCurrentUser";
 import useGetReview from "../../../hooks/useGetReview";
 import { likeReviewAsync } from "../../../slices/activitySlice";
+import { getReviewFromFirebase } from "../../../api/firebase/reviewAPI";
+import { ReviewType } from "../../../types/reviewType";
 
 interface LikeToggleProps {
   reviewId: string | undefined;
@@ -29,6 +31,7 @@ export default function LikeToggle({
 
   const {
     review,
+    setReview,
     // isLoading: isReviewLoading,
     // error: reviewError,
   } = useGetReview(reviewId, pageName); // Firebase
@@ -40,7 +43,7 @@ export default function LikeToggle({
     useToggle(isLikedInitialState);
 
   const handleLike = async () => {
-    if (!userId || !review) {
+    if (!userId) {
       toast.error("로그인 후 이용 가능합니다.");
       return;
     }
@@ -48,15 +51,15 @@ export default function LikeToggle({
     onLikeToggle(); // 버튼 상태를 임시로 반영
 
     try {
-      // 1. 서버에서 좋아요 상태와 관련된 데이터를 업데이트
-      const updatedLikedReviews = await dispatch(
-        likeReviewAsync({ userId, reviewId, cancel: isLiked })
-      );
+      // 1. 좋아요 업데이트 (Firebase)
+      await dispatch(likeReviewAsync({ userId, reviewId, cancel: isLiked }));
 
-      // 2. 서버 응답을 기다린 후 리덕스 상태를 업데이트
-      if (updatedLikedReviews) {
-        // 3. 리덕스에서 상태 업데이트 (user의 likedReviews를 최신 상태로)
-        // dispatch(setUser({ likedReviews: updatedLikedReviews }));
+      // Firebase에서 최신 데이터 가져와서 갱신
+      const updatedReview = (await getReviewFromFirebase(
+        reviewId!
+      )) as ReviewType;
+      if (updatedReview && typeof updatedReview === "object") {
+        setReview(updatedReview);
       }
     } catch {
       // console.error(e);
@@ -73,7 +76,7 @@ export default function LikeToggle({
     >
       <LikeIcon size={size === "md" ? "24" : "20"} active={isLiked} />
       <span className='sr_only'>좋아요</span>
-      <span className={`font_${size}`}>{review?.likeCount}</span>
+      {review && <span className={`font_${size}`}>{review.likeCount}</span>}
     </button>
   );
 }

@@ -173,7 +173,7 @@ export default function ReviewDetail() {
         </div>
       </section>
       <div className={styles.review_bar}>
-        <ReviewBar review={review} />
+        <ReviewBar reviewId={review?.reviewId} />
       </div>
     </div>
   );
