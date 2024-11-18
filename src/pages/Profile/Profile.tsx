@@ -179,13 +179,13 @@ function ReviewList({ activeView }: { activeView: "list" | "grid" }) {
           <ReviewCard
             key={i.reviewId}
             hasAvatar={false}
-            reviewLink={`/review/${i.reviewId}`}
             title={i.concert?.title || "제목 없음"}
             likeCount={i.likeCount}
             starRate={i.rating}
             thumbnail={i.thumbnail || ""}
             date={i.date}
             content={i.contentsPreview}
+            reviewId={i.reviewId}
           />
         ))}
       </section>

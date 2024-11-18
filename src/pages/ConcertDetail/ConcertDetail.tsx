@@ -349,7 +349,7 @@ export default function ConcertDetail() {
                   likeCount={review.likedBy?.length || 0}
                   date={review.createdAt}
                   starRate={review.rating}
-                  reviewLink={`/review/${review.reviewId}`}
+                  reviewId={review.reviewId}
                   thumbnail={review.images ? review.images[0] : undefined}
                 />
               ))}

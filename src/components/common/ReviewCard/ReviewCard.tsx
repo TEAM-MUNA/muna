@@ -13,7 +13,7 @@ interface ReviewCardProps extends UserType, ReviewPropType {
 }
 
 export default function ReviewCard({
-  reviewLink = defaultReviewType.reviewLink,
+  reviewId = defaultReviewType.reviewId,
   profileImage = defaultUserType.profileImage,
   nickname = defaultUserType.nickname,
   userId = defaultUserType.userId,
@@ -45,14 +45,16 @@ export default function ReviewCard({
             userId={userId}
             profileImage={profileImage}
           />
-          {page === "main" && <LikeToggle size='sm' likeCount={likeCount} />}
+          {page === "main" && (
+            <LikeToggle reviewId={reviewId} size='sm' pageName='Main' />
+          )}
         </div>
       ) : (
-        <Link to={reviewLink}>
+        <Link to={`/review/${reviewId}`}>
           <h3 className={styles.title}>{title}</h3>
         </Link>
       )}
-      <Link to={reviewLink}>
+      <Link to={`/review/${reviewId}`}>
         <div className={styles.content}>
           <div className={styles.text}>
             {page === "main" && <h3 className={styles.title}>{title}</h3>}

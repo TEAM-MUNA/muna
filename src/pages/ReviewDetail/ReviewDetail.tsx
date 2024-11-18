@@ -22,7 +22,7 @@ export default function ReviewDetail() {
     review,
     // isLoading: isReviewLoading,
     // error: reviewError,
-  } = useGetReview(id);
+  } = useGetReview(id, "ReviewDetail");
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [startX, setStartX] = useState(0);
@@ -173,7 +173,7 @@ export default function ReviewDetail() {
         </div>
       </section>
       <div className={styles.review_bar}>
-        <ReviewBar review={review} />
+        <ReviewBar reviewId={review?.reviewId} />
       </div>
     </div>
   );

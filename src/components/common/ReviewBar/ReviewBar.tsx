@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import LikeToggle from "../LikeToggle/LikeToggle";
 import styles from "./ReviewBar.module.scss";
-import { ReviewType } from "../../../types/reviewType";
 
 interface ReviewBarProps {
-  review: ReviewType | null;
+  reviewId: string | undefined;
 }
 
-export default function ReviewBar({ review }: ReviewBarProps) {
+export default function ReviewBar({ reviewId }: ReviewBarProps) {
   useEffect(() => {
     // likedBy: String[] - userId 에서
     // 로그인된 내 아이디가 있는지 없는지 확인후
@@ -16,7 +15,7 @@ export default function ReviewBar({ review }: ReviewBarProps) {
 
   return (
     <div className={styles.container}>
-      <LikeToggle likeCount={review?.likeCount} />
+      <LikeToggle reviewId={reviewId} pageName='ReviewDetail' />
     </div>
   );
 }

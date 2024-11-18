@@ -1,4 +1,6 @@
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   DocumentData,
   getDocs,
@@ -137,4 +139,21 @@ export const updateAuthorProfileInReviews = async (
 
   // 모든 업데이트가 완료될 때까지 대기
   await Promise.all(updatePromises);
+};
+
+// 해당 리뷰에 좋아요를 추가한 사용자 추가/삭제
+export const updateReviewLike = async (
+  userId: string,
+  reviewId: string,
+  currentLikeCount: number,
+  cancel: boolean = false
+) => {
+  const concertsDocRef = doc(db, "reviews", reviewId);
+  const action = cancel ? arrayRemove : arrayUnion;
+  const likeCount = cancel ? currentLikeCount - 1 : currentLikeCount + 1;
+
+  await updateDoc(concertsDocRef, {
+    likedBy: action(userId),
+    likeCount,
+  });
 };

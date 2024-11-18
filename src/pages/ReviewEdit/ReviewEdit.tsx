@@ -27,7 +27,7 @@ export default function ReviewEdit() {
     review,
     isLoading: isReviewLoading,
     error: reviewError,
-  } = useGetReview(id);
+  } = useGetReview(id, "ReviewEdit");
 
   const { concertId: reviewConcertId } = location.state || {};
   const [concertId, setConcertId] = useState<string>(reviewConcertId);

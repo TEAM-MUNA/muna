@@ -80,7 +80,6 @@ export default function BookmarkToggle({
         onBookmarkToggle(); // 북마크 해제
       }
     } else {
-      // TODO: 로그인 페이지로 이동 등 처리 필요
       toast.error("로그인 후 이용 가능합니다.");
     }
   };
