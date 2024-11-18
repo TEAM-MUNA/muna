@@ -139,22 +139,24 @@ export const likeReviewAsync = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
+      // Firebase에서 해당 리뷰를 가져오기
       const firebaseReview = await getReviewFromFirebase(reviewId!);
 
+      // 현재 좋아요 수를 가져오기
       const currentLikeCount = firebaseReview ? firebaseReview.likeCount : 0;
 
+      // 리뷰 업데이트와 사용자 북마크 업데이트를 동시에 수행
       await Promise.all([
         updateReviewLike(userId, reviewId!, currentLikeCount, cancel),
         updateUserBookmark(userId, reviewId!, cancel),
       ]);
+
+      // 업데이트된 사용자 정보 (likedReviews) 가져오기
       const updatedUser = await getUserFromFirebase(userId);
-      // console.log("updated", updatedUser);
 
       // 업데이트된 좋아요 목록 반환
       return updatedUser?.likedReviews;
     } catch (error) {
-      // console.log("bookmarkconceertasync", error);
-
       return rejectWithValue(error);
     }
   }

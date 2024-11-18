@@ -156,6 +156,4 @@ export const updateReviewLike = async (
     likedBy: action(userId),
     likeCount,
   });
-
-  console.log("리뷰에 좋아요한 사용자정보 추가/삭제됨 -", likeCount);
 };
