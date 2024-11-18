@@ -6,6 +6,7 @@ import useToggle from "../../../hooks/useToggle";
 import { useAppDispatch } from "../../../app/hooks";
 import useCurrentUser from "../../../hooks/useCurrentUser";
 import useGetReview from "../../../hooks/useGetReview";
+import { likeReviewAsync } from "../../../slices/activitySlice";
 
 interface LikeToggleProps {
   reviewId: string | undefined;
@@ -25,28 +26,24 @@ export default function LikeToggle({
   const dispatch = useAppDispatch();
   const userId = useCurrentUser().userId;
 
-  const likeCount = 100;
-
   const {
     review,
     // isLoading: isReviewLoading,
     // error: reviewError,
   } = useGetReview(reviewId, pageName); // Firebase
 
-  const isLikedInitialState = false;
-  // concert?.bookmarkedBy?.some(
-  //   (bookmarkedUserId: string) => bookmarkedUserId === userId
-  // ) || false;
+  const isLikedInitialState =
+    review?.likedBy?.some((likedUserId: string) => likedUserId === userId) ||
+    false;
   const { isActive: isLiked, onToggle: onLikeToggle } =
     useToggle(isLikedInitialState);
 
   const handleLike = async () => {
     if (userId && review) {
       onLikeToggle();
-
       try {
-        // await dispatch (likeReviewAsync)
-      } catch (e) {
+        await dispatch(likeReviewAsync({ userId, reviewId, cancel: isLiked }));
+      } catch {
         // console.error(e);
         toast.error(
           "후기 좋아요 추가하지 못했습니다. 잠시 후에 다시 시도해주세요."
@@ -73,7 +70,7 @@ export default function LikeToggle({
     >
       <LikeIcon size={size === "md" ? "24" : "20"} active={isLiked} />
       <span className='sr_only'>좋아요</span>
-      <span className={`font_${size}`}>{likeCount}</span>
+      {/* <span className={`font_${size}`}>{likeCount}</span> */}
     </button>
   );
 }

@@ -22,6 +22,7 @@ import {
   addReviewToFirebase,
   getReviewFromFirebase,
   removeReviewFromFirebase,
+  updateReviewLike,
 } from "../api/firebase/reviewAPI";
 
 import { uploadReviewImages } from "./imageSlice";
@@ -110,6 +111,47 @@ export const bookmarkConcertAsync = createAsyncThunk<
 
       // 업데이트된 북마크 목록 반환
       return updatedUser?.bookmarkedConcerts;
+    } catch (error) {
+      // console.log("bookmarkconceertasync", error);
+
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// 좋아요
+export const likeReviewAsync = createAsyncThunk<
+  string[] | undefined, // 업데이트된 좋아요 목록 반환
+  {
+    userId: string;
+    // review: ReviewType;
+    reviewId: string | undefined;
+    cancel?: boolean;
+  }
+>(
+  "activity/review",
+  async (
+    {
+      userId,
+      reviewId,
+      cancel = false,
+    }: { userId: string; reviewId: string | undefined; cancel?: boolean },
+    { rejectWithValue }
+  ) => {
+    try {
+      const firebaseReview = await getReviewFromFirebase(reviewId!);
+
+      const currentLikeCount = firebaseReview ? firebaseReview.likeCount : 0;
+
+      await Promise.all([
+        updateReviewLike(userId, reviewId!, currentLikeCount, cancel),
+        updateUserBookmark(userId, reviewId!, cancel),
+      ]);
+      const updatedUser = await getUserFromFirebase(userId);
+      // console.log("updated", updatedUser);
+
+      // 업데이트된 좋아요 목록 반환
+      return updatedUser?.likedReviews;
     } catch (error) {
       // console.log("bookmarkconceertasync", error);
 
@@ -245,6 +287,24 @@ const activitySlice = createSlice({
         state.error = null;
       })
       .addCase(bookmarkConcertAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
+
+    // 좋아요
+    builder
+      .addCase(likeReviewAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(likeReviewAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (state.userActivity) {
+          state.userActivity.likedReviews = action.payload;
+        }
+        state.error = null;
+      })
+      .addCase(likeReviewAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

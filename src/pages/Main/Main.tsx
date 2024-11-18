@@ -178,7 +178,7 @@ export default function Main() {
             userId={review.author.id}
             content={review.contents}
             thumbnail={review.images ? review.images[0] : undefined}
-            reviewLink={`/review/${review.reviewId}`}
+            reviewId={review.reviewId}
           />
         ))}
     </section>
