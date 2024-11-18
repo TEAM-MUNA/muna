@@ -147,6 +147,20 @@ export const updateUserBookmark = async (
   });
 };
 
+// 해당 사용자에 좋아요한 후기 추가/삭제
+export const updateUserLike = async (
+  userId: string,
+  reviewId: string,
+  cancel: boolean = false
+) => {
+  const userDocRef = doc(db, "users", userId);
+  const action = cancel ? arrayRemove : arrayUnion;
+
+  await updateDoc(userDocRef, {
+    likedReviews: action(reviewId),
+  });
+};
+
 export const addUserReview = async (userId: string, reviewId: string) => {
   const userDocRef = doc(db, "users", userId);
   await updateDoc(userDocRef, {

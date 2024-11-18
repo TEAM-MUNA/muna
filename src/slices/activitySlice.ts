@@ -6,6 +6,7 @@ import {
   getUserFromFirebase,
   removeUserReview,
   updateUserBookmark,
+  updateUserLike,
 } from "../api/firebase/authAPI";
 import {
   addConcert,
@@ -145,10 +146,10 @@ export const likeReviewAsync = createAsyncThunk<
       // 현재 좋아요 수를 가져오기
       const currentLikeCount = firebaseReview ? firebaseReview.likeCount : 0;
 
-      // 리뷰 업데이트와 사용자 북마크 업데이트를 동시에 수행
+      // 리뷰정보 업데이트, 사용자의 리뷰정보 업데이트
       await Promise.all([
         updateReviewLike(userId, reviewId!, currentLikeCount, cancel),
-        updateUserBookmark(userId, reviewId!, cancel),
+        updateUserLike(userId, reviewId!, cancel),
       ]);
 
       // 업데이트된 사용자 정보 (likedReviews) 가져오기
