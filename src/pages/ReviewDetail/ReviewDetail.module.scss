@@ -90,5 +90,8 @@
     line-height: $font-2xl;
     letter-spacing: -2%;
     color: $black;
+    // 리뷰화면에서 줄바꿈 적용되도록함
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 }
