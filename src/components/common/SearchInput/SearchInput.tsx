@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
+import { RootState } from "../../../app/store";
 import { clearQuery, setQuery } from "../../../slices/searchSlice";
 import styles from "./SearchInput.module.scss";
 import SearchIcon from "../../../assets/svg/SearchIcon";
@@ -17,7 +18,13 @@ export default function SearchInput({
   fullWidth = false,
 }: SearchInputProps) {
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState("");
+  const query = useSelector((state: RootState) => state.search.query); // query 상태 가져오기
+  const [inputValue, setInputValue] = useState(query); // query와 동기화
+
+  // query 상태 변경 시 inputValue 업데이트
+  useEffect(() => {
+    setInputValue(query);
+  }, [query]);
 
   // 디바운싱 적용
   const debouncedSetQuery = useCallback(
