@@ -289,13 +289,16 @@ export default function ConcertDetail() {
                 <span className='divider' />
                 {concertDetail.prfage}
               </p>
-              <Button
-                className={styles.booking_button}
-                size='sm'
-                color='default'
-                label='예매하러 가기'
-                onClick={openReservationModal}
-              />
+              {concertDetail.relates &&
+              concertDetail.relates.relate.length > 0 ? (
+                <Button
+                  className={styles.booking_button}
+                  size='sm'
+                  color='default'
+                  label='예매하러 가기'
+                  onClick={openReservationModal}
+                />
+              ) : null}
             </div>
           </div>
         </div>
