@@ -63,7 +63,11 @@ export default function SearchInput({
       <span className={styles.icon_container}>
         <SearchIcon />
       </span>
+      <label htmlFor='search-input' className='sr_only'>
+        search-input
+      </label>
       <input
+        id='search-input'
         value={inputValue}
         type='text'
         className={styles.input}
