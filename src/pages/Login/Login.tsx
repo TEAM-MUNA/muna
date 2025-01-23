@@ -79,6 +79,7 @@ export default function Login() {
           <h2 className='sr_only'>로그인</h2>
           <form className={styles.form} onSubmit={handleLogin}>
             <Input
+              name='email'
               value={email}
               onChange={onEmailChange}
               error={!!emailError}
@@ -87,6 +88,7 @@ export default function Login() {
               placeholder={placeholder.email}
             />
             <Input
+              name='password'
               type='password'
               value={password}
               onChange={onPasswordChange}

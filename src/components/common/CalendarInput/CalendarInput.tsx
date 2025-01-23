@@ -44,7 +44,11 @@ export default function CalendarInput({
       onClick={handleClick}
       onKeyDown={handleClick}
     >
+      <label htmlFor='calendar-input' className='sr_only'>
+        calendar-input
+      </label>
       <input
+        id='calendar-input'
         ref={inputRef}
         className={`${styles.calendarInput} ${isEmptyDate ? styles.emptyDate : ""}`}
         type='date'
