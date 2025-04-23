@@ -212,8 +212,8 @@ export const sortConcerts = (
   list: ConcertType[],
   sortOrder: string
 ): ConcertType[] => {
-  // 리스트가 없거나 비어 있으면 그대로 반환
-  if (!list || list.length === 0) return list;
+  // 리스트가 없거나 비어 있으면 빈 배열 반환
+  if (!list || list.length === 0) return [];
 
   // 정렬 조건에 따라 정렬
   const sortedConcerts = list.sort((A, B) => {
