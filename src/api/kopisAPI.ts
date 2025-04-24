@@ -3,7 +3,6 @@ import parseXml from "../utils/parseXml";
 import { ConcertReturnType } from "../types/concertType";
 
 // kopis Open API
-// axios.defaults.baseURL = "/openApi/restful/pblprfr";
 axios.defaults.baseURL =
   process.env.NODE_ENV === "production"
     ? "/api/openApi/restful/pblprfr"
@@ -33,15 +32,17 @@ export const fetchConcertList = async (
   pfStateCode: string,
   regionCode: string,
   page: number,
-  keyword: string
+  keyword: string,
+  startDate: string,
+  endDate: string
 ): Promise<ConcertReturnType[]> => {
   try {
     const { data } = await axios.get("/", {
       params: {
         service: process.env.REACT_APP_kopisKey,
-        stdate: "20000101",
-        eddate: "20251230",
-        rows: 15,
+        stdate: startDate,
+        eddate: endDate,
+        rows: 5,
         cpage: page,
         shcate: genreCode,
         prfstate: pfStateCode,
@@ -50,11 +51,82 @@ export const fetchConcertList = async (
       },
     });
 
-    const concertList = parseXml(data) as ConcertReturnType[];
+    const parsedData = parseXml(data) as ConcertReturnType[];
+    const concertList = !parsedData ? [] : parsedData;
+    // console.log("🚀 ~ concertList:", concertList);
     return concertList;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     // console.error("Error fetching data:", error);
     return [];
   }
+};
+
+// 날짜 범위 나누기 함수
+export const splitDateRange = (
+  startDate: string,
+  endDate: string
+): string[][] => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const dateRanges: string[][] = [];
+
+  while (start < end) {
+    const rangeEnd = new Date(start);
+    rangeEnd.setDate(start.getDate() + 30); // 31일 기간 설정
+
+    if (rangeEnd > end) {
+      rangeEnd.setTime(end.getTime()); // 끝 날짜로 조정
+    }
+
+    dateRanges.push([
+      start.toISOString().slice(0, 10).replace(/-/g, ""),
+      rangeEnd.toISOString().slice(0, 10).replace(/-/g, ""),
+    ]);
+
+    start.setDate(start.getDate() + 31); // 날짜를 31일 후로 이동
+  }
+
+  return dateRanges;
+};
+
+// 1년치 데이터를 병렬 요청하는 함수
+export const fetchConcertDataForPeriod = async (
+  genreCode: string,
+  pfStateCode: string,
+  regionCode: string,
+  page: number,
+  keyword: string
+): Promise<ConcertReturnType[]> => {
+  const now = new Date();
+  const endDate = now.toISOString().slice(0, 10); // 오늘 날짜
+  const start = new Date(now.setFullYear(now.getFullYear() - 1)); // 1년 전 날짜
+  const startDate = start.toISOString().slice(0, 10);
+
+  const dateRanges = splitDateRange(startDate, endDate);
+
+  // 여러 날짜 범위로 요청 보내기 (병렬 요청)
+  const requests = dateRanges.map(([stdate, eddate]) =>
+    fetchConcertList(
+      genreCode,
+      pfStateCode,
+      regionCode,
+      page,
+      keyword,
+      stdate,
+      eddate
+    )
+  );
+
+  // 모든 요청을 병렬로 처리하고, 결과를 병합
+  const concertLists = await Promise.all(requests);
+  const allConcerts = concertLists.flat();
+
+  // 💡 mt20id 기준 중복 제거
+  const uniqueConcerts = Array.from(
+    new Map(allConcerts.map((item) => [`kopis-${item.mt20id}`, item])).values()
+  );
+
+  return uniqueConcerts;
 };

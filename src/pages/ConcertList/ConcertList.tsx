@@ -6,7 +6,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinne
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import { fetchConcertList } from "../../api/kopisAPI";
+import { fetchConcertDataForPeriod } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType, ConcertType } from "../../types/concertType";
@@ -111,7 +111,13 @@ export default function ConcertList() {
     const list = regionCodes.length ? regionCodes : [ALL_REGIONS];
     const result = await Promise.all(
       list.map((regionCode) =>
-        fetchConcertList(genreCode, pfStateCode, regionCode, page, keyword)
+        fetchConcertDataForPeriod(
+          genreCode,
+          pfStateCode,
+          regionCode,
+          page,
+          keyword
+        )
       )
     );
     const data = result.flat();
