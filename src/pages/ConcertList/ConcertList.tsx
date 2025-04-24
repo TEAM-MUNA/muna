@@ -6,7 +6,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinne
 import Tab from "../../components/common/Tab/Tab";
 import DropdownSelect from "../../components/common/Dropdown/DropdownSelect";
 import ConcertCard from "../../components/common/ConcertCard/ConcertCard";
-import { fetchConcertList } from "../../api/kopisAPI";
+import { fetchConcertDataForPeriod } from "../../api/kopisAPI";
 import useScroll from "../../hooks/useScroll";
 import styles from "./ConcertList.module.scss";
 import { ConcertReturnType, ConcertType } from "../../types/concertType";
@@ -37,152 +37,59 @@ const regionCodeMap: { [key: string]: string[] } = {
 };
 
 export default function ConcertList() {
-  // Kopis ConcertList
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const keyword = useSelector((state: RootState) => state.search.query);
+  const isEnd = useScroll();
+
   const [concertList, setConcertList] = useState<ConcertReturnType[]>([]);
-  // FireBase ConcertList
   const [fbConcertList, setFbConcertList] = useState<ConcertType[]>([]);
 
   const [genreCode, setGenreCode] = useState<string>("");
   const [pfStateCode, setPfStateCode] = useState<string>("");
   const [regionCodes, setRegionCodes] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<string>("최신순");
+
   const [page, setPage] = useState(1);
-  const keyword = useSelector((state: RootState) => state.search.query);
-  const isEnd = useScroll();
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const location = useLocation();
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
-  // kopis 공연 데이터 요청
-  const getData = async () => {
-    const dataList = await Promise.all(
-      (regionCodes.length ? regionCodes : [""]).map((regionCode) =>
-        fetchConcertList(genreCode, pfStateCode, regionCode, page, keyword)
-      )
-    );
-    const addedConcerts = dataList.flat();
-
-    setConcertList((prevData) => [
-      ...prevData,
-      ...sortConcertList(addedConcerts, sortOrder),
-    ]);
-  };
-
-  // firebase 공연 전체 불러오기 (처음에만)
-  useEffect(() => {
-    const fetchAllConcerts = async () => {
-      const allConcerts = await fetchConcertsFromFirebase();
-      setFbConcertList(allConcerts);
-      // 초기 정렬 설정
-    };
-    fetchAllConcerts(); // 처음 한번 호출
-  }, []); // 빈 배열이므로 처음에만 실행
-
-  // sortOrder가 변경될 때마다 정렬만 수행
-  // 정렬된 FireBase ConcertList를 useMemo로 관리
-  const sortedFbConcertList: ConcertType[] = useMemo(() => {
-    if (fbConcertList.length > 0) {
-      return sortConcerts(fbConcertList, sortOrder);
-    }
-    return [];
-  }, [fbConcertList, sortOrder]);
-
-  // 컴포넌트가 언마운트될 때 검색어 초기화
-  useEffect(
-    () => () => {
-      dispatch(clearQuery()); // 클린업
-    },
-    [dispatch]
-  );
-
-  // 필터 값 변경 시 리스트 초기화
-  useEffect(() => {
-    setConcertList([]);
-    setPage(1); // 페이지를 1로 리셋
-  }, [genreCode, pfStateCode, regionCodes, keyword]);
-
-  // 페이지 변경시 공연 리스트 요청
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      await getData();
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [page, keyword, genreCode, pfStateCode, regionCodes]);
-
-  // 화면 하단부 도착시 페이지 변경
-  useEffect(() => {
-    if (isEnd) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [isEnd]);
-
-  // onTabChanged 함수 정의
   const handleTabChange = useCallback((index: number) => {
     setSelectedTabIndex(index); // 탭 인덱스 업데이트
     const code = genreCodeList[index];
     setGenreCode(code);
   }, []);
 
-  // URL에서 genre 파라미터를 읽어와서 해당 탭과 genreCode를 설정
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const genreParam = searchParams.get("genre");
-    if (genreParam) {
-      const genreIndex = genreCodeList.indexOf(genreParam);
-      if (genreIndex !== -1) {
-        setSelectedTabIndex(genreIndex); // 탭 인덱스 설정
-        setGenreCode(genreParam); // 장르 코드 설정
-      }
-    }
-  }, [location.search]);
-
-  // 공연 상태 onSelect 함수 정의
   const handlePfStateChange = useCallback((selected: string) => {
     setPfStateCode(pfStateCodeMap[selected]);
   }, []);
 
-  // 지역 상태 onSelect 함수 정의
   const handleRegionStateChange = useCallback((selected: string) => {
     setRegionCodes(regionCodeMap[selected]);
   }, []);
 
-  // 공연목록 정렬 기준 변경
   const handleSortChange = useCallback((selected: string) => {
     setSortOrder(selected);
   }, []);
 
-  // 정렬이 변경될 때마다 concertList 정렬
-  // useEffect(() => {
-  //   setConcertList((prevData) => sortConcertList(prevData, sortOrder));
-  // }, [sortOrder]);
-
-  // 콘서트 아이템 렌더링 함수
+  // 콘서트 카드 렌더링 함수
   const renderConcertItem = (concert: ConcertReturnType | ConcertType) => {
-    // concert가 존재하지 않거나 title 또는 prfnm 속성이 없을 경우 null을 반환
     if (!concert) {
       return null;
     }
 
-    // ConcertReturnType인지 ConcertType인지에 따라 key와 title 설정
-    const key =
-      "mt20id" in concert
-        ? `kopis-${concert.mt20id}`
-        : `firebase-${concert.concertId}`;
-    const title = "prfnm" in concert ? concert.prfnm : concert.title;
+    const isKopisConcert = "mt20id" in concert; // mt20id 속성이 있다면 kopis 공연 데이터
+    // 다음은 kopis 데이터와 firebase 데이터의 key와 제목을 각각 설정해줍니다.
+    const key = isKopisConcert
+      ? `kopis-${concert.mt20id}`
+      : `firebase-${concert.concertId}`;
+    const title = isKopisConcert ? concert.prfnm : concert.title;
 
-    // key와 title이 유효하지 않으면 null 반환
-    if (!key || !title) {
-      return null;
-    }
+    if (!key || !title) return null; // key와 title이 유효하지 않으면 null 반환
 
     return (
       <li key={key}>
-        {/* concert 혹은 fbConcert를 조건부로 전달 */}
-        {"mt20id" in concert ? (
+        {isKopisConcert ? (
           <ConcertCard concert={concert as ConcertReturnType} />
         ) : (
           <ConcertCard fbConcert={concert as ConcertType} />
@@ -191,6 +98,81 @@ export default function ConcertList() {
     );
   };
 
+  // 의존성이 바뀌지 않으면, 이전 값을 그대로 재사용하여 불필요한 계산을 방지
+  const sortedFbConcertList: ConcertType[] = useMemo(
+    () => sortConcerts(fbConcertList, sortOrder), // 무거운 정렬
+    [fbConcertList, sortOrder]
+  );
+
+  // kopis 공연 데이터 요청 - useCallback으로 변경
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    const ALL_REGIONS = ""; // 전국 조회
+    const list = regionCodes.length ? regionCodes : [ALL_REGIONS];
+    const result = await Promise.all(
+      list.map((regionCode) =>
+        fetchConcertDataForPeriod(
+          genreCode,
+          pfStateCode,
+          regionCode,
+          page,
+          keyword
+        )
+      )
+    );
+    const data = result.flat();
+    const sortedData = sortConcertList(data, sortOrder);
+    setConcertList((prev) => [...prev, ...sortedData]);
+    setIsLoading(false);
+  }, [page, keyword, genreCode, pfStateCode, regionCodes, sortOrder]);
+
+  // fetchData 변경시 공연 목록 불러옴
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    const loadFirebaseConcerts = async () => {
+      const data = await fetchConcertsFromFirebase();
+      setFbConcertList(data);
+    };
+    loadFirebaseConcerts();
+  }, []);
+
+  useEffect(() => {
+    setConcertList([]);
+    setPage(1);
+  }, [genreCode, pfStateCode, regionCodes, keyword]);
+
+  // 화면 하단부 도착시 페이지 변경
+  useEffect(() => {
+    if (isEnd) setPage((prev) => prev + 1);
+  }, [isEnd]);
+
+  useEffect(
+    () => () => {
+      dispatch(clearQuery());
+    },
+    [dispatch]
+  );
+
+  // URL에서 장르 정보 가져와서 선택된 탭과 장르 변경
+  useEffect(() => {
+    const genreParam = new URLSearchParams(location.search).get("genre");
+    if (genreParam) {
+      const index = genreCodeList.indexOf(genreParam);
+      if (index !== -1) {
+        setGenreCode(genreParam); // 장르 코드 변경
+        setSelectedTabIndex(index); // 선택된 탭 설정
+      }
+    }
+  }, [location.search]);
+
+  // ===== 조건 변수 =====
+  const isFbSort = ["북마크순", "리뷰순", "평점순"].includes(sortOrder);
+  const isEmpty = !concertList.length && !isLoading;
+
+  // ===== 렌더링 =====
   return (
     <>
       <Tab
@@ -215,7 +197,7 @@ export default function ConcertList() {
         />
       </div>
       {isLoading && <LoadingSpinner />}
-      {!isLoading && concertList.length === 0 ? (
+      {isEmpty ? (
         <p className={styles.emptyMessage}>
           조건에 맞는 공연이 없습니다.
           <br />
@@ -223,7 +205,7 @@ export default function ConcertList() {
         </p>
       ) : (
         <ul className={isLoading ? styles.faded : ""}>
-          {["북마크순", "리뷰순", "평점순"].includes(sortOrder) ? (
+          {isFbSort ? (
             <>
               {sortedFbConcertList.map(renderConcertItem)}
               {concertList.map(renderConcertItem)}
