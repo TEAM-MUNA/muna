@@ -38,6 +38,8 @@
         "some": ["nesting", "id"],
       },
     ],
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
   },
   "settings": {
     "import/resolver": {
