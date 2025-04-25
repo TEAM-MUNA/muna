@@ -124,10 +124,12 @@ export default function ConcertList() {
     const sortedData = sortConcertList(data, sortOrder);
     setConcertList((prev) => [...prev, ...sortedData]);
     setIsLoading(false);
-  }, [page, keyword, genreCode, pfStateCode, regionCodes, sortOrder]);
+  }, [page, sortOrder]);
 
   // fetchData 변경시 공연 목록 불러옴
   useEffect(() => {
+    // console.log("🎬 useEffect triggered");
+    // console.log("page: ", page);
     fetchData();
   }, [fetchData]);
 
@@ -142,7 +144,7 @@ export default function ConcertList() {
   useEffect(() => {
     setConcertList([]);
     setPage(1);
-  }, [genreCode, pfStateCode, regionCodes, keyword]);
+  }, [genreCode, pfStateCode, regionCodes, keyword, sortOrder]);
 
   // 화면 하단부 도착시 페이지 변경
   useEffect(() => {
