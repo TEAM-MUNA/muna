@@ -106,9 +106,10 @@ export const fetchConcertDataForPeriod = async (
 
   const dateRanges = splitDateRange(startDate, endDate);
 
-  // 여러 날짜 범위로 요청 보내기 (병렬 요청)
-  const requests = dateRanges.map(([stdate, eddate]) =>
-    fetchConcertList(
+  let allConcerts: ConcertReturnType[] = [];
+
+  for (const [stdate, eddate] of dateRanges) {
+    const concerts = await fetchConcertList(
       genreCode,
       pfStateCode,
       regionCode,
@@ -116,12 +117,13 @@ export const fetchConcertDataForPeriod = async (
       keyword,
       stdate,
       eddate
-    )
-  );
+    );
+    allConcerts = allConcerts.concat(concerts);
+  }
 
-  // 모든 요청을 병렬로 처리하고, 결과를 병합
-  const concertLists = await Promise.all(requests);
-  const allConcerts = concertLists.flat();
+  // // 모든 요청을 병렬로 처리하고, 결과를 병합
+  // const concertLists = await Promise.all(requests);
+  // const allConcerts = concertLists.flat();
 
   // 💡 mt20id 기준 중복 제거
   const uniqueConcerts = Array.from(
