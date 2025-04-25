@@ -6,7 +6,7 @@ const useScroll = (): boolean => {
   useEffect(() => {
     const handleScroll = () => {
       setIsEnd(
-        document.documentElement.offsetHeight - 20 <=
+        document.documentElement.offsetHeight - 100 <=
           window.innerHeight + document.documentElement.scrollTop
       );
     };
