@@ -34,27 +34,22 @@ export const fetchConcertList = async (
   endDate: string
 ): Promise<ConcertReturnType[]> => {
   try {
-    const { data } = await axios.get("", {
+    const { data } = await axios.get("/getConcertList", {
       params: {
-        service: process.env.REACT_APP_kopisKey,
-        stdate: startDate,
-        eddate: endDate,
-        rows: 5,
-        cpage: page,
-        shcate: genreCode,
-        prfstate: pfStateCode,
-        signgucode: regionCode,
-        shprfnm: keyword,
+        genreCode,
+        pfStateCode,
+        regionCode,
+        page,
+        keyword,
+        startDate,
+        endDate,
       },
     });
 
-    const parsedData = parseXml(data) as ConcertReturnType[];
-    const concertList = !parsedData ? [] : parsedData;
-    // console.log("🚀 ~ concertList:", concertList);
-    return concertList;
+    const concertList = parseXml(data) as ConcertReturnType[];
+    return concertList || [];
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    // console.error("Error fetching data:", error);
     return [];
   }
 };
