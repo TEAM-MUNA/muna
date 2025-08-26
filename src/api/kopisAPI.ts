@@ -93,15 +93,15 @@ export const fetchConcertDataForPeriod = async (
 ): Promise<ConcertReturnType[]> => {
   const now = new Date();
   const endDate = now.toISOString().slice(0, 10); // 오늘 날짜
-  const start = new Date(now.setFullYear(now.getFullYear() - 1)); // 1년 전 날짜
+  const start = new Date();
+  start.setFullYear(now.getFullYear() - 1); // 1년 전 날짜
   const startDate = start.toISOString().slice(0, 10);
 
   const dateRanges = splitDateRange(startDate, endDate);
 
-  let allConcerts: ConcertReturnType[] = [];
-
-  for (const [stdate, eddate] of dateRanges) {
-    const concerts = await fetchConcertList(
+  // 모든 기간 요청을 병렬로 수행
+  const requests = dateRanges.map(([stdate, eddate]) =>
+    fetchConcertList(
       genreCode,
       pfStateCode,
       regionCode,
@@ -109,13 +109,11 @@ export const fetchConcertDataForPeriod = async (
       keyword,
       stdate,
       eddate
-    );
-    allConcerts = allConcerts.concat(concerts);
-  }
+    )
+  );
 
-  // // 모든 요청을 병렬로 처리하고, 결과를 병합
-  // const concertLists = await Promise.all(requests);
-  // const allConcerts = concertLists.flat();
+  const concertLists = await Promise.all(requests);
+  const allConcerts = concertLists.flat();
 
   // 💡 mt20id 기준 중복 제거
   const uniqueConcerts = Array.from(
