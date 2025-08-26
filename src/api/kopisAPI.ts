@@ -3,19 +3,16 @@ import parseXml from "../utils/parseXml";
 import { ConcertReturnType } from "../types/concertType";
 
 // kopis Open API
-axios.defaults.baseURL =
-  process.env.NODE_ENV === "production"
-    ? "/api/openApi/restful/pblprfr"
-    : "/openApi/restful/pblprfr";
+axios.defaults.baseURL = "/.netlify/functions";
 
 // 공연 상세 정보 조회
+// 이제 프론트에서는 kopis API 대신 Netlify Function 호출
 export const fetchConcertDetail = async (mt20id: string) => {
   try {
-    const { data } = await axios.get(`/${mt20id}`, {
-      params: {
-        service: process.env.REACT_APP_kopisKey,
-      },
-    });
+    const { data } = await axios.get(
+      `/getConcertDetail`, // Netlify Functions은 함수이름 으로 접근
+      { params: { mt20id } }
+    );
 
     const concertDetail = parseXml(data) as ConcertReturnType;
     return concertDetail;
@@ -37,7 +34,7 @@ export const fetchConcertList = async (
   endDate: string
 ): Promise<ConcertReturnType[]> => {
   try {
-    const { data } = await axios.get("/", {
+    const { data } = await axios.get("", {
       params: {
         service: process.env.REACT_APP_kopisKey,
         stdate: startDate,
